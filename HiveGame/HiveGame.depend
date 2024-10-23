@@ -1,0 +1,29 @@
+# depslib dependency file v1.0
+1729698902 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\main.cpp
+	"Plateau.h"
+
+1729694840 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\hexagon.cpp
+	"Hexagon.h"
+
+1729697146 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\hexagon.h
+	<cstdlib>
+	<iostream>
+
+1729695992 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\insecte.cpp
+	"Insecte.h"
+
+1729698990 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\insecte.h
+	"Hexagon.h"
+	<string>
+	<vector>
+
+1729698837 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\plateau.h
+	<iostream>
+	<map>
+	<vector>
+	"Hexagon.h"
+	"Insecte.h"
+
+1729697597 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\plateau.cpp
+	"Plateau.h"
+
