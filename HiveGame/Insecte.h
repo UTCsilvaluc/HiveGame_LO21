@@ -56,5 +56,32 @@ public:
         return {};
     }
 };
+class Scarabee : public Insecte {
+public:
+    Scarabee(Hexagon coords) : Insecte("Scarabee", coords) {}
 
+    std::vector<Hexagon> deplacementsPossibles() const {
+        // Retourne une liste de coordonnées hexagonales
+        return {};
+    }
+};
+class Araignee : public Insecte {
+public:
+    Araignee(Hexagon coords) : Insecte("Araignée", coords) {}
+
+    std::vector<Hexagon> deplacementsPossibles() const {
+        // Retourne une liste de coordonnées hexagonales
+        return {};
+    }
+};
+
+class Moustique : public Insecte {
+public:
+    Moustique(Hexagon coords) : Insecte("Moustique", coords) {}
+
+    std::vector<Hexagon> deplacementsPossibles() const {
+        // Retourne une liste de coordonnées hexagonales
+        return {};
+    }
+};
 #endif // INSECTE_H

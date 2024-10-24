@@ -5,14 +5,14 @@
 1729694840 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\hexagon.cpp
 	"Hexagon.h"
 
-1729697146 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\hexagon.h
+1729699319 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\hexagon.h
 	<cstdlib>
 	<iostream>
 
 1729695992 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\insecte.cpp
 	"Insecte.h"
 
-1729698990 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\insecte.h
+1729776527 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\insecte.h
 	"Hexagon.h"
 	<string>
 	<vector>
@@ -26,4 +26,10 @@
 
 1729697597 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\plateau.cpp
 	"Plateau.h"
+
+1729775843 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\joueur.cpp
+	"Joueur.h"
+
+1729776417 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\joueur.h
+	"Insecte.h"
 

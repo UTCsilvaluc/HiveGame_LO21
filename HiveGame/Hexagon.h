@@ -27,7 +27,7 @@ public:
         q = newQ;
         r = newR;
     }
-    // Opérateur de comparaison pour std::map
+    // Opérateur de comparaison pour std::map sinon erreur , permet d'ordonner les éléments et pas de doublon
     bool operator<(const Hexagon& other) const {
         // Comparer d'abord par q, puis par r
         if (q != other.q) {
