@@ -19,6 +19,15 @@ public:
     Hexagon getCoords() const { return coords; }
     std::string getNom() const { return nom; }
     virtual std::vector<Hexagon> deplacementsPossibles() const = 0; // La méthode est virtuelle pour que chaque enfant ait la sienne
+    void setDessus(Insecte *insecte){
+        dessus = insecte;
+    }
+    void setDessous(Insecte *insecte){
+        dessous = insecte;
+    }
+    void setCoords(Hexagon newCoords){
+        coords = newCoords;
+    }
 };
 
 class ReineAbeille : public Insecte {
