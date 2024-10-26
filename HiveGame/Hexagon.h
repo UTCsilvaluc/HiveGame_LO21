@@ -35,8 +35,11 @@ public:
         }
         return r < other.r;
     }
+    friend std::ostream& operator<<(std::ostream& os, const Hexagon& hex);
 
 };
+
+
 
 #endif
 

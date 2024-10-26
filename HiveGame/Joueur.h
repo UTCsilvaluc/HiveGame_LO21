@@ -3,30 +3,39 @@
 #define JOUEUR_H
 #include "Insecte.h"
 #include <vector>
+
+std::vector<Insecte*> deckDeBase();
 class Joueur
 {
 private:
     std::string nom;
     std::vector<Insecte*> deck;
 public:
-    Joueur(const std::string& nom) : nom(nom) {}
+    Joueur(const std::string& nom) : nom(nom) , deck(deckDeBase()) {}
     Joueur(std::string n, std::vector<Insecte*> d) {
         if (n.empty()) {throw std::invalid_argument("Le nom ne peut pas être vide.");}
         nom = n;
         // Si un deck est fourni, l'utiliser ; sinon, utiliser le deck par défaut. Permet de gérer les extensions en cas de besoin.
-        if (d.empty()){
-            deck.push_back(new ReineAbeille(Hexagon(0, 0)));  // Reine Abeille x1
-            for (int i = 0; i < 2; ++i) { deck.push_back(new Araignee(Hexagon(0, 0))); }  // Araignée x2
-            for (int i = 0; i < 2; ++i) { deck.push_back(new Scarabee(Hexagon(0, 0))); }  // Scarabée x2
-            for (int i = 0; i < 3; ++i) { deck.push_back(new Fourmi(Hexagon(0, 0))); }    // Fourmi x3
-            for (int i = 0; i < 3; ++i) { deck.push_back(new Sauterelle(Hexagon(0, 0))); } // Sauterelle x3
-            deck.push_back(new Coccinelle(Hexagon(0, 0)));  // Coccinelle x1
-            deck.push_back(new Moustique(Hexagon(0, 0)));   // Moustique x1
-        }
-        deck = d.empty() ? d : d;
+        deck = d.empty() ? deckDeBase() : d;
     }
     const std::string &getName() const {return nom;}
     const std::vector<Insecte*>& getDeck() const { return deck; }
+    void afficherDeck() const {
+        for (auto it = deck.begin(); it != deck.end(); ++it) {
+            std::cout << "N°: " << (it - deck.begin()) + 1
+                      << ": " << (*it)->getNom() << std::endl;
+        }
+    }
+    ~Joueur() {
+        for (Insecte* insecte : deck) {
+            delete insecte;
+        }
+    }
+
+    size_t getDeckSize() const {
+        return deck.size();
+    }
 };
+
 
 #endif // JOUEUR_H

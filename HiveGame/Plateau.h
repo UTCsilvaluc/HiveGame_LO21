@@ -15,34 +15,32 @@ private:
     //std::vector<Extension*> extensionsActivees;
     int nombreRetoursArriere;
     int nombreTours;
+    int minR, maxR, minQ, maxQ;
 
 public:
-    Plateau() : nombreRetoursArriere(3), nombreTours(0) {} // Initialisation par défaut
+    Plateau() : nombreRetoursArriere(3), nombreTours(0), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par défaut
 
     void ajouterInsecte(Insecte* insecte) {
         plateauMap[insecte->getCoords()] = insecte; // Ajouter à la carte
         insectesSurPlateau.push_back(insecte); // Garder une référence à l'insecte
+        mettreAJourLimites(insecte->getCoords()); // Mettre à jour les limites lors de l'ajout
     }
 
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
         // Mettre à jour la position de l'insecte
+        mettreAJourLimites(insecte->getCoords());
     }
+
     void superposerInsecte(Insecte* currentInsecte, Insecte* newInsecte) {
         newInsecte->setDessous(currentInsecte);
         currentInsecte->setDessus(newInsecte);
         currentInsecte->setCoords(newInsecte->getCoords());
         plateauMap[newInsecte->getCoords()] = newInsecte;
+        mettreAJourLimites(newInsecte->getCoords()); // Mettre à jour les limites lors de la superposition
     }
-    void afficherPlateau() const {
-        int minR = 0, maxR = 0, minQ = 0, maxQ = 0;
 
-        // Déterminer les limites du , ses extremités afin de partir du début à la fin.
-        for (const auto& [coords, insecte] : plateauMap) {
-            if (coords.getQ() < minQ) minQ = coords.getQ();
-            if (coords.getQ() > maxQ) maxQ = coords.getQ();
-            if (coords.getR() < minR) minR = coords.getR();
-            if (coords.getR() > maxR) maxR = coords.getR();
-        }
+    void afficherPlateau() const {
+        // Utiliser les limites minR, maxR, minQ, maxQ pour afficher le plateau
         for (int r = minR; r <= maxR; ++r) {
             if (r % 2 != 0) std::cout << "  "; // pour essayer de faire ressembler à un hexagone ptdr c immonde
 
@@ -56,6 +54,16 @@ public:
             }
             std::cout << std::endl;
         }
+    }
+    int getMinR() const { return minR; }
+    int getMaxR() const { return maxR; }
+    int getMinQ() const { return minQ; }
+    int getMaxQ() const { return maxQ; }
+    void mettreAJourLimites(const Hexagon& coords) {
+        if (coords.getR() < minR) minR = coords.getR();
+        if (coords.getR() > maxR) maxR = coords.getR();
+        if (coords.getQ() < minQ) minQ = coords.getQ();
+        if (coords.getQ() > maxQ) maxQ = coords.getQ();
     }
 };
 
