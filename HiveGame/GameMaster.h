@@ -76,15 +76,23 @@ public:
         } while (choice != 1 && (choice != 2 && current->getDeckSize() > 0));
         if (choice == 1) {
             plateau.afficherPlateau();
+            mode = getInput("Quel pion souhaitez-vous déplacer, saisir sa position ?\n", 1, current->getDeckSize());
+            int x = getInput("Où en absisse ?\n", plateau.getMinQ() , plateau.getMaxQ());
+            int y = getInput("Où en ordonnées ?\n", plateau.getMinR() , plateau.getMaxR());
+            Insecte *currentInsecte = plateau.getInsecteAtCoords(x , y);
+            plateau.deplacerInsecte(currentInsecte , Hexagon(x , y));
         } else {
             std::cout <<"\nVoici votre deck : " << std::endl;
             current->afficherDeck();
             mode = getInput("Quel pion souhaitez-vous poser ?\n", 1, current->getDeckSize());
+            Insecte *currentInsecte = current->getInsecteByIndex(mode - 1);
             plateau.afficherPlateau();
             int x = getInput("Où en absisse ?\n", plateau.getMinQ() - 1 , plateau.getMaxQ() + 1);
             int y = getInput("Où en ordonnées ?\n", plateau.getMinR() - 1 , plateau.getMaxR() + 1);
-            //récupérer l'insecte dans le vecteur, et appeler la méthode pour le placer : plateau.ajouterInsecte(Insecte* insecte)
+            plateau.ajouterInsecte(currentInsecte);
         }
+        tour++;
+        jouer();
     }
     // Destructeur pour libérer la mémoire
     ~GameMaster() {

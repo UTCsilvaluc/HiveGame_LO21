@@ -35,6 +35,11 @@ public:
     size_t getDeckSize() const {
         return deck.size();
     }
+
+    Insecte *getInsecteByIndex(unsigned int i){
+        if (i >= deck.size()){return nullptr;}
+        return deck[i];
+    }
 };
 
 

@@ -47,9 +47,9 @@ public:
             for (int q = minQ; q <= maxQ; ++q) {
                 Hexagon h(q, r);
                 if (plateauMap.count(h)) {
-                    std::cout << plateauMap.at(h)->getNom() << "   "; // L'insecte existe alors je récupère son nom
+                    std::cout << plateauMap.at(h)->getNom() << "[" << h.getQ() << " " << h.getR() << "] "; // L'insecte existe alors je récupère son nom
                 } else {
-                    std::cout << ".   ";  // Aucun insecte à cet emplacement
+                    std::cout << ".[" << h.getQ() << " " << h.getR() << "] "; // Aucun insecte à cet emplacement
                 }
             }
             std::cout << std::endl;
@@ -64,6 +64,12 @@ public:
         if (coords.getR() > maxR) maxR = coords.getR();
         if (coords.getQ() < minQ) minQ = coords.getQ();
         if (coords.getQ() > maxQ) maxQ = coords.getQ();
+    }
+
+    Insecte* getInsecteAtCoords(int q , int r){
+        Hexagon h(q , r);
+        if (!(plateauMap.count(h))){return nullptr;}
+        return plateauMap[h];
     }
 };
 
