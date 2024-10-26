@@ -33,3 +33,38 @@
 1729776417 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame\joueur.h
 	"Insecte.h"
 
+1729931847 source:c:\users\sillu\hivegame_lo21\hivegame\hexagon.cpp
+	"Hexagon.h"
+
+1729931847 c:\users\sillu\hivegame_lo21\hivegame\hexagon.h
+	<cstdlib>
+	<iostream>
+
+1729931847 source:c:\users\sillu\hivegame_lo21\hivegame\insecte.cpp
+	"Insecte.h"
+
+1729934048 c:\users\sillu\hivegame_lo21\hivegame\insecte.h
+	"Hexagon.h"
+	<string>
+	<vector>
+
+1729931847 source:c:\users\sillu\hivegame_lo21\hivegame\joueur.cpp
+	"Joueur.h"
+
+1729933993 c:\users\sillu\hivegame_lo21\hivegame\joueur.h
+	"Insecte.h"
+	<vector>
+
+1729931847 source:c:\users\sillu\hivegame_lo21\hivegame\main.cpp
+	"Plateau.h"
+
+1729931847 c:\users\sillu\hivegame_lo21\hivegame\plateau.h
+	<iostream>
+	<map>
+	<vector>
+	"Hexagon.h"
+	"Insecte.h"
+
+1729931847 source:c:\users\sillu\hivegame_lo21\hivegame\plateau.cpp
+	"Plateau.h"
+

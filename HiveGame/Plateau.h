@@ -27,7 +27,9 @@ public:
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
         // Mettre à jour la position de l'insecte
     }
-    void superposerInsecte(Insecte* insecte, Insecte* autreInsecte) {}
+    void superposerInsecte(Insecte* currentInsecte, Insecte* newInsecte) {
+
+    }
     void afficherPlateau() const {
         int minR = 0, maxR = 0, minQ = 0, maxQ = 0;
 

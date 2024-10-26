@@ -1,15 +1,18 @@
+#pragma once
 #ifndef INSECTE_H
 #define INSECTE_H
 #include "Hexagon.h"
 #include <string>
 #include <vector>
 
+class Joueur; // Déclaration anticipée de Joueur pour éviter l'inclusion circulaire
 class Insecte
 {
 private:
     Hexagon coords;
     Insecte *dessus = nullptr;
     Insecte *dessous = nullptr;
+    Joueur *owner;
     std::string nom;
 public:
     Insecte(std::string nom, Hexagon coords) : nom(nom), coords(coords) {}
