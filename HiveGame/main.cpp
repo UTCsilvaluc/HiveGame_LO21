@@ -1,6 +1,8 @@
 #include "Plateau.h"
-
+#include "GameMaster.h"
 int main() {
+    GameMaster master;
+    master.startGame();
     Plateau plateau;
 
     plateau.ajouterInsecte(new ReineAbeille(Hexagon(0, 0)));

@@ -9,7 +9,8 @@ private:
     std::string nom;
     std::vector<Insecte*> deck;
 public:
-    Joueur(std::string n, std::vector<Insecte*> d = std::vector<Insecte*>()) {
+    Joueur(const std::string& nom) : nom(nom) {}
+    Joueur(std::string n, std::vector<Insecte*> d) {
         if (n.empty()) {throw std::invalid_argument("Le nom ne peut pas être vide.");}
         nom = n;
         // Si un deck est fourni, l'utiliser ; sinon, utiliser le deck par défaut. Permet de gérer les extensions en cas de besoin.
@@ -24,8 +25,8 @@ public:
         }
         deck = d.empty() ? d : d;
     }
-    std::string getName() const {return nom;}
-    std::vector<Insecte*>& getDeck() { return deck; }
+    const std::string &getName() const {return nom;}
+    const std::vector<Insecte*>& getDeck() const { return deck; }
 };
 
 #endif // JOUEUR_H
