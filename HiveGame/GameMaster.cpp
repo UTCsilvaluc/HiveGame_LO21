@@ -18,3 +18,15 @@ int getInput(const std::string& prompt, int minValue, int maxValue) {
     } while (choice < minValue || choice > maxValue);
     return choice;
 }
+
+Insecte* GameMaster::selectionnerInsecte() {
+    int x = getInput("Abscisse de la position du pion à déplacer : ", plateau.getMinQ(), plateau.getMaxQ());
+    int y = getInput("Ordonnée de la position du pion à déplacer : ", plateau.getMinR(), plateau.getMaxR());
+
+    Insecte* currentInsecte = plateau.getInsecteAtCoords(x, y);
+    if (!currentInsecte) {
+        std::cout << "Aucun pion à cette position. Veuillez réessayer." << std::endl;
+        return selectionnerInsecte(); // Appel récursif jusqu'à obtenir un pion valide
+    }
+    return currentInsecte;
+}

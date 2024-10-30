@@ -40,6 +40,14 @@ public:
         if (i >= deck.size()){return nullptr;}
         return deck[i];
     }
+    void retirerInsecte(unsigned int index) {
+        if (index < deck.size()) {
+            deck.erase(deck.begin() + index);  // Retirer du deck
+        } else {
+            std::cout << "Index invalide. Aucune action effectuée." << std::endl;
+        }
+    }
+
 };
 
 

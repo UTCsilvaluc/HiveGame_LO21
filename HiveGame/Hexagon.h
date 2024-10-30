@@ -23,9 +23,9 @@ public:
     void afficherCoordonnees() const {
         std::cout << "Coordonnées: (" << q << ", " << r << ")" << std::endl;
     }
-    void deplacer(int newQ  , int newR){
-        q = newQ;
-        r = newR;
+    void deplacer(const Hexagon& autre) {
+        q = autre.q;
+        r = autre.r;
     }
     // Opérateur de comparaison pour std::map sinon erreur , permet d'ordonner les éléments et pas de doublon
     bool operator<(const Hexagon& other) const {

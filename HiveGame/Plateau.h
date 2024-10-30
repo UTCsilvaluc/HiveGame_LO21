@@ -27,17 +27,21 @@ public:
     }
 
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
-        // Mettre à jour la position de l'insecte
-        mettreAJourLimites(insecte->getCoords());
+        plateauMap.erase(insecte->getCoords()); // Retirer l'insecte de sa position actuelle
+        insecte->setCoords(nouvellePosition); // Mettre à jour les coordonnées de l'insecte
+        plateauMap[nouvellePosition] = insecte; // Ajouter l'insecte à la nouvelle position
+        mettreAJourLimites(nouvellePosition); // Mettre à jour les limites
     }
+
 
     void superposerInsecte(Insecte* currentInsecte, Insecte* newInsecte) {
         newInsecte->setDessous(currentInsecte);
         currentInsecte->setDessus(newInsecte);
-        currentInsecte->setCoords(newInsecte->getCoords());
+        newInsecte->setCoords(currentInsecte->getCoords());
         plateauMap[newInsecte->getCoords()] = newInsecte;
         mettreAJourLimites(newInsecte->getCoords()); // Mettre à jour les limites lors de la superposition
     }
+
 
     void afficherPlateau() const {
         // Utiliser les limites minR, maxR, minQ, maxQ pour afficher le plateau
