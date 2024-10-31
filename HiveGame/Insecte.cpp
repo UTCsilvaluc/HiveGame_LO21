@@ -45,6 +45,18 @@ std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, I
     return occupees;
 }
 
+bool Insecte::getLongueurChaine(std::map<Hexagon, Insecte*> p, std::map<Hexagon> chemin){
+    std::vector<Hexagon> voisinOccupee = casesAdjacentesOccupees(this.getCoords(), p);
+    for (size_t i=0; i<voisinOccupee.size(); i++){
+        for(size_t j=0, j<chemin.size(); j++){
+            if(voisinOccupee.at(i) != chemin.at(i)){
+                chemin.push_back(voisinOccupee.at(i));
+                Insecte::getLongueurChaine(p, chemin);
+            }
+        }
+    }
+
+}
 
 
 

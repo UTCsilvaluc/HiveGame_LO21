@@ -19,6 +19,16 @@ private:
     Joueur *owner;
     std::string nom;
 public:
+    Insecte& operator =(const Insecte &i){
+        if(this != &i){
+            coords = i.getCoords();
+            dessus = i.dessus;
+            dessous = i.dessous;
+            owner = i.owner;
+            nom = i.getNom();
+        }
+        return *this;
+    }
     Insecte(std::string nom, Hexagon coords) : nom(nom), coords(coords) {}
     Hexagon getCoords() const { return coords; }
     std::string getNom() const { return nom; }
@@ -31,6 +41,7 @@ public:
     void setCoords(Hexagon newCoords){
         coords = newCoords;
     }
+    bool getChaineBrisee(std::map<Hexagon, Insecte*> p);
 };
 
 
@@ -85,5 +96,6 @@ public:
 std::vector<Hexagon> getVoisins(Hexagon coords);
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, Insecte*> p);
+
 
 #endif // INSECTE_H
