@@ -2,9 +2,9 @@
 #ifndef INSECTE_H
 #define INSECTE_H
 #include "Hexagon.h"
-#include "Plateau.h"
 #include <string>
 #include <vector>
+#include <map>
 
 
 class Joueur; // Déclaration anticipée de Joueur pour éviter l'inclusion circulaire
@@ -79,11 +79,10 @@ public:
 class Moustique : public Insecte {
 public:
     Moustique(Hexagon coords) : Insecte("Moustique", coords) {}
-
     std::vector<Hexagon> deplacementsPossibles() const;
 };
 
-std::vector<Hexagon> getVoisins(Hexagon coords)const;
-std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, Plateau p)const;
+std::vector<Hexagon> getVoisins(Hexagon coords);
+std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> plat);
 
 #endif // INSECTE_H

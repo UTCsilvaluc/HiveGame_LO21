@@ -93,16 +93,17 @@
 	"Insecte.h"
 	<vector>
 
-1730380834 c:\users\debru\documents\github\hivegame_lo21\hivegame\insecte.h
+1730384827 c:\users\debru\documents\github\hivegame_lo21\hivegame\insecte.h
 	"Hexagon.h"
 	<string>
 	<vector>
+	<map>
 
 1730374840 c:\users\debru\documents\github\hivegame_lo21\hivegame\hexagon.h
 	<cstdlib>
 	<iostream>
 
-1730374840 c:\users\debru\documents\github\hivegame_lo21\hivegame\plateau.h
+1730384798 c:\users\debru\documents\github\hivegame_lo21\hivegame\plateau.h
 	<iostream>
 	<map>
 	<vector>
@@ -112,7 +113,7 @@
 1730374840 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\hexagon.cpp
 	"Hexagon.h"
 
-1730374840 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\insecte.cpp
+1730385031 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\insecte.cpp
 	"Insecte.h"
 
 1730374840 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\joueur.cpp

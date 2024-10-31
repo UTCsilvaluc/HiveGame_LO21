@@ -6,7 +6,6 @@
 #include <vector>
 #include "Hexagon.h"
 #include "Insecte.h"
-
 class Plateau {
 private:
     std::map<Hexagon, Insecte*> plateauMap;
