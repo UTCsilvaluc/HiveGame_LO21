@@ -45,20 +45,27 @@ std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, I
     return occupees;
 }
 
-bool Insecte::getLongueurChaine(std::map<Hexagon, Insecte*> p, std::map<Hexagon> chemin){
-    std::vector<Hexagon> voisinOccupee = casesAdjacentesOccupees(this.getCoords(), p);
+std::vector<Hexagon> getLongueurChaine(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin){
+    std::vector<Hexagon> voisinOccupee = casesAdjacentesOccupees(i->getCoords(), p);
     for (size_t i=0; i<voisinOccupee.size(); i++){
-        for(size_t j=0, j<chemin.size(); j++){
-            if(voisinOccupee.at(i) != chemin.at(i)){
+        for(size_t j=0; j<chemin.size(); j++){
+            if(voisinOccupee.at(i).getQ() != chemin.at(j).getQ() || voisinOccupee.at(i).getR() != chemin.at(j).getR()){
                 chemin.push_back(voisinOccupee.at(i));
-                Insecte::getLongueurChaine(p, chemin);
+                chemin = getLongueurChaine(p[voisinOccupee.at(i)], p, chemin);
             }
         }
     }
-
+    return chemin;
 }
 
 
+bool getChaineBrisee(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin){
+    std::vector<Hexagon> l = getLongueurChaine(i, p, chemin);
+    if (l.size() < p.size()){
+        return true;
+    }
+    return false;
+}
 
 
 

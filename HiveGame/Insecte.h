@@ -41,7 +41,6 @@ public:
     void setCoords(Hexagon newCoords){
         coords = newCoords;
     }
-    bool getChaineBrisee(std::map<Hexagon, Insecte*> p);
 };
 
 
@@ -96,6 +95,7 @@ public:
 std::vector<Hexagon> getVoisins(Hexagon coords);
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, Insecte*> p);
-
+std::vector<Hexagon> getLongueurChaine(Insecte &i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
+bool getChaineBrisee(Insecte &i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
 
 #endif // INSECTE_H
