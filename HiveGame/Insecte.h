@@ -83,6 +83,7 @@ public:
 };
 
 std::vector<Hexagon> getVoisins(Hexagon coords);
-std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> plat);
+std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p);
+std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, Insecte*> p);
 
 #endif // INSECTE_H
