@@ -45,7 +45,7 @@ public:
 
             joueur1 = new Joueur(nom);  // Créer le joueur
             joueur2 = new Joueur("IA");
-            std::cout << "Joueur créé : " << joueur1->getName() << std::endl;
+            std::cout << "Joueur cree : " << joueur1->getName() << std::endl;
         }
 
         jouer();
