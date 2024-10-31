@@ -11,6 +11,7 @@ int main() {
 
     GameMaster master(plateau);
     master.startGame();
+    // Test
 
     return 0;
 }
