@@ -45,37 +45,32 @@ std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, I
     return occupees;
 }
 
-std::vector<Hexagon> getLongueurChaine(const Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin){
-    std::vector<Hexagon> voisinOccupee = casesAdjacentesOccupees(i->getCoords(), p);
+std::vector<Hexagon> getLongueurChaine(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin){
+    std::vector<Hexagon> voisinOccupee = casesAdjacentesOccupees(coords, p);
     for (size_t i=0; i<voisinOccupee.size(); i++){
         for(size_t j=0; j<chemin.size(); j++){
             if(voisinOccupee.at(i).getQ() != chemin.at(j).getQ() || voisinOccupee.at(i).getR() != chemin.at(j).getR()){
                 chemin.push_back(voisinOccupee.at(i));
-                chemin = getLongueurChaine(p[voisinOccupee.at(i)], p, chemin);
+                chemin = getLongueurChaine(voisinOccupee.at(i), p, chemin);
             }
         }
     }
     return chemin;
 }
 
-std::vector<Hexagon> getLongueurChaine(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin) {
-    return getLongueurChaine(static_cast<const Insecte*>(i), p, chemin);
-}
-
-
-bool getChaineBrisee(const Insecte *i, const  std::map<Hexagon, Insecte*> p, const  std::vector<Hexagon> chemin){
+bool getChaineBrisee(Hexagon coords, const  std::map<Hexagon, Insecte*> p, const  std::vector<Hexagon> chemin){
     std::map<Hexagon, Insecte*> p1 = p;
-    p1.erase(i->getCoords());
-    std::vector<Hexagon> l = getLongueurChaine(i, p1, chemin);
+    p1.erase(coords);
+    std::vector<Hexagon> l = getLongueurChaine(coords, p1, chemin);
     if (l.size() < p1.size()){
         return true;
     }
     return false;
 }
 
-bool getGlissementPossible(const  Insecte *i, const  std::map<Hexagon, Insecte*> p, const  Hexagon destination){
+bool getGlissementPossible(Hexagon coords, const  std::map<Hexagon, Insecte*> p, const  Hexagon destination){
     int t =0;
-    std::vector<Hexagon> voisinOccupeeDepart = casesAdjacentesOccupees(i->getCoords(), p);
+    std::vector<Hexagon> voisinOccupeeDepart = casesAdjacentesOccupees(coords, p);
     std::vector<Hexagon> voisinOccupeeArrivee = casesAdjacentesOccupees(destination, p);
     for(size_t j=0; j<voisinOccupeeDepart.size(); j++){
         for(size_t k=0; k<voisinOccupeeArrivee.size(); k++){
@@ -90,11 +85,11 @@ bool getGlissementPossible(const  Insecte *i, const  std::map<Hexagon, Insecte*>
     return true;
 }
 
-std::vector<Hexagon> ReineAbeille::deplacementsPossibles(std::map<Hexagon, Insecte*> p) const {
+std::vector<Hexagon> deplacementsPossiblesReineAbeille(Hexagon coords, std::map<Hexagon, Insecte*> p){
     std::vector<Hexagon> deplacements;
     std::vector<Hexagon> chemin;
-    std::vector<Hexagon> voisinsVides = casesAdjacentesVides(getCoords(), p);
-    if(getChaineBrisee(this, p, chemin)){
+    std::vector<Hexagon> voisinsVides = casesAdjacentesVides(coords, p);
+    if(getChaineBrisee(coords, p, chemin)){
         return deplacements;
     }
     for (size_t i = 0; i < voisinsVides.size();) {
@@ -105,7 +100,7 @@ std::vector<Hexagon> ReineAbeille::deplacementsPossibles(std::map<Hexagon, Insec
         }
     }
     for (size_t j = 0; j < voisinsVides.size();) {
-        if (!getGlissementPossible(this, p, voisinsVides.at(j))) {
+        if (!getGlissementPossible(coords, p, voisinsVides.at(j))) {
             voisinsVides.erase(voisinsVides.begin() + j);
         } else {
             ++j;
@@ -114,33 +109,31 @@ std::vector<Hexagon> ReineAbeille::deplacementsPossibles(std::map<Hexagon, Insec
     return voisinsVides;
 }
 
-std::vector<Hexagon> Fourmi::deplacementsPossibles(Hexagon coord, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> cheminInsecte) const{
+std::vector<Hexagon> deplacementsPossiblesFourmi(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminInsecte, std::set<Hexagon>& deplacements) {
     std::vector<Hexagon> cheminChaine;
-    if(getChaineBrisee(this, p, cheminChaine)){
-        return deplacements;
+    if(getChaineBrisee(coords, p, cheminChaine)){
+        return std::vector<Hexagon>();
     }
-    std::vector<Hexagon> voisinsVides = casesAdjacentesVides(getCoords(), p);
+    std::vector<Hexagon> voisinsVides = casesAdjacentesVides(coords, p);
     std::map<Hexagon, Insecte*> p1 = p;
-    p1.erase(i->getCoords());
+    p1.erase(coords);
     for (size_t i = 0; i < voisinsVides.size();) {
-        if (casesAdjacentesOccupees(voisinsVides.at(i), p1).empty()) {
+        if (casesAdjacentesOccupees(voisinsVides[i], p1).empty() || !getGlissementPossible(coords, p, voisinsVides[i])) {
             voisinsVides.erase(voisinsVides.begin() + i);
         } else {
             ++i;
         }
     }
-    for (size_t j = 0; j < voisinsVides.size();) {
-        if (!getGlissementPossible(this, p, voisinsVides.at(j))) {
-            voisinsVides.erase(voisinsVides.begin() + j);
-        } else {
-            ++j;
+    cheminInsecte.push_back(coords);
+    for (Hexagon voisin : voisinsVides) {
+        if (std::find(cheminInsecte.begin(), cheminInsecte.end(), voisin) == cheminInsecte.end()) {
+            deplacements.insert(voisin);
+            deplacementsPossiblesFourmi(voisin, p1, cheminInsecte, deplacements);
         }
     }
-    cheminInsecte.push_back(getCoords());
-    for(size_t k=0; k< voisinsVides.size(); k++){
-        Fourmi::deplacementsPossibles(voisinsVides.at(i), p1)
-    }
+    return std::vector<Hexagon>(deplacements.begin(), deplacements.end());
 }
+
 
 
 

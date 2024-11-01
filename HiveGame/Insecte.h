@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <set>
+#include <algorithm>
 
 
 class Joueur; // Déclaration anticipée de Joueur pour éviter l'inclusion circulaire
@@ -47,51 +49,50 @@ public:
 class ReineAbeille : public Insecte {
 public:
     ReineAbeille(Hexagon coords) : Insecte("Reine", coords) {}
-    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p)const;
 };
 
 
 class Fourmi : public Insecte {
 public:
     Fourmi(Hexagon coords) : Insecte("Fourmi", coords) {}
-    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
 
 
 class Sauterelle : public Insecte {
 public:
     Sauterelle(Hexagon coords) : Insecte("Sauterelle", coords) {}
-    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
 
 
 class Coccinelle : public Insecte {
 public:
     Coccinelle(Hexagon coords) : Insecte("Coccinelle", coords) {}
-    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
 
 
 class Scarabee : public Insecte {
 public:
     Scarabee(Hexagon coords) : Insecte("Scarabee", coords) {}
-    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
 
 
 class Araignee : public Insecte {
 public:
     Araignee(Hexagon coords) : Insecte("Araignée", coords) {}
-    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
 
 
 class Moustique : public Insecte {
 public:
     Moustique(Hexagon coords) : Insecte("Moustique", coords) {}
-    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
-
+std::vector<Hexagon> deplacementsPossiblesReineAbeille(const Insecte *i, std::map<Hexagon, Insecte*> p);
+std::vector<Hexagon> deplacementsPossiblesFourmi(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminInsecte, std::set<Hexagon>& deplacements);
+std::vector<Hexagon> deplacementsPossiblesSauterelle(const Insecte *i, std::map<Hexagon, Insecte*> p);
+std::vector<Hexagon> deplacementsPossiblesCoccinelle(const Insecte *i, std::map<Hexagon, Insecte*> p);
+std::vector<Hexagon> deplacementsPossiblesScarabee(const Insecte *i, std::map<Hexagon, Insecte*> p);
+std::vector<Hexagon> deplacementsPossiblesAraignee(const Insecte *i, std::map<Hexagon, Insecte*> p);
+std::vector<Hexagon> deplacementsPossiblesMoustique(const Insecte *i, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> getVoisins(Hexagon coords);
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, Insecte*> p);

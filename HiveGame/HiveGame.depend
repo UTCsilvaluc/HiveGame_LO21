@@ -93,11 +93,13 @@
 	"Insecte.h"
 	<vector>
 
-1730470148 c:\users\debru\documents\github\hivegame_lo21\hivegame\insecte.h
+1730474654 c:\users\debru\documents\github\hivegame_lo21\hivegame\insecte.h
 	"Hexagon.h"
 	<string>
 	<vector>
 	<map>
+	<set>
+	<algorithm>
 
 1730374840 c:\users\debru\documents\github\hivegame_lo21\hivegame\hexagon.h
 	<cstdlib>
