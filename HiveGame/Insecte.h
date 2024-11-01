@@ -95,7 +95,8 @@ public:
 std::vector<Hexagon> getVoisins(Hexagon coords);
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, Insecte*> p);
-std::vector<Hexagon> getLongueurChaine(Insecte &i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
-bool getChaineBrisee(Insecte &i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
+std::vector<Hexagon> getLongueurChaine(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
+bool getChaineBrisee(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
+bool getGlissementPossible(Insecte *i, std::map<Hexagon, Insecte*> p, Hexagon destination);
 
 #endif // INSECTE_H

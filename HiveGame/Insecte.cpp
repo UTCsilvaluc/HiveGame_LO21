@@ -67,7 +67,22 @@ bool getChaineBrisee(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexa
     return false;
 }
 
-
+bool getGlissementPossible(Insecte *i, std::map<Hexagon, Insecte*> p, Hexagon destination){
+    int t =0;
+    std::vector<Hexagon> voisinOccupeeDepart = casesAdjacentesOccupees(i->getCoords(), p);
+    std::vector<Hexagon> voisinOccupeeArrivee = casesAdjacentesOccupees(destination, p);
+    for(size_t j=0; j<voisinOccupeeDepart.size(); j++){
+        for(size_t k=0; k<voisinOccupeeArrivee.size(); k++){
+            if (voisinOccupeeDepart.at(j).getQ()==voisinOccupeeArrivee.at(k).getQ() && voisinOccupeeDepart.at(j).getR()==voisinOccupeeArrivee.at(k).getR()){
+                t++;
+            }
+        }
+    }
+    if(t==2){
+        return false;
+    }
+    return true;
+}
 
 
 
