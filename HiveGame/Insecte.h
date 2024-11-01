@@ -47,49 +47,49 @@ public:
 class ReineAbeille : public Insecte {
 public:
     ReineAbeille(Hexagon coords) : Insecte("Reine", coords) {}
-    std::vector<Hexagon> deplacementsPossibles() const;
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p)const;
 };
 
 
 class Fourmi : public Insecte {
 public:
     Fourmi(Hexagon coords) : Insecte("Fourmi", coords) {}
-    std::vector<Hexagon> deplacementsPossibles() const;
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
 
 
 class Sauterelle : public Insecte {
 public:
     Sauterelle(Hexagon coords) : Insecte("Sauterelle", coords) {}
-    std::vector<Hexagon> deplacementsPossibles() const;
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
 
 
 class Coccinelle : public Insecte {
 public:
     Coccinelle(Hexagon coords) : Insecte("Coccinelle", coords) {}
-    std::vector<Hexagon> deplacementsPossibles() const;
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
 
 
 class Scarabee : public Insecte {
 public:
     Scarabee(Hexagon coords) : Insecte("Scarabee", coords) {}
-    std::vector<Hexagon> deplacementsPossibles() const;
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
 
 
 class Araignee : public Insecte {
 public:
     Araignee(Hexagon coords) : Insecte("Araignée", coords) {}
-    std::vector<Hexagon> deplacementsPossibles() const;
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
 
 
 class Moustique : public Insecte {
 public:
     Moustique(Hexagon coords) : Insecte("Moustique", coords) {}
-    std::vector<Hexagon> deplacementsPossibles() const;
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) const;
 };
 
 std::vector<Hexagon> getVoisins(Hexagon coords);
@@ -97,6 +97,6 @@ std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Inse
 std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> getLongueurChaine(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
 bool getChaineBrisee(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
-bool getGlissementPossible(Insecte *i, std::map<Hexagon, Insecte*> p, Hexagon destination);
+bool getGlissementPossible(const  Insecte *i, const  std::map<Hexagon, Insecte*> p, const Hexagon destination);
 
 #endif // INSECTE_H
