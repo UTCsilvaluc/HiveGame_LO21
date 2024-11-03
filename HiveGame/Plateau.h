@@ -9,7 +9,7 @@
 class Plateau {
 private:
     std::map<Hexagon, Insecte*> plateauMap;
-    std::vector<Insecte*> insectesSurPlateau; // On peut supprimer et faire un deck de joueur, quand un joueur pose un insecte, alors l'insecte disparait de son deck gr‚ce ‡ ajouter Insecte
+    std::vector<Insecte*> insectesSurPlateau; // On peut supprimer et faire un deck de joueur, quand un joueur pose un insecte, alors l'insecte disparait de son deck gr√¢ce √† ajouter Insecte
     //std::vector<Action*> historiqueDesActions;
     //std::vector<Extension*> extensionsActivees;
     int nombreRetoursArriere;
@@ -17,19 +17,19 @@ private:
     int minR, maxR, minQ, maxQ;
 
 public:
-    Plateau() : nombreRetoursArriere(3), nombreTours(0), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par dÈfaut
+    Plateau() : nombreRetoursArriere(3), nombreTours(0), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par d√©faut
 
     void ajouterInsecte(Insecte* insecte) {
-        plateauMap[insecte->getCoords()] = insecte; // Ajouter ‡ la carte
-        insectesSurPlateau.push_back(insecte); // Garder une rÈfÈrence ‡ l'insecte
-        mettreAJourLimites(insecte->getCoords()); // Mettre ‡ jour les limites lors de l'ajout
+        plateauMap[insecte->getCoords()] = insecte; // Ajouter √† la carte
+        insectesSurPlateau.push_back(insecte); // Garder une r√©f√©rence √† l'insecte
+        mettreAJourLimites(insecte->getCoords()); // Mettre √† jour les limites lors de l'ajout
     }
 
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
         plateauMap.erase(insecte->getCoords()); // Retirer l'insecte de sa position actuelle
-        insecte->setCoords(nouvellePosition); // Mettre ‡ jour les coordonnÈes de l'insecte
-        plateauMap[nouvellePosition] = insecte; // Ajouter l'insecte ‡ la nouvelle position
-        mettreAJourLimites(nouvellePosition); // Mettre ‡ jour les limites
+        insecte->setCoords(nouvellePosition); // Mettre √† jour les coordonn√©es de l'insecte
+        plateauMap[nouvellePosition] = insecte; // Ajouter l'insecte √† la nouvelle position
+        mettreAJourLimites(nouvellePosition); // Mettre √† jour les limites
     }
 
 
@@ -38,21 +38,21 @@ public:
         currentInsecte->setDessus(newInsecte);
         newInsecte->setCoords(currentInsecte->getCoords());
         plateauMap[newInsecte->getCoords()] = newInsecte;
-        mettreAJourLimites(newInsecte->getCoords()); // Mettre ‡ jour les limites lors de la superposition
+        mettreAJourLimites(newInsecte->getCoords()); // Mettre √† jour les limites lors de la superposition
     }
 
 
     void afficherPlateau() const {
         // Utiliser les limites minR, maxR, minQ, maxQ pour afficher le plateau
         for (int r = minR; r <= maxR; ++r) {
-            if (r % 2 != 0) std::cout << "  "; // pour essayer de faire ressembler ‡ un hexagone ptdr c immonde
+            if (r % 2 != 0) std::cout << "  "; // pour essayer de faire ressembler √† un hexagone ptdr c immonde
 
             for (int q = minQ; q <= maxQ; ++q) {
                 Hexagon h(q, r);
                 if (plateauMap.count(h)) {
-                    std::cout << plateauMap.at(h)->getNom() << "[" << h.getQ() << " " << h.getR() << "] "; // L'insecte existe alors je rÈcupËre son nom
+                    std::cout << plateauMap.at(h)->getNom() << "[" << h.getQ() << " " << h.getR() << "] "; // L'insecte existe alors je r√©cup√®re son nom
                 } else {
-                    std::cout << ".[" << h.getQ() << " " << h.getR() << "] "; // Aucun insecte ‡ cet emplacement
+                    std::cout << ".[" << h.getQ() << " " << h.getR() << "] "; // Aucun insecte √† cet emplacement
                 }
             }
             std::cout << std::endl;
@@ -73,6 +73,13 @@ public:
         Hexagon h(q , r);
         if (!(plateauMap.count(h))){return nullptr;}
         return plateauMap[h];
+    }
+    // Ajout dans la section publique de Plateau
+    const std::vector<Insecte*>& getInsectesSurPlateau() const {
+        return insectesSurPlateau;
+    }
+    std::map<Hexagon, Insecte*> getPlateauMap() {
+        return plateauMap;
     }
 };
 
