@@ -8,8 +8,8 @@
 #include <set>
 #include <algorithm>
 
-
-class Joueur; // Déclaration anticipée de Joueur pour éviter l'inclusion circulaire
+//test
+class Joueur; // DÃ©claration anticipÃ©e de Joueur pour Ã©viter l'inclusion circulaire
 
 
 class Insecte
@@ -80,7 +80,7 @@ public:
 
 class Araignee : public Insecte {
 public:
-    Araignee(Hexagon coords) : Insecte("Araignée", coords) {}
+    Araignee(Hexagon coords) : Insecte("AraignÃ©e", coords) {}
 };
 
 
