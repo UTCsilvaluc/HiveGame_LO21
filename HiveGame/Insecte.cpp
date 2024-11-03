@@ -135,11 +135,14 @@ std::vector<Hexagon> deplacementsPossiblesFourmi(Hexagon coords, std::map<Hexago
 }
 
 std::vector<Hexagon> Fourmi::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
-        std::vector<Hexagon> cheminInsecte;
-        std::set<Hexagon> deplacements;
-        return deplacementsPossiblesFourmi(getCoords(), p, cheminInsecte, deplacements);
+    std::vector<Hexagon> cheminInsecte;
+    std::set<Hexagon> deplacements;
+    return deplacementsPossiblesFourmi(getCoords(), p, cheminInsecte, deplacements);
 }
 
+std::vector<Hexagon> ReineAbeille::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
+    return deplacementsPossiblesReineAbeille(getCoords(), p);
+}
 
 
 

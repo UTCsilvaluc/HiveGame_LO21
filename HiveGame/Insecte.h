@@ -49,6 +49,7 @@ public:
 class ReineAbeille : public Insecte {
 public:
     ReineAbeille(Hexagon coords) : Insecte("Reine", coords) {}
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p);
 };
 
 
