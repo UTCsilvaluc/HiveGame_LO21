@@ -8,7 +8,8 @@
 #include <set>
 #include <algorithm>
 
-class Joueur; // Déclaration anticipée de Joueur pour éviter l'inclusion circulaire
+
+class Joueur; // D�claration anticip�e de Joueur pour �viter l'inclusion circulaire
 
 
 class Insecte
@@ -30,7 +31,7 @@ public:
         }
         return *this;
     }
-    Insecte(std::string nom, Hexagon coords) : nom(nom), coords(coords) {}
+    Insecte(std::string nom, Hexagon coords) : coords(coords) , nom(nom) {}
     Hexagon getCoords() const { return coords; }
     std::string getNom() const { return nom; }
     void setDessus(Insecte *insecte){
@@ -42,13 +43,16 @@ public:
     void setCoords(Hexagon newCoords){
         coords = newCoords;
     }
+    virtual std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) = 0;
+
+    Joueur *getOwner(){return owner;}
 };
 
 
 class ReineAbeille : public Insecte {
 public:
     ReineAbeille(Hexagon coords) : Insecte("Reine", coords) {}
-    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p);
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) override;
 };
 
 
@@ -62,30 +66,35 @@ public:
 class Sauterelle : public Insecte {
 public:
     Sauterelle(Hexagon coords) : Insecte("Sauterelle", coords) {}
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p);
 };
 
 
 class Coccinelle : public Insecte {
 public:
     Coccinelle(Hexagon coords) : Insecte("Coccinelle", coords) {}
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p);
 };
 
 
 class Scarabee : public Insecte {
 public:
     Scarabee(Hexagon coords) : Insecte("Scarabee", coords) {}
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p);
 };
 
 
 class Araignee : public Insecte {
 public:
-    Araignee(Hexagon coords) : Insecte("Araignée", coords) {}
+    Araignee(Hexagon coords) : Insecte("Araign�e", coords) {}
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p);
 };
 
 
 class Moustique : public Insecte {
 public:
     Moustique(Hexagon coords) : Insecte("Moustique", coords) {}
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p);
 };
 
 std::vector<Hexagon> deplacementsPossiblesReineAbeille(Hexagon coords, std::map<Hexagon, Insecte*> p);
