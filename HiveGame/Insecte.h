@@ -55,6 +55,7 @@ public:
 class Fourmi : public Insecte {
 public:
     Fourmi(Hexagon coords) : Insecte("Fourmi", coords) {}
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p);
 };
 
 
@@ -86,13 +87,14 @@ class Moustique : public Insecte {
 public:
     Moustique(Hexagon coords) : Insecte("Moustique", coords) {}
 };
-std::vector<Hexagon> deplacementsPossiblesReineAbeille(const Insecte *i, std::map<Hexagon, Insecte*> p);
+
+std::vector<Hexagon> deplacementsPossiblesReineAbeille(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> deplacementsPossiblesFourmi(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminInsecte, std::set<Hexagon>& deplacements);
-std::vector<Hexagon> deplacementsPossiblesSauterelle(const Insecte *i, std::map<Hexagon, Insecte*> p);
-std::vector<Hexagon> deplacementsPossiblesCoccinelle(const Insecte *i, std::map<Hexagon, Insecte*> p);
-std::vector<Hexagon> deplacementsPossiblesScarabee(const Insecte *i, std::map<Hexagon, Insecte*> p);
-std::vector<Hexagon> deplacementsPossiblesAraignee(const Insecte *i, std::map<Hexagon, Insecte*> p);
-std::vector<Hexagon> deplacementsPossiblesMoustique(const Insecte *i, std::map<Hexagon, Insecte*> p);
+std::vector<Hexagon> deplacementsPossiblesSauterelle(Hexagon coords, std::map<Hexagon, Insecte*> p);
+std::vector<Hexagon> deplacementsPossiblesCoccinelle(Hexagon coords, std::map<Hexagon, Insecte*> p);
+std::vector<Hexagon> deplacementsPossiblesScarabee(Hexagon coords, std::map<Hexagon, Insecte*> p);
+std::vector<Hexagon> deplacementsPossiblesAraignee(Hexagon coords, std::map<Hexagon, Insecte*> p);
+std::vector<Hexagon> deplacementsPossiblesMoustique(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> getVoisins(Hexagon coords);
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, Insecte*> p);
