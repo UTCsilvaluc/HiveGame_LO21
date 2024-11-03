@@ -13,12 +13,12 @@ std::vector<Hexagon> getVoisins(Hexagon coords){
     }
 
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p){
-    std::vector<Hexagon> vides; //On déclare la liste des hexagons adjacents vides, pour le moment elle ne contient rien
-    std::vector<Hexagon> voisins = getVoisins(coords); //On déclare la liste des voisins de l'hexagon cible
+    std::vector<Hexagon> vides; //On dï¿½clare la liste des hexagons adjacents vides, pour le moment elle ne contient rien
+    std::vector<Hexagon> voisins = getVoisins(coords); //On dï¿½clare la liste des voisins de l'hexagon cible
     for(size_t i=0; i<6; i++){
         for(size_t n=0; n<p.size(); n++){
             auto it = p.begin();
-            std::advance(it, n); // On parcours chaque voisin et vérifions si ses coordonnées sont déjà enregistrées dans le plateau,
+            std::advance(it, n); // On parcours chaque voisin et vï¿½rifions si ses coordonnï¿½es sont dï¿½jï¿½ enregistrï¿½es dans le plateau,
                                  //si c'est le cas cela signifie qu'il y a un insecte sur cette case
             if(it != p.end()){
                 const Hexagon &hex = it->first;
@@ -32,13 +32,13 @@ std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Inse
 }
 
 std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, Insecte*> p){
-    std::vector<Hexagon> occupees; //On déclare la liste des hexagons adjacents occupées, pour le moment elle ne contient rien
-    std::vector<Hexagon> voisins = getVoisins(coords); //On déclare la liste des voisins de l'hexagon cible
+    std::vector<Hexagon> occupees; //On dï¿½clare la liste des hexagons adjacents occupï¿½es, pour le moment elle ne contient rien
+    std::vector<Hexagon> voisins = getVoisins(coords); //On dï¿½clare la liste des voisins de l'hexagon cible
     std::vector<Hexagon> vides = casesAdjacentesVides(coords, p);
     for (size_t i=0; i<6; i++){
         for(size_t j=0; j<vides.size(); j++){
             if(voisins.at(i).getQ()!=vides.at(j).getQ() || voisins.at(i).getR()!=vides.at(j).getR()){
-                occupees.push_back(voisins.at(i)); //On compare la liste des voisins et celle des cases adjacentes vides, la différence correspond aux cases occupées
+                occupees.push_back(voisins.at(i)); //On compare la liste des voisins et celle des cases adjacentes vides, la diffï¿½rence correspond aux cases occupï¿½es
             }
         }
     }
@@ -144,7 +144,23 @@ std::vector<Hexagon> ReineAbeille::deplacementsPossibles(std::map<Hexagon, Insec
     return deplacementsPossiblesReineAbeille(getCoords(), p);
 }
 
+std::vector<Hexagon> Coccinelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
+    return deplacementsPossiblesReineAbeille(getCoords(), p);
+}
+std::vector<Hexagon> Scarabee::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
+    return deplacementsPossiblesReineAbeille(getCoords(), p);
+}
+std::vector<Hexagon> Sauterelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
+    return deplacementsPossiblesReineAbeille(getCoords(), p);
+}
 
+std::vector<Hexagon> Araignee::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
+    return deplacementsPossiblesReineAbeille(getCoords(), p);
+}
+
+std::vector<Hexagon> Moustique::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
+    return deplacementsPossiblesReineAbeille(getCoords(), p);
+}
 
 
 
