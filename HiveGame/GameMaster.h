@@ -7,6 +7,7 @@
 #include <memory>
 #include <limits>
 int getInput(const std::string& prompt, int minValue, int maxValue);
+bool positionEstValide(const Hexagon& position, const std::vector<Hexagon>& deplacementsPossibles);
 class GameMaster {
 private:
     Plateau plateau;
@@ -15,26 +16,27 @@ private:
     unsigned int mode;
     unsigned int tour;
 public:
+    bool hasPlayQueen(Joueur *currentPlayer);
     GameMaster() : joueur1(nullptr), joueur2(nullptr) , mode(0) {}
     Insecte* selectionnerInsecte();
     GameMaster(Plateau plateau) : joueur1(nullptr), joueur2(nullptr) , mode(0) , plateau(plateau){}
     void startGame() {
-        std::cout << "\nDémarrage du jeu HiveGame en cours...\n" << std::endl;
-        mode = getInput("Merci de sélectionner le mode de jeu :\n1 - Joueur vs Joueur (JvJ)\n2 - Joueur vs IA (JvIA)\n", 1, 2);
-        std::cout << "Vous avez sélectionné le mode : " << (mode == 1 ? "JvJ" : "JvIA") << "\n";
+        std::cout << "\nDÃ©marrage du jeu HiveGame en cours...\n" << std::endl;
+        mode = getInput("Merci de sÃ©lectionner le mode de jeu :\n1 - Joueur vs Joueur (JvJ)\n2 - Joueur vs IA (JvIA)\n", 1, 2);
+        std::cout << "Vous avez sÃ©lectionnÃ© le mode : " << (mode == 1 ? "JvJ" : "JvIA") << "\n";
         if (mode == 1) {
             std::string nom;
             std::cout << "\nMerci de saisir le nom du premier Joueur" << std::endl;
             std::cin >> nom;
 
-            joueur1 = new Joueur(nom);  // Créer le joueur 1
-            std::cout << "Joueur 1 créé : " << joueur1->getName() << std::endl;
+            joueur1 = new Joueur(nom);  // CrÃ©er le joueur 1
+            std::cout << "Joueur 1 crÃ©Ã© : " << joueur1->getName() << std::endl;
 
             std::cout << "\nMerci de saisir le nom du second Joueur" << std::endl;
             std::cin >> nom;
 
-            joueur2 = new Joueur(nom);  // Créer le joueur 2
-            std::cout << "Joueur 2 créé : " << joueur2->getName() << std::endl;
+            joueur2 = new Joueur(nom);  // CrÃ©er le joueur 2
+            std::cout << "Joueur 2 crÃ©Ã© : " << joueur2->getName() << std::endl;
 
             std::cout << "\nHiveGame : Le joueur 1 sera " << joueur1->getName()
                       << " et le joueur 2 sera " << joueur2->getName() << ".\n";
@@ -43,14 +45,14 @@ public:
             std::cout << "\nMerci de saisir le nom du Joueur" << std::endl;
             std::cin >> nom;
 
-            joueur1 = new Joueur(nom);  // Créer le joueur
+            joueur1 = new Joueur(nom);  // CrÃ©er le joueur
             joueur2 = new Joueur("IA");
             std::cout << "Joueur cree : " << joueur1->getName() << std::endl;
         }
 
         jouer();
 
-        /* Générer le plateau */
+        /* GÃ©nÃ©rer le plateau */
     }
 
     void choixExtensions(){}//Objet publique extension qui contient une liste d'extension et propose de les choisir
@@ -58,12 +60,15 @@ public:
         while (true) {
             Joueur *current = (tour % 2 == 0) ? joueur1 : joueur2;
             std::cout << "\nC'est au tour de : " << current->getName() << std::endl;
+            if (!(hasPlayQueen(current))){
+                std::cout << "Il vous reste " << 4 - tour << " pour jouer votre reine." <<std::endl;
+            }
 
-            // Choix d'action : déplacer un pion ou en placer un
+            // Choix d'action : dÃ©placer un pion ou en placer un
             int choice = 0;
             do {
                 std::cout << "Que voulez-vous faire ?\n"
-                          << "1 - Déplacer un pion \n";
+                          << "1 - DÃ©placer un pion \n";
                 if (current->getDeckSize() > 0) {
                     std::cout << "2 - Placer un pion \n";
                 }
@@ -76,15 +81,28 @@ public:
                 }
             } while (choice != 1 && (choice != 2 || current->getDeckSize() == 0));
 
-            // Exécuter l'action choisie
-            if (choice == 1) {  // Déplacer un pion
+            // ExÃ©cuter l'action choisie
+            if (choice == 1) {  // DÃ©placer un pion
                 plateau.afficherPlateau();
-                int x = getInput("Abscisse de la position du pion à déplacer : ", plateau.getMinQ(), plateau.getMaxQ());
-                int y = getInput("Ordonnée de la position du pion à déplacer : ", plateau.getMinR(), plateau.getMaxR());
+                int x = getInput("Abscisse de la position du pion Ã  dÃ©placer : ", plateau.getMinQ(), plateau.getMaxQ());
+                int y = getInput("OrdonnÃ©e de la position du pion Ã  dÃ©placer : ", plateau.getMinR(), plateau.getMaxR());
                 Insecte *currentInsecte = selectionnerInsecte();
-                int newX = getInput("Nouvelle abscisse : ", plateau.getMinQ() - 1, plateau.getMaxQ() + 1);
-                int newY = getInput("Nouvelle ordonnée : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
-                plateau.deplacerInsecte(currentInsecte, Hexagon(newX, newY));
+                bool deplacementValide = false;
+                Hexagon nouvellePosition;
+                while (!(deplacementValide)){
+                    int newX = getInput("Nouvelle abscisse : ", plateau.getMinQ() - 1, plateau.getMaxQ() + 1);
+                    int newY = getInput("Nouvelle ordonnÃ©e : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
+                    nouvellePosition = Hexagon(newX, newY);
+                    std::vector<Hexagon> deplacementsPossibles = currentInsecte->deplacementsPossibles(plateau.getPlateauMap());
+                    // Appeler les extensions pour filtrer deplacementsPossibles
+                    if (positionEstValide(nouvellePosition, deplacementsPossibles)){
+                        deplacementValide = true;
+                    } else {
+                        std::cout << "DÃ©placement invalide. Veuillez choisir une coordonnÃ©e valide." << std::endl;
+                    }
+
+                }
+                plateau.deplacerInsecte(currentInsecte, nouvellePosition);
 
             } else if (choice == 2) {  // Placer un nouveau pion
                 std::cout << "\nVoici votre deck : " << std::endl;
@@ -93,21 +111,22 @@ public:
 
                 Insecte *insecteAPlacer = current->getInsecteByIndex(index);
                 if (!insecteAPlacer) {
-                    std::cout << "Index de pion invalide. Veuillez réessayer." << std::endl;
+                    std::cout << "Index de pion invalide. Veuillez rÃ©essayer." << std::endl;
                     continue;
                 }
                 plateau.afficherPlateau();
                 int x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1, plateau.getMaxQ() + 1);
-                int y = getInput("Ordonnée pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
+                int y = getInput("OrdonnÃ©e pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
                 plateau.ajouterInsecte(insecteAPlacer);
-                current->retirerInsecte(index);  // Retirer le pion du deck après l'avoir posé
+                current->retirerInsecte(index);  // Retirer le pion du deck aprÃ¨s l'avoir posÃ©
             }
 
-            // Incrémenter le compteur de tours et passer au prochain joueur
+            // IncrÃ©menter le compteur de tours et passer au prochain joueur
             tour++;
         }
     }
-    // Destructeur pour libérer la mémoire
+
+    // Destructeur pour libÃ©rer la mÃ©moire
     ~GameMaster() {
         if (joueur1) delete joueur1;
         if (joueur2) delete joueur2;
