@@ -8,7 +8,6 @@
 #include <set>
 #include <algorithm>
 
-//test
 class Joueur; // Déclaration anticipée de Joueur pour éviter l'inclusion circulaire
 
 
