@@ -20,12 +20,10 @@ public:
     }
     const std::string &getName() const {return nom;}
     const std::vector<Insecte*>& getDeck() const { return deck; }
-    void afficherDeck() const {
-        for (auto it = deck.begin(); it != deck.end(); ++it) {
-            std::cout << "N°: " << (it - deck.begin()) + 1
-                      << ": " << (*it)->getNom() << std::endl;
-        }
-    }
+    Insecte* getQueen() const;
+    int getQueenIndex() const;
+    bool hasQueen() const;
+    void afficherDeck() const;
     ~Joueur() {
         for (Insecte* insecte : deck) {
             delete insecte;

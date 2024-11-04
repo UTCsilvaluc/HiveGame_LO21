@@ -1,48 +1,170 @@
 #include "GameMaster.h"
 
+GameMaster::~GameMaster() {
+    delete joueur1;
+    delete joueur2;
+}
+
 int getInput(const std::string& prompt, int minValue, int maxValue) {
     int choice;
-    do {
+    while (true) {
         std::cout << prompt;
         std::cin >> choice;
 
-        // VÃ©rifier si l'input est valide
         if (std::cin.fail() || choice < minValue || choice > maxValue) {
-            std::cin.clear(); // RÃ©initialiser l'Ã©tat d'erreur
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caractÃ¨res restants
-            choice = minValue - 1; // Forcer une nouvelle saisie
-            std::cout << "S'il vous plaÃ®t, entrez un nombre valide entre " << minValue << " et " << maxValue << ".\n";
+            std::cin.clear(); // Réinitialiser l'état d'erreur
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caractères restants
+            std::cout << "S'il vous plaît, entrez un nombre valide entre " << minValue << " et " << maxValue << ".\n";
         } else {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caractÃ¨res restants
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caractères restants
+            break; // Sortir de la boucle si l'entrée est valide
         }
-    } while (choice < minValue || choice > maxValue);
+    }
     return choice;
 }
 
 Insecte* GameMaster::selectionnerInsecte() {
-    int x = getInput("Abscisse de la position du pion Ã  dÃ©placer : ", plateau.getMinQ(), plateau.getMaxQ());
-    int y = getInput("OrdonnÃ©e de la position du pion Ã  dÃ©placer : ", plateau.getMinR(), plateau.getMaxR());
+    int x = getInput("Abscisse de la position du pion à déplacer : ", plateau.getMinQ(), plateau.getMaxQ());
+    int y = getInput("Ordonnée de la position du pion à déplacer : ", plateau.getMinR(), plateau.getMaxR());
 
     Insecte* currentInsecte = plateau.getInsecteAtCoords(x, y);
     if (!currentInsecte) {
-        std::cout << "Aucun pion Ã  cette position. Veuillez rÃ©essayer." << std::endl;
-        return selectionnerInsecte(); // Appel rÃ©cursif jusqu'Ã  obtenir un pion valide
+        std::cout << "Aucun pion à cette position. Veuillez réessayer." << std::endl;
+        return selectionnerInsecte(); // Appel récursif jusqu'à obtenir un pion valide
     }
     return currentInsecte;
 }
 
-bool GameMaster::hasPlayQueen(Joueur *currentPlayer) {
-    for (auto it = plateau.getInsectesSurPlateau().begin(); it != plateau.getInsectesSurPlateau().end(); ++it) {
-        Insecte* insecte = *it;
-
-        // VÃ©rifiez si l'insecte est de type Reine et appartient au joueur actuel
-        if (insecte->getNom() == "Reine" && insecte->getOwner() == currentPlayer) {
-            return true;
-        }
-    }
-    return false;
-}
-
 bool positionEstValide(const Hexagon& position, const std::vector<Hexagon>& deplacementsPossibles) {
     return std::find(deplacementsPossibles.begin(), deplacementsPossibles.end(), position) != deplacementsPossibles.end();
+}
+
+void GameMaster::startGame() {
+    std::cout << "\nDémarrage du jeu HiveGame en cours...\n" << std::endl;
+    mode = getInput("Merci de sélectionner le mode de jeu :\n1 - Joueur vs Joueur (JvJ)\n2 - Joueur vs IA (JvIA)\n", 1, 2);
+    std::cout << "Vous avez sélectionné le mode : " << (mode == 1 ? "JvJ" : "JvIA") << "\n";
+
+    std::string nom;
+    std::cout << "\nMerci de saisir le nom du Joueur" << std::endl;
+    std::cin >> nom;
+
+    joueur1 = new Joueur(nom);  // Créer le joueur 1
+
+    if (mode == 1) {
+        std::cout << "\nMerci de saisir le nom du second Joueur" << std::endl;
+        std::cin >> nom;
+        joueur2 = new Joueur(nom);  // Créer le joueur 2
+    } else {
+        joueur2 = new Joueur("IA");
+    }
+
+    std::cout << "Joueur 1 créé : " << joueur1->getName() << std::endl;
+    std::cout << "Joueur 2 créé : " << joueur2->getName() << std::endl;
+
+    jouer();
+}
+
+void GameMaster::jouer() {
+    bool hasWinner = false;
+    while (!hasWinner) {
+        Joueur* current = (tour % 2 == 0) ? joueur1 : joueur2;
+        hasWinner = detectWinner(current);
+        std::cout << "\nC'est au tour de : " << current->getName() << std::endl;
+
+        if (current->hasQueen()) {
+            std::cout << "Il vous reste " << 4 - tour << " pour jouer votre reine." << std::endl;
+        }
+        int choice = 0;
+        bool needPlayQueen = (4 - tour == 0) && current->hasQueen();
+
+        if (needPlayQueen) {
+            std::cout << "Vous devez obligatoirement poser votre Reine !\n";
+            choice = 2; // Forcer le choix de poser la reine
+        } else {
+            choice = getInputForAction(current);
+        }
+
+        // Exécuter l'action choisie
+        if (choice == 1) {  // Déplacer un pion
+            deplacerPion(current);
+        } else if (choice == 2) {  // Placer un nouveau pion
+            placerPion(current, needPlayQueen);
+        }
+
+        // Incrémenter le compteur de tours
+        tour++;
+    }
+}
+
+int GameMaster::getInputForAction(Joueur* current) {
+    int choice = 0;
+    while (true) {
+        std::cout << "Que voulez-vous faire ?\n"
+                  << "1 - Déplacer un pion \n"
+                  << (current->getDeckSize() > 0 ? "2 - Placer un pion \n" : "");
+        std::cin >> choice;
+
+        if (std::cin.fail() || (choice != 1 && (choice != 2 || current->getDeckSize() == 0))) {
+            std::cin.clear();
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            std::cout << "Merci de saisir 1 ou 2 (si deck disponible).\n";
+        } else {
+            break; // Sortir de la boucle si l'entrée est valide
+        }
+    }
+    return choice;
+}
+
+void GameMaster::deplacerPion(Joueur* current) {
+    plateau.afficherPlateau();
+    Insecte* currentInsecte = selectionnerInsecte();
+    bool deplacementValide = false;
+    Hexagon nouvellePosition;
+
+    while (!deplacementValide) {
+        int x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1 , plateau.getMaxQ() + 1);
+        int y = getInput("Ordonnée pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
+        nouvellePosition = Hexagon(x, y);
+        std::vector<Hexagon> deplacementsPossibles = currentInsecte->deplacementsPossibles(plateau.getPlateauMap());
+        if (positionEstValide(nouvellePosition, deplacementsPossibles)) {
+            deplacementValide = true;
+        } else {
+            std::cout << "Déplacement invalide. Veuillez choisir une coordonnée valide." << std::endl;
+        }
+    }
+    plateau.deplacerInsecte(currentInsecte, nouvellePosition);
+}
+
+void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
+    Insecte* insecteAPlacer = nullptr;
+    int index = 0;
+
+    if (!needPlayQueen) {
+        std::cout << "\nVoici votre deck : " << std::endl;
+        current->afficherDeck();
+        index = getInput("Quel pion souhaitez-vous poser ? ", 1, current->getDeckSize()) - 1;
+        insecteAPlacer = current->getInsecteByIndex(index);
+    } else {
+        insecteAPlacer = current->getQueen();
+        index = current->getQueenIndex();
+    }
+
+    plateau.afficherPlateau();
+    int x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1 , plateau.getMaxQ() + 1);
+    int y = getInput("Ordonnée pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
+    insecteAPlacer->setCoords(Hexagon(x , y));
+    plateau.ajouterInsecte(insecteAPlacer);
+    current->retirerInsecte(index); // Retirer le pion du deck après l'avoir posé
+}
+
+bool GameMaster::detectWinner(Joueur *current) {
+    Insecte* reine = plateau.getReineAbeille(current);
+    if (reine == nullptr) {
+        return false;
+    }
+    if (plateau.estEntouree(reine)) {
+        std::cout << "Le joueur " << current->getName() << " a perdu ! " << std::endl;
+        return true;
+    }
+    return false;
 }

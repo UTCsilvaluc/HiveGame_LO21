@@ -53,6 +53,7 @@ class ReineAbeille : public Insecte {
 public:
     ReineAbeille(Hexagon coords) : Insecte("Reine", coords) {}
     std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) override;
+    bool estEntouree(const std::map<Hexagon, Insecte*>& p) const;
 };
 
 

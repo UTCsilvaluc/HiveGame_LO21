@@ -10,7 +10,7 @@ std::vector<Hexagon> getVoisins(Hexagon coords){
         voisins.push_back(Hexagon(coords.getQ(), coords.getR()-1));
         voisins.push_back(Hexagon(coords.getQ(), coords.getR()+1));
         return voisins;
-    }
+}
 
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p){
     std::vector<Hexagon> vides; //On d�clare la liste des hexagons adjacents vides, pour le moment elle ne contient rien
@@ -162,7 +162,15 @@ std::vector<Hexagon> Moustique::deplacementsPossibles(std::map<Hexagon, Insecte*
     return deplacementsPossiblesReineAbeille(getCoords(), p);
 }
 
-
+bool ReineAbeille::estEntouree(const std::map<Hexagon, Insecte*>& p) const {
+    std::vector<Hexagon> voisins = getVoisins(getCoords());
+    for (const Hexagon& voisin : voisins) {
+        if (p.find(voisin) == p.end()) {
+            return false; // Si une case voisine est vide, la reine n'est pas entourée
+        }
+    }
+    return true;
+}
 
 
 
