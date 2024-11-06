@@ -7,6 +7,7 @@
 #include <map>
 #include <set>
 #include <algorithm>
+#include <sstream>
 
 
 class Joueur; // D�claration anticip�e de Joueur pour �viter l'inclusion circulaire
@@ -44,7 +45,7 @@ public:
         coords = newCoords;
     }
     virtual std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) = 0;
-
+    std::string toJson() const;
     Joueur *getOwner(){return owner;}
 };
 
@@ -101,7 +102,7 @@ public:
 std::vector<Hexagon> deplacementsPossiblesReineAbeille(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> deplacementsPossiblesFourmi(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminInsecte, std::set<Hexagon>& deplacements);
 std::vector<Hexagon> deplacementsPossiblesSauterelle(Hexagon coords, std::map<Hexagon, Insecte*> p);
-std::vector<Hexagon> deplacementsPossiblesCoccinelle(Hexagon coords, std::map<Hexagon, Insecte*> p);
+void deplacementsPossiblesCoccinelle(Hexagon coords, std::map<Hexagon, Insecte*> p, int i, std::vector<Hexagon> &cheminFinal);
 std::vector<Hexagon> deplacementsPossiblesScarabee(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> deplacementsPossiblesAraignee(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> deplacementsPossiblesMoustique(Hexagon coords, std::map<Hexagon, Insecte*> p);
@@ -111,5 +112,6 @@ std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, I
 std::vector<Hexagon> getLongueurChaine(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
 bool getChaineBrisee(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
 bool getGlissementPossible(const  Insecte *i, const  std::map<Hexagon, Insecte*> p, const Hexagon destination);
+
 
 #endif // INSECTE_H
