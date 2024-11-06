@@ -5,6 +5,28 @@ GameMaster::~GameMaster() {
     delete joueur2;
 }
 
+int getInput(const std::string& prompt, int minValue, int maxValue, unsigned int tour) {
+    int choice;
+    if (tour == 0){
+        minValue = std::numeric_limits<int>::min();
+        maxValue = std::numeric_limits<int>::max();
+    }
+    while (true) {
+        std::cout << prompt;
+        std::cin >> choice;
+
+        if (std::cin.fail() || choice < minValue || choice > maxValue) {
+            std::cin.clear(); // Réinitialiser l'état d'erreur
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caractères restants
+            std::cout << "S'il vous plaît, entrez un nombre valide entre " << minValue << " et " << maxValue << ".\n";
+        } else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caractères restants
+            break; // Sortir de la boucle si l'entrée est valide
+        }
+    }
+    return choice;
+}
+
 int getInput(const std::string& prompt, int minValue, int maxValue) {
     int choice;
     while (true) {
@@ -81,7 +103,12 @@ void GameMaster::jouer() {
             std::cout << "Vous devez obligatoirement poser votre Reine !\n";
             choice = 2; // Forcer le choix de poser la reine
         } else {
-            choice = getInputForAction(current);
+            if (!(plateau.playerCanMoveInsecte(current))){
+                choice = 2;
+            } else {
+                choice = getInputForAction(current);
+            }
+
         }
 
         // Exécuter l'action choisie
@@ -116,7 +143,7 @@ int GameMaster::getInputForAction(Joueur* current) {
 }
 
 void GameMaster::deplacerPion(Joueur* current) {
-    plateau.afficherPlateau();
+    plateau.afficherPlateau(joueur1 , joueur2);
     Insecte* currentInsecte = selectionnerInsecte();
     bool deplacementValide = false;
     Hexagon nouvellePosition;
@@ -148,10 +175,13 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
         insecteAPlacer = current->getQueen();
         index = current->getQueenIndex();
     }
+    if (!(plateau.plateauEstVide())){
+        plateau.afficherPlateau(joueur1 , joueur2);
+    }
 
-    plateau.afficherPlateau();
-    int x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1 , plateau.getMaxQ() + 1);
-    int y = getInput("Ordonnée pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
+
+    int x = getInput("Abscisse pour poser le pion : " , plateau.getMinQ() - 1 , plateau.getMaxQ() + 1 , tour);
+    int y = getInput("Ordonnée pour poser le pion : " , plateau.getMinR() - 1 , plateau.getMaxR() + 1 , tour);
     insecteAPlacer->setCoords(Hexagon(x , y));
     plateau.ajouterInsecte(insecteAPlacer);
     current->retirerInsecte(index); // Retirer le pion du deck après l'avoir posé
@@ -168,3 +198,4 @@ bool GameMaster::detectWinner(Joueur *current) {
     }
     return false;
 }
+

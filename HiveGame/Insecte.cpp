@@ -1,6 +1,5 @@
 #include "Insecte.h"
-
-
+#include "Joueur.h" // Ajoutez cette ligne
 std::vector<Hexagon> getVoisins(Hexagon coords){
         std::vector<Hexagon> voisins;
         voisins.push_back(Hexagon(coords.getQ()+1, coords.getR()));
@@ -171,6 +170,22 @@ bool ReineAbeille::estEntouree(const std::map<Hexagon, Insecte*>& p) const {
     }
     return true;
 }
+
+#include <sstream>
+std::string Insecte::toJson() const {
+    std::stringstream jsonData;
+    jsonData << "{\n";
+    jsonData << "  \"nom\": \"" << nom << "\",\n";
+    jsonData << "  \"coords\": " << coords.toJson() << ",\n";
+    jsonData << "  \"owner\": \"" << (owner ? owner->getName() : "null") << "\",\n";
+    jsonData << "  \"dessus\": " << (dessus ? "\"" + dessus->getNom() + "\"" : "null") << ",\n";
+    jsonData << "  \"dessous\": " << (dessous ? "\"" + dessous->getNom() + "\"" : "null") << "\n";
+    jsonData << "}";
+
+    return jsonData.str();
+}
+
+
 
 
 
