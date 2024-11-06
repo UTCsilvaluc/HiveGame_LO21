@@ -4,19 +4,19 @@
 #include "Insecte.h"
 #include <vector>
 
-std::vector<Insecte*> deckDeBase();
+std::vector<Insecte*> deckDeBase(Joueur *joueur);
 class Joueur
 {
 private:
     std::string nom;
     std::vector<Insecte*> deck;
 public:
-    Joueur(const std::string& nom) : nom(nom) , deck(deckDeBase()) {}
+    Joueur(const std::string& nom) : nom(nom) , deck(deckDeBase(this)) {}
     Joueur(std::string n, std::vector<Insecte*> d) {
-        if (n.empty()) {throw std::invalid_argument("Le nom ne peut pas être vide.");}
+        if (n.empty()) {throw std::invalid_argument("Le nom ne peut pas Ãªtre vide.");}
         nom = n;
-        // Si un deck est fourni, l'utiliser ; sinon, utiliser le deck par défaut. Permet de gérer les extensions en cas de besoin.
-        deck = d.empty() ? deckDeBase() : d;
+        // Si un deck est fourni, l'utiliser ; sinon, utiliser le deck par dÃ©faut. Permet de gÃ©rer les extensions en cas de besoin.
+        deck = d.empty() ? deckDeBase(this) : d;
     }
     const std::string &getName() const {return nom;}
     const std::vector<Insecte*>& getDeck() const { return deck; }
@@ -24,6 +24,7 @@ public:
     int getQueenIndex() const;
     bool hasQueen() const;
     void afficherDeck() const;
+    std::string toJson() const;
     ~Joueur() {
         for (Insecte* insecte : deck) {
             delete insecte;
@@ -42,7 +43,7 @@ public:
         if (index < deck.size()) {
             deck.erase(deck.begin() + index);  // Retirer du deck
         } else {
-            std::cout << "Index invalide. Aucune action effectuée." << std::endl;
+            std::cout << "Index invalide. Aucune action effectuÃ©e." << std::endl;
         }
     }
 
