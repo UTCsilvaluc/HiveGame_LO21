@@ -29,6 +29,7 @@ std::vector<Hexagon> getVoisins(const Hexagon& coords) {
     return voisins;
 }
 
+
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p){
     std::vector<Hexagon> vides; //On d�clare la liste des hexagons adjacents vides, pour le moment elle ne contient rien
     std::vector<Hexagon> voisins = getVoisins(coords); //On d�clare la liste des voisins de l'hexagon cible
@@ -100,32 +101,6 @@ bool getGlissementPossible(Hexagon coords, const  std::map<Hexagon, Insecte*> p,
         return false;
     }
     return true;
-}
-
-std::vector<Hexagon> Insecte::placementsPossiblesDeBase(const std::map<Hexagon, Insecte*>& plateau) const {
-    std::vector<Hexagon> positionsValides;
-
-    for (const auto& [position, insecteSurCase] : plateau) {
-        if (insecteSurCase->getOwner() == this->owner) {
-            std::vector<Hexagon> videsAdjacents = casesAdjacentesVides(position, plateau);
-
-            for (const Hexagon& caseVide : videsAdjacents) {
-                bool caseValide = true;
-
-                for (const Hexagon& voisin : getVoisins(caseVide)) {
-                    if (plateau.count(voisin) > 0 && plateau.at(voisin)->getOwner() != this->owner) {
-                        caseValide = false;
-                        break;
-                    }
-                }
-
-                if (caseValide) {
-                    positionsValides.push_back(caseVide);
-                }
-            }
-        }
-    }
-    return positionsValides;
 }
 
 std::vector<Hexagon> deplacementsPossiblesReineAbeille(Hexagon coords, std::map<Hexagon, Insecte*> p){
@@ -264,6 +239,28 @@ std::string Insecte::toJson() const {
     jsonData << "}";
 
     return jsonData.str();
+}
+
+std::vector<Hexagon> Insecte::placementsPossiblesDeBase(const std::map<Hexagon, Insecte*>& plateau) const {
+    std::vector<Hexagon> positionsValides;
+    for (const auto& [position, insecteSurCase] : plateau) {
+        if (insecteSurCase->getOwner() == this->owner) {
+            std::vector<Hexagon> videsAdjacents = casesAdjacentesVides(position, plateau);
+            for (const Hexagon& caseVide : videsAdjacents) {
+                bool caseValide = true;
+                for (const Hexagon& voisin : getVoisins(caseVide)) {
+                    if (plateau.count(voisin) > 0 && plateau.at(voisin)->getOwner() != this->owner) {
+                        caseValide = false;
+                        break;
+                    }
+                }
+                if (caseValide) {
+                    positionsValides.push_back(caseVide);
+                }
+            }
+        }
+    }
+    return positionsValides;
 }
 
 

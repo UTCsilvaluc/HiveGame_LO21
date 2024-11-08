@@ -15,6 +15,7 @@ private:
     Joueur *joueur1;
     Joueur *joueur2;
     unsigned int mode;
+    unsigned int tour;
     void deplacerPion(Joueur* current);
     void placerPion(Joueur* current, bool b);
 public:
@@ -26,7 +27,7 @@ public:
     void choixExtensions(){}//Objet publique extension qui contient une liste d'extension et propose de les choisir
     void jouer();
     int getInputForAction(Joueur* current);
-    bool detectWinner(Joueur *current);
+    bool detectWinner(Joueur *joueur1 , Joueur *joueur2);
     void saveGame();
     // Destructeur pour libérer la mémoire
     ~GameMaster();
