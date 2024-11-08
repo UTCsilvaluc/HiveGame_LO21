@@ -47,6 +47,16 @@ public:
         }
     }
 
+    //Cherche si un insecte passé en parametre est dans le deck du joueur
+    Insecte* contientInsecte(const std::string& nomInsecte) const {
+        for (Insecte* insecte : deck) {
+            if (insecte->getNom() == nomInsecte) {
+                return insecte;
+            }
+        }
+        return nullptr;
+    }
+
 };
 
 

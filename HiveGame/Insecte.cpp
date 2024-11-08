@@ -1,7 +1,7 @@
 #include "Insecte.h"
 #include "Joueur.h" // Ajoutez cette ligne
 
-std::vector<Hexagon> obtenirVoisins(const Hexagon& coords) {
+std::vector<Hexagon> getVoisins(const Hexagon& coords) {
     std::vector<Hexagon> voisins;
     int q = coords.getQ();
     int r = coords.getR();
@@ -100,6 +100,32 @@ bool getGlissementPossible(Hexagon coords, const  std::map<Hexagon, Insecte*> p,
         return false;
     }
     return true;
+}
+
+std::vector<Hexagon> Insecte::placementsPossiblesDeBase(const std::map<Hexagon, Insecte*>& plateau) const {
+    std::vector<Hexagon> positionsValides;
+
+    for (const auto& [position, insecteSurCase] : plateau) {
+        if (insecteSurCase->getOwner() == this->owner) {
+            std::vector<Hexagon> videsAdjacents = casesAdjacentesVides(position, plateau);
+
+            for (const Hexagon& caseVide : videsAdjacents) {
+                bool caseValide = true;
+
+                for (const Hexagon& voisin : getVoisins(caseVide)) {
+                    if (plateau.count(voisin) > 0 && plateau.at(voisin)->getOwner() != this->owner) {
+                        caseValide = false;
+                        break;
+                    }
+                }
+
+                if (caseValide) {
+                    positionsValides.push_back(caseVide);
+                }
+            }
+        }
+    }
+    return positionsValides;
 }
 
 std::vector<Hexagon> deplacementsPossiblesReineAbeille(Hexagon coords, std::map<Hexagon, Insecte*> p){

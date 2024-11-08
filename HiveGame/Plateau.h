@@ -4,8 +4,10 @@
 #include <iostream>
 #include <map>
 #include <vector>
+#include <limits>
 #include "Hexagon.h"
 #include "Insecte.h"
+#include "Joueur.h"
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
 #define BLUE    "\033[34m"
@@ -17,11 +19,16 @@ private:
     //std::vector<Action*> historiqueDesActions;
     //std::vector<Extension*> extensionsActivees;
     int nombreRetoursArriere;
-    int nombreTours;
+    unsigned int nombreTours;
     int minR, maxR, minQ, maxQ;
 
 public:
     Plateau() : nombreRetoursArriere(3), nombreTours(0), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par défaut
+
+    unsigned int getTour(){return nombreTours;}
+    void incrementerTour(){++nombreTours;}
+
+    void ajouterInsecte(Insecte* insecte, Hexagon position);
 
     void mettreAJourLimites() {
         // Initialiser les limites à des valeurs extrêmes
@@ -36,11 +43,7 @@ public:
             if (coords.getQ() > maxQ) maxQ = coords.getQ();
         }
     }
-    void ajouterInsecte(Insecte* insecte) {
-        plateauMap[insecte->getCoords()] = insecte; // Ajouter à la carte
-        insectesSurPlateau.push_back(insecte); // Garder une référence à l'insecte
-        mettreAJourLimites(); // Mettre à jour les limites lors de l'ajout
-    }
+
 
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
         plateauMap.erase(insecte->getCoords()); // Retirer l'insecte de sa position actuelle
@@ -93,7 +96,13 @@ void afficherPlateau(Joueur *p1, Joueur *p2) const {
         // Reset de la couleur et retour à la ligne après chaque rangée
         std::cout << RESET << std::endl << std::endl;
     }
-}
+    }
+
+    void afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplacementsPossibles, Joueur* j1, Joueur* j2);
+
+    void afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2);
+
+    void afficherPossibilitePlacement(Insecte* insecte, Joueur* j1, Joueur* j2);
 
 
     int getMinR() const { return minR; }

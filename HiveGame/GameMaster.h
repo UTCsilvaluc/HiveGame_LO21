@@ -15,7 +15,6 @@ private:
     Joueur *joueur1;
     Joueur *joueur2;
     unsigned int mode;
-    unsigned int tour;
     void deplacerPion(Joueur* current);
     void placerPion(Joueur* current, bool b);
 public:

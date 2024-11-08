@@ -177,3 +177,56 @@
 1730905424 source:c:\users\debru\onedrive\documents\github\hivegame_lo21\hivegame\plateau.cpp
 	"Plateau.h"
 
+1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\gamemaster.cpp
+	"GameMaster.h"
+
+1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\gamemaster.h
+	"Joueur.h"
+	"Plateau.h"
+	<iostream>
+	<memory>
+	<limits>
+
+1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\joueur.h
+	"Insecte.h"
+	<vector>
+
+1731026131 c:\users\jean-\desktop\hivegame_lo21\hivegame\insecte.h
+	"Hexagon.h"
+	<string>
+	<vector>
+	<map>
+	<set>
+	<algorithm>
+	<sstream>
+
+1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\hexagon.h
+	<cstdlib>
+	<iostream>
+
+1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\plateau.h
+	<iostream>
+	<map>
+	<vector>
+	"Hexagon.h"
+	"Insecte.h"
+
+1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\hexagon.cpp
+	"Hexagon.h"
+	<sstream>
+
+1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\insecte.cpp
+	"Insecte.h"
+	"Joueur.h"
+
+1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\joueur.cpp
+	"Joueur.h"
+	<sstream>
+
+1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\main.cpp
+	"Plateau.h"
+	"GameMaster.h"
+
+1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\plateau.cpp
+	"Plateau.h"
+
