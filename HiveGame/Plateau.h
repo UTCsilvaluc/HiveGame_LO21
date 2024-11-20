@@ -62,6 +62,8 @@ public:
     }
 
 
+
+
     void afficherPlateau(Joueur *p1, Joueur *p2) const {
         for (int r = minR; r <= maxR; ++r) {
             // Décalage pour les lignes impaires pour créer l'effet hexagonal
@@ -121,16 +123,25 @@ public:
         std::vector<Hexagon> voisins;
         int q = insecte->getCoords().getQ();
         int r = insecte->getCoords().getR();
-
-        // Définir les voisins pour le système hexagonal
-        voisins = {
-            Hexagon(q + 1, r),     // Est
-            Hexagon(q, r + 1),     // Sud
-            Hexagon(q - 1, r + 1), // Sud-Ouest
-            Hexagon(q - 1, r),     // Ouest
-            Hexagon(q, r - 1),     // Nord
-            Hexagon(q + 1, r - 1)  // Nord-Est
-        };
+        if (q % 2 == 0) {  // Colonne paire
+            voisins = {
+                Hexagon(q - 1, r - 1),
+                Hexagon(q, r - 1),
+                Hexagon(q + 1, r),
+                Hexagon(q, r + 1),
+                Hexagon(q - 1, r + 1),
+                Hexagon(q - 1, r)
+            };
+        } else {  // Colonne impaire
+            voisins = {
+                Hexagon(q, r - 1),
+                Hexagon(q + 1, r - 1),
+                Hexagon(q+1, r),
+                Hexagon(q+1, r+1),
+                Hexagon(q, r+1),
+                Hexagon(q-1, r)
+            };
+        }
 
         // Affichage des voisins pour vérification
         std::cout << "Voisins de l'insecte (" << q << ", " << r << ") :\n";
@@ -190,6 +201,14 @@ public:
         }
         return false;
     }
+
+    Insecte* getSeulInsecteSurPlateau() const {
+        if (plateauMap.size() == 1) {
+            return plateauMap.begin()->second; // Retourne le premier (et seul) insecte
+        }
+        return nullptr; // Retourne nullptr si aucun ou plusieurs insectes
+    }
+
 };
 
 #endif // PLATEAU_H

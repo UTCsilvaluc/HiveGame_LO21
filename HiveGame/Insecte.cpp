@@ -8,21 +8,21 @@ std::vector<Hexagon> getVoisins(const Hexagon& coords) {
 
     if (q % 2 == 0) {  // Colonne paire
         voisins = {
-            Hexagon(q + 1, r),
-            Hexagon(q + 1, r - 1),
+            Hexagon(q - 1, r - 1),
             Hexagon(q, r - 1),
-            Hexagon(q - 1, r),
+            Hexagon(q + 1, r),
+            Hexagon(q, r + 1),
             Hexagon(q - 1, r + 1),
-            Hexagon(q, r + 1)
+            Hexagon(q - 1, r)
         };
     } else {  // Colonne impaire
         voisins = {
-            Hexagon(q + 1, r),
-            Hexagon(q + 1, r + 1),
             Hexagon(q, r - 1),
-            Hexagon(q - 1, r),
-            Hexagon(q - 1, r - 1),
-            Hexagon(q, r + 1)
+            Hexagon(q + 1, r - 1),
+            Hexagon(q+1, r),
+            Hexagon(q+1, r+1),
+            Hexagon(q, r+1),
+            Hexagon(q-1, r)
         };
     }
 

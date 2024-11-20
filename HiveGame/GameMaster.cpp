@@ -90,25 +90,30 @@ void GameMaster::jouer() {
     bool hasWinner = false;
     while (!hasWinner) {
         Joueur* current = (tour % 2 == 0) ? joueur1 : joueur2;
-        hasWinner = detectWinner(joueur1 , joueur2);
+        int playerTurn = (tour / 2) + 1; // Tour spécifique au joueur
+        hasWinner = detectWinner(joueur1, joueur2);
+
         std::cout << "\nC'est au tour de : " << current->getName() << std::endl;
 
         if (current->hasQueen()) {
-            std::cout << "Il vous reste " << 4 - tour << " pour jouer votre reine." << std::endl;
+            int remainingTurnsToPlayQueen = 4 - playerTurn;
+            std::cout << "Il vous reste " << remainingTurnsToPlayQueen
+                      << " tours pour jouer votre reine." << std::endl;
         }
+
         int choice = 0;
-        bool needPlayQueen = (4 - tour == 0) && current->hasQueen();
+        bool needPlayQueen = (playerTurn >= 4) && current->hasQueen();
 
         if (needPlayQueen) {
             std::cout << "Vous devez obligatoirement poser votre Reine !\n";
             choice = 2; // Forcer le choix de poser la reine
         } else {
-            if (!(plateau.playerCanMoveInsecte(current))){
+            if (!plateau.playerCanMoveInsecte(current)) {
+                std::cout << "Aucun mouvement possible, vous devez placer un pion.\n";
                 choice = 2;
             } else {
                 choice = getInputForAction(current);
             }
-
         }
 
         // Exécuter l'action choisie
@@ -122,6 +127,7 @@ void GameMaster::jouer() {
         tour++;
     }
 }
+
 
 int GameMaster::getInputForAction(Joueur* current) {
     int choice = 0;
@@ -166,6 +172,7 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
     Insecte* insecteAPlacer = nullptr;
     int index = 0;
 
+    // Sélection du pion à placer
     if (!needPlayQueen) {
         std::cout << "\nVoici votre deck : " << std::endl;
         current->afficherDeck();
@@ -175,17 +182,77 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
         insecteAPlacer = current->getQueen();
         index = current->getQueenIndex();
     }
-    if (!(plateau.plateauEstVide())){
-        plateau.afficherPlateau(joueur1 , joueur2);
+
+    if (!plateau.plateauEstVide()) {
+        plateau.afficherPlateau(joueur1, joueur2);
     }
 
+    Hexagon nouvellePosition;
+    bool placementValide = false;
 
-    int x = getInput("Abscisse pour poser le pion : " , plateau.getMinQ() - 1 , plateau.getMaxQ() + 1 , tour);
-    int y = getInput("Ordonnée pour poser le pion : " , plateau.getMinR() - 1 , plateau.getMaxR() + 1 , tour);
-    insecteAPlacer->setCoords(Hexagon(x , y));
+    // Boucle pour garantir un placement valide
+    while (!placementValide) {
+        int x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1, plateau.getMaxQ() + 1);
+        int y = getInput("Ordonnée pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
+        nouvellePosition = Hexagon(x, y);
+
+        if (plateau.plateauEstVide()) {
+            // Si le plateau est vide, tout placement est valide
+            placementValide = true;
+        } else {
+            // Vérifier les voisins du premier insecte sur le plateau
+            if (!plateau.playerCanMoveInsecte(current)) {
+                Insecte* seulInsecte = plateau.getSeulInsecteSurPlateau();
+                if (!seulInsecte) {
+                    std::cout << "Erreur : aucun insecte trouvé sur le plateau." << std::endl;
+                    return;
+                }
+
+                // Récupérer les voisins de l'insecte
+                std::vector<Hexagon> deplacementsPossibles = seulInsecte->getCoords().getVoisins();
+
+                // Afficher les voisins
+                std::cout << "Les voisins possibles pour le placement sont : " << std::endl;
+                for (const Hexagon& voisin : deplacementsPossibles) {
+                    std::cout << "Voisin : (" << voisin.getQ() << ", " << voisin.getR() << ")" << std::endl;
+                }
+
+                if (std::find(deplacementsPossibles.begin(), deplacementsPossibles.end(), nouvellePosition) != deplacementsPossibles.end()) {
+                    placementValide = true;
+                } else {
+                    std::cout << "Placement invalide. Vous devez être adjacent au premier pion du plateau. Essayez à nouveau.\n";
+                }
+            } else {
+                std::vector<Hexagon> voisins = nouvellePosition.getVoisins();
+                bool adjacentAllie = false;
+                bool toucheEnnemi = false;
+
+                for (const Hexagon& voisin : voisins) {
+                    Insecte* insecteVoisin = plateau.getInsecteAtCoords(voisin.getQ(), voisin.getR());
+                    if (insecteVoisin) {
+                        if (insecteVoisin->getOwner() == current) {
+                            adjacentAllie = true;
+                        } else {
+                            toucheEnnemi = true;
+                        }
+                    }
+                }
+
+                if (adjacentAllie && !toucheEnnemi) {
+                    placementValide = true;
+                } else {
+                    std::cout << "Placement invalide. Votre pion doit être adjacent à un de vos pions et ne pas toucher un pion ennemi. Essayez à nouveau.\n";
+                }
+            }
+        }
+    }
+    insecteAPlacer->setCoords(nouvellePosition);
     plateau.ajouterInsecte(insecteAPlacer);
-    current->retirerInsecte(index); // Retirer le pion du deck après l'avoir posé
+    current->retirerInsecte(index); // Retirer le pion du deck après placement
+    std::cout << "Pion placé avec succès en " << nouvellePosition << "." << std::endl;
 }
+
+
 
 bool GameMaster::detectWinner(Joueur *joueur1 , Joueur *joueur2) {
     Insecte* reineP1 = plateau.getReineAbeille(joueur1);

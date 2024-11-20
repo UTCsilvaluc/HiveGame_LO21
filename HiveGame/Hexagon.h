@@ -2,6 +2,7 @@
 #define HEXAGON_H
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 
 class Hexagon {
 private:
@@ -37,6 +38,30 @@ public:
         return r < other.r;
     }
     friend std::ostream& operator<<(std::ostream& os, const Hexagon& hex);
+
+    std::vector<Hexagon> getVoisins() {
+        std::vector<Hexagon> voisins;
+        if (q % 2 == 0) {  // Colonne paire
+            voisins = {
+                Hexagon(q - 1, r - 1),
+                Hexagon(q, r - 1),
+                Hexagon(q + 1, r),
+                Hexagon(q, r + 1),
+                Hexagon(q - 1, r + 1),
+                Hexagon(q - 1, r)
+            };
+        } else {  // Colonne impaire
+            voisins = {
+                Hexagon(q, r - 1),
+                Hexagon(q + 1, r - 1),
+                Hexagon(q+1, r),
+                Hexagon(q+1, r+1),
+                Hexagon(q, r+1),
+                Hexagon(q-1, r)
+            };
+        }
+        return voisins;
+    }
 
 };
 
