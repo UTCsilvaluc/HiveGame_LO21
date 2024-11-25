@@ -113,7 +113,7 @@ public:
 // Fonctions supplémentaires
 std::vector<Hexagon> deplacementsPossiblesReineAbeille(Hexagon coords, std::map<Hexagon, Insecte*> p);
 void deplacementsPossiblesFourmi(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminInsecte, std::set<Hexagon>& deplacements);
-std::vector<Hexagon> deplacementsPossiblesSauterelle(Hexagon coords, std::map<Hexagon, Insecte*> p);
+void deplacementsPossiblesSauterelle(Hexagon coords, std::map<Hexagon, Insecte*> p);
 void deplacementsPossiblesCoccinelle(Hexagon coords, std::map<Hexagon, Insecte*> p, int i, std::vector<Hexagon> &cheminFinal);
 std::vector<Hexagon> deplacementsPossiblesScarabee(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> deplacementsPossiblesAraignee(Hexagon coords, std::map<Hexagon, Insecte*> p);

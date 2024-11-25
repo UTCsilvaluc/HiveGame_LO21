@@ -201,7 +201,6 @@ void deplacementsPossiblesCoccinelle(Hexagon coords, std::map<Hexagon, Insecte*>
     }
 }
 
-
 std::vector<Hexagon> Coccinelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
     int i=0;
     std::vector<Hexagon> cheminFinal;
@@ -209,9 +208,133 @@ std::vector<Hexagon> Coccinelle::deplacementsPossibles(std::map<Hexagon, Insecte
     return std::vector<Hexagon>(cheminFinal.begin(), cheminFinal.end());
 }
 
-std::vector<Hexagon> Sauterelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
-    return deplacementsPossiblesReineAbeille(getCoords(), p);
+void deplacementsPossiblesSauterelle(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminFinal){
+    std::vector<Hexagon> chemin;
+    if(getChaineBrisee(coords, p, chemin)){
+        return;
+    }
+    std::vector<Hexagon> voisins = casesAdjacentesOccupees(coords, p);
+    for(size_t i =0; i<voisins.size(); i++){
+        int direction = 0;
+        if(coords.getQ() % 2 == 0){
+            if(coords.getQ() == voisins.at(i).getQ() && coords.getR() == voisins.at(i).getR() - 1){
+                direction = 0; //Nord
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() && coords.getR() == voisins.at(i).getR() + 1){
+                direction = 3; //Sud
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() + 1 && coords.getR() == voisins.at(i).getR()){
+                direction = 1; //Nord-Est
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() + 1 && coords.getR() == voisins.at(i).getR() + 1){
+                direction = 2; //Sud-Est
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() - 1 && coords.getR() == voisins.at(i).getR()){
+                direction = 5; //Nord-Ouest
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() - 1 && coords.getR() == voisins.at(i).getR() + 1){
+                direction = 4; //Sud-Ouest
+            }
+        }
+        else{
+            if(coords.getQ() == voisins.at(i).getQ() && coords.getR() == voisins.at(i).getR() - 1){
+                direction = 0; //Nord
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() && coords.getR() == voisins.at(i).getR() + 1){
+                direction = 3; //Sud
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() + 1 && coords.getR() == voisins.at(i).getR() - 1){
+                direction = 1; //Nord-Est
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() + 1 && coords.getR() == voisins.at(i).getR()){
+                direction = 2; //Sud-Est
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() - 1 && coords.getR() == voisins.at(i).getR() - 1){
+                direction = 5; //Nord-Ouest
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() - 1 && coords.getR() == voisins.at(i).getR()){
+                direction = 4; //Sud-Ouest
+            }
+        }
+        bool caseVide = false;
+        Hexagon current = voisins.at(i);
+        std::map<Hexagon, Insecte*>::iterator it;
+        while (!caseVide) {
+            it = p.find(current);
+            if (it == p.end()) {
+                cheminFinal.push_back(current);
+                caseVide = true;
+                break;
+                }
+            switch (direction) {
+                case 0: // Nord
+                    current = Hexagon(current.getQ(), current.getR() - 1);
+                    break;
+                case 1: // Nord-Est
+                    if (current.getQ() % 2 == 0)
+                        current = Hexagon(current.getQ() + 1, current.getR());
+                    else
+                        current = Hexagon(current.getQ() + 1, current.getR() - 1);
+                    break;
+                case 2: // Sud-Est
+                    if (current.getQ() % 2 == 0)
+                        current = Hexagon(current.getQ() + 1, current.getR() + 1);
+                    else
+                        current = Hexagon(current.getQ() + 1, current.getR());
+                    break;
+                case 3: // Sud
+                    current = Hexagon(current.getQ(), current.getR() + 1);
+                    break;
+                case 4: // Sud-Ouest
+                    if (current.getQ() % 2 == 0)
+                        current = Hexagon(current.getQ() - 1, current.getR() + 1);
+                    else
+                        current = Hexagon(current.getQ() - 1, current.getR());
+                    break;
+                case 5: // Nord-Ouest
+                    if (current.getQ() % 2 == 0)
+                        current = Hexagon(current.getQ() - 1, current.getR());
+                    else
+                        current = Hexagon(current.getQ() - 1, current.getR() - 1);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 }
+
+std::vector<Hexagon> Sauterelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
+    std::vector<Hexagon> cheminFinal;
+    deplacementsPossiblesSauterelle(this->getCoords(), p, cheminFinal);
+    return std::vector<Hexagon>(cheminFinal.begin(), cheminFinal.end());
+}
+
+void deplacementsPossiblesAraignee(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminInsecte, std::set<Hexagon>& deplacements) {
+    std::vector<Hexagon> cheminChaine;
+    if(getChaineBrisee(coords, p, cheminChaine)){
+        return;
+    }
+    std::vector<Hexagon> voisinsVides = casesAdjacentesVides(coords, p);
+    std::map<Hexagon, Insecte*> p1 = p;
+    p1.erase(coords);
+    for (size_t i = 0; i < voisinsVides.size();) {
+        if (casesAdjacentesOccupees(voisinsVides[i], p1).empty() || !getGlissementPossible(coords, p, voisinsVides[i])) {
+            voisinsVides.erase(voisinsVides.begin() + i);
+        } else {
+            ++i;
+        }
+    }
+    cheminInsecte.push_back(coords);
+    for (Hexagon voisin : voisinsVides) {
+        if (std::find(cheminInsecte.begin(), cheminInsecte.end(), voisin) == cheminInsecte.end()) {
+            deplacements.insert(voisin);
+            deplacementsPossiblesFourmi(voisin, p1, cheminInsecte, deplacements);
+        }
+    }
+}
+
+
 
 std::vector<Hexagon> Araignee::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
     return deplacementsPossiblesReineAbeille(getCoords(), p);
