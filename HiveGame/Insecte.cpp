@@ -176,17 +176,19 @@ std::vector<Hexagon> Scarabee::deplacementsPossibles(std::map<Hexagon, Insecte*>
     return deplacementsPossiblesScarabee(getCoords(), p);
 }
 
-void deplacementsPossiblesCoccinelle(Hexagon coords, std::map<Hexagon, Insecte*> p, int i, std::vector<Hexagon>& cheminFinal){
-    std::vector<Hexagon> deplacements;
+void deplacementsPossiblesCoccinelle(Hexagon coords, std::map<Hexagon, Insecte*> p, int i, std::vector<Hexagon>& cheminFinal, std::set<Hexagon>& visited) {
+    if (visited.find(coords) != visited.end()) {
+        return;
+    }
+    visited.insert(coords);
     std::vector<Hexagon> chemin;
-    std::vector<Hexagon> voisins = getVoisins(coords);
     if(getChaineBrisee(coords, p, chemin)){
         return;
     }
     if(i!=0){
         std::vector<Hexagon> voisinsOccupes = casesAdjacentesOccupees(coords, p);
         for (int j = 0; j<voisinsOccupes.size(); j++){
-            deplacementsPossiblesCoccinelle(voisinsOccupes.at(i), p, i-1, cheminFinal);
+            deplacementsPossiblesCoccinelle(voisinsOccupes.at(j), p, i-1, cheminFinal, visited);
         }
     }
     else{
@@ -204,7 +206,8 @@ void deplacementsPossiblesCoccinelle(Hexagon coords, std::map<Hexagon, Insecte*>
 std::vector<Hexagon> Coccinelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
     int i=0;
     std::vector<Hexagon> cheminFinal;
-    deplacementsPossiblesCoccinelle(this->getCoords(), p, i, cheminFinal);
+    std::set<Hexagon> visited;
+    deplacementsPossiblesCoccinelle(this->getCoords(), p, i, cheminFinal, visited);
     return std::vector<Hexagon>(cheminFinal.begin(), cheminFinal.end());
 }
 
@@ -310,7 +313,7 @@ std::vector<Hexagon> Sauterelle::deplacementsPossibles(std::map<Hexagon, Insecte
     return std::vector<Hexagon>(cheminFinal.begin(), cheminFinal.end());
 }
 
-void deplacementsPossiblesAraignee(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminInsecte, std::set<Hexagon>& deplacements) {
+void deplacementsPossiblesAraignee(Hexagon coords, std::map<Hexagon, Insecte*> p, int i, std::vector<Hexagon>& cheminInsecte, std::set<Hexagon>& deplacementsFinaux) {
     std::vector<Hexagon> cheminChaine;
     if(getChaineBrisee(coords, p, cheminChaine)){
         return;
@@ -318,26 +321,32 @@ void deplacementsPossiblesAraignee(Hexagon coords, std::map<Hexagon, Insecte*> p
     std::vector<Hexagon> voisinsVides = casesAdjacentesVides(coords, p);
     std::map<Hexagon, Insecte*> p1 = p;
     p1.erase(coords);
-    for (size_t i = 0; i < voisinsVides.size();) {
-        if (casesAdjacentesOccupees(voisinsVides[i], p1).empty() || !getGlissementPossible(coords, p, voisinsVides[i])) {
-            voisinsVides.erase(voisinsVides.begin() + i);
+    for (size_t j = 0; j < voisinsVides.size();) {
+        if (casesAdjacentesOccupees(voisinsVides[j], p1).empty() || !getGlissementPossible(coords, p, voisinsVides[j])) {
+            voisinsVides.erase(voisinsVides.begin() + j);
         } else {
-            ++i;
+            ++j;
         }
     }
     cheminInsecte.push_back(coords);
-    for (Hexagon voisin : voisinsVides) {
-        if (std::find(cheminInsecte.begin(), cheminInsecte.end(), voisin) == cheminInsecte.end()) {
-            deplacements.insert(voisin);
-            deplacementsPossiblesFourmi(voisin, p1, cheminInsecte, deplacements);
+    if(i!=0){
+        for (Hexagon voisin : voisinsVides) {
+            if (std::find(cheminInsecte.begin(), cheminInsecte.end(), voisin) == cheminInsecte.end()) {
+                deplacementsPossiblesAraignee(voisin, p1, i-1, cheminInsecte, deplacementsFinaux);
+            }
         }
+    }
+    else{
+        deplacementsFinaux.insert(coords);
     }
 }
 
-
-
 std::vector<Hexagon> Araignee::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
-    return deplacementsPossiblesReineAbeille(getCoords(), p);
+    int i=3;
+    std::set<Hexagon> deplacementsFinaux;
+    std::vector<Hexagon> cheminInsecte;
+    deplacementsPossiblesAraignee(this->getCoords(), p, i, cheminInsecte, deplacementsFinaux);
+    return std::vector<Hexagon>(deplacementsFinaux.begin(), deplacementsFinaux.end());
 }
 
 std::vector<Hexagon> Moustique::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
