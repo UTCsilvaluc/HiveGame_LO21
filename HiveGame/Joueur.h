@@ -46,6 +46,15 @@ public:
             std::cout << "Index invalide. Aucune action effectuée." << std::endl;
         }
     }
+    Insecte* contientInsecte(const std::string& nomInsecte) const {
+        for (Insecte* insecte : deck) {
+            if (insecte->getNom() == nomInsecte) {
+                return insecte;
+            }
+        }
+        return nullptr;
+    }
+
 
 };
 

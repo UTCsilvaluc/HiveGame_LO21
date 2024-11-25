@@ -55,6 +55,7 @@ public:
     std::string getFirstCarac() {
         return std::string(1, this->nom[0]);
     }
+    std::vector<Hexagon> placementsPossiblesDeBase(const std::map<Hexagon, Insecte*>& plateau) const;
 };
 
 // Adaptation des constructeurs pour chaque classe d'insecte dérivée
@@ -100,6 +101,14 @@ public:
     Moustique(Hexagon coords, Joueur *owner) : Insecte("Moustique", coords, owner) {}
     std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p);
 };
+class InsecteFictif : public Insecte {
+public:
+    InsecteFictif(Hexagon coords, Joueur* player) : Insecte("X", coords, player) {}
+    // Implémentation correcte de la fonction pure virtuelle
+    std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) override {
+        return {}; // Pas de déplacement pour cet insecte fictif
+    }
+};
 
 // Fonctions supplémentaires
 std::vector<Hexagon> deplacementsPossiblesReineAbeille(Hexagon coords, std::map<Hexagon, Insecte*> p);
@@ -109,7 +118,7 @@ void deplacementsPossiblesCoccinelle(Hexagon coords, std::map<Hexagon, Insecte*>
 std::vector<Hexagon> deplacementsPossiblesScarabee(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> deplacementsPossiblesAraignee(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> deplacementsPossiblesMoustique(Hexagon coords, std::map<Hexagon, Insecte*> p);
-std::vector<Hexagon> getVoisins(Hexagon coords);
+std::vector<Hexagon> getVoisins(const Hexagon& coords);
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> getLongueurChaine(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
