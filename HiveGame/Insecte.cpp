@@ -8,21 +8,21 @@ std::vector<Hexagon> obtenirVoisins(const Hexagon& coords) {
 
     if (q % 2 == 0) {  // Colonne paire
         voisins = {
-            Hexagon(q + 1, r),
-            Hexagon(q + 1, r - 1),
-            Hexagon(q, r - 1),
-            Hexagon(q - 1, r),
-            Hexagon(q - 1, r + 1),
-            Hexagon(q, r + 1)
+            Hexagon(q, r - 1), //Nord
+            Hexagon(q, r + 1), //Sud
+            Hexagon(q + 1, r), //Nord-Est
+            Hexagon(q + 1, r + 1), //Sud-Est
+            Hexagon(q - 1, r), //Nord-Ouest
+            Hexagon(q - 1, r + 1) //Sud-Ouest
         };
     } else {  // Colonne impaire
         voisins = {
-            Hexagon(q + 1, r),
-            Hexagon(q + 1, r + 1),
-            Hexagon(q, r - 1),
-            Hexagon(q - 1, r),
-            Hexagon(q - 1, r - 1),
-            Hexagon(q, r + 1)
+            Hexagon(q, r - 1), //Nord
+            Hexagon(q, r + 1), //Sud
+            Hexagon(q + 1, r - 1), //Nord-Est
+            Hexagon(q + 1, r), //Sud-Est
+            Hexagon(q - 1, r - 1), //Nord-Ouest
+            Hexagon(q - 1, r) //Sud-Ouest
         };
     }
 
@@ -130,10 +130,10 @@ std::vector<Hexagon> ReineAbeille::deplacementsPossibles(std::map<Hexagon, Insec
     return deplacementsPossiblesReineAbeille(getCoords(), p);
 }
 
-std::vector<Hexagon> deplacementsPossiblesFourmi(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminInsecte, std::set<Hexagon>& deplacements) {
+void deplacementsPossiblesFourmi(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminInsecte, std::set<Hexagon>& deplacements) {
     std::vector<Hexagon> cheminChaine;
     if(getChaineBrisee(coords, p, cheminChaine)){
-        return std::vector<Hexagon>();
+        return;
     }
     std::vector<Hexagon> voisinsVides = casesAdjacentesVides(coords, p);
     std::map<Hexagon, Insecte*> p1 = p;
@@ -152,13 +152,13 @@ std::vector<Hexagon> deplacementsPossiblesFourmi(Hexagon coords, std::map<Hexago
             deplacementsPossiblesFourmi(voisin, p1, cheminInsecte, deplacements);
         }
     }
-    return std::vector<Hexagon>(deplacements.begin(), deplacements.end());
 }
 
 std::vector<Hexagon> Fourmi::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
-    std::vector<Hexagon> cheminInsecte;
     std::set<Hexagon> deplacements;
-    return deplacementsPossiblesFourmi(getCoords(), p, cheminInsecte, deplacements);
+    std::vector<Hexagon> cheminInsecte;
+    deplacementsPossiblesFourmi(this->getCoords(), p, cheminInsecte, deplacements);
+    return std::vector<Hexagon>(deplacements.begin(), deplacements.end());
 }
 
 std::vector<Hexagon> deplacementsPossiblesScarabee(Hexagon coords, std::map<Hexagon, Insecte*> p){
@@ -202,7 +202,10 @@ void deplacementsPossiblesCoccinelle(Hexagon coords, std::map<Hexagon, Insecte*>
 
 
 std::vector<Hexagon> Coccinelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
-    return deplacementsPossiblesReineAbeille(getCoords(), p);
+    int i=0;
+    std::vector<Hexagon> cheminFinal;
+    deplacementsPossiblesCoccinelle(this->getCoords(), p, i, cheminFinal);
+    return std::vector<Hexagon>(cheminFinal.begin(), cheminFinal.end());
 }
 
 std::vector<Hexagon> Sauterelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
