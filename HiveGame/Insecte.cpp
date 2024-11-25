@@ -350,7 +350,20 @@ std::vector<Hexagon> Araignee::deplacementsPossibles(std::map<Hexagon, Insecte*>
 }
 
 std::vector<Hexagon> Moustique::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
-    return deplacementsPossiblesReineAbeille(getCoords(), p);
+    Hexagon coords = this->getCoords();
+    std::vector<Hexagon> voisins = casesAdjacentesOccupees(coords, p);
+    std::set<Hexagon> deplacementsUnique;
+    for (const Hexagon& voisin : voisins) {
+        auto it = p.find(voisin);
+        if (it != p.end()) {
+            Insecte* insecte = it->second;
+            if (insecte != nullptr) {
+                std::vector<Hexagon> deplacementsInsecte = insecte->deplacementsPossibles(p);
+                deplacementsUnique.insert(deplacementsInsecte.begin(), deplacementsInsecte.end());
+            }
+        }
+    }
+    return std::vector<Hexagon>(deplacementsUnique.begin(), deplacementsUnique.end());
 }
 
 bool ReineAbeille::estEntouree(const std::map<Hexagon, Insecte*>& p) const {
