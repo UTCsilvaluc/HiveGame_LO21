@@ -123,7 +123,7 @@ public:
         std::vector<Hexagon> voisins;
         int q = insecte->getCoords().getQ();
         int r = insecte->getCoords().getR();
-        if (q % 2 == 0) {  // Colonne paire
+        if (r % 2 == 0) {  // Colonne paire
             voisins = {
                 Hexagon(q - 1, r - 1),
                 Hexagon(q, r - 1),

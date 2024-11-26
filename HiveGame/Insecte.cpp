@@ -131,6 +131,7 @@ std::vector<Hexagon> ReineAbeille::deplacementsPossibles(std::map<Hexagon, Insec
 void deplacementsPossiblesFourmi(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminInsecte, std::set<Hexagon>& deplacements) {
     std::vector<Hexagon> cheminChaine;
     if(getChaineBrisee(coords, p, cheminChaine)){
+        std::cout<<"La chaine est brisee\n";
         return;
     }
     std::vector<Hexagon> voisinsVides = casesAdjacentesVides(coords, p);
@@ -156,6 +157,11 @@ std::vector<Hexagon> Fourmi::deplacementsPossibles(std::map<Hexagon, Insecte*> p
     std::set<Hexagon> deplacements;
     std::vector<Hexagon> cheminInsecte;
     deplacementsPossiblesFourmi(this->getCoords(), p, cheminInsecte, deplacements);
+    std::vector<Hexagon> test = std::vector<Hexagon>(deplacements.begin(), deplacements.end());
+    std::cout << "Nombre de déplacements possibles: " << test.size() << "\n";
+    for (const auto& hex : test) {
+        std::cout << hex << "\n";
+    }
     return std::vector<Hexagon>(deplacements.begin(), deplacements.end());
 }
 

@@ -41,7 +41,7 @@ public:
 
     std::vector<Hexagon> getVoisins() {
         std::vector<Hexagon> voisins;
-        if (q % 2 == 0) {  // Colonne paire
+        if (r % 2 == 0) {  // Colonne paire
             voisins = {
                 Hexagon(q - 1, r - 1),
                 Hexagon(q, r - 1),
