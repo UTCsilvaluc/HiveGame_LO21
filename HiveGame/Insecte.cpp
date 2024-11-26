@@ -5,30 +5,27 @@ std::vector<Hexagon> getVoisins(const Hexagon& coords) {
     std::vector<Hexagon> voisins;
     int q = coords.getQ();
     int r = coords.getR();
-
-    if (q % 2 == 0) {  // Colonne paire
+    if (r % 2 == 0) {  // Ligne paire
         voisins = {
-            Hexagon(q, r - 1), //Nord
-            Hexagon(q, r + 1), //Sud
-            Hexagon(q + 1, r), //Nord-Est
-            Hexagon(q + 1, r + 1), //Sud-Est
-            Hexagon(q - 1, r), //Nord-Ouest
+            Hexagon(q - 1, r), //Ouest
+            Hexagon(q + 1, r), //Est
+            Hexagon(q, r - 1), //Nord-Est
+            Hexagon(q, r + 1), //Sud-Est
+            Hexagon(q - 1, r - 1), //Nord-Ouest
             Hexagon(q - 1, r + 1) //Sud-Ouest
         };
-    } else {  // Colonne impaire
+    } else {  // Ligne impaire
         voisins = {
-            Hexagon(q, r - 1), //Nord
-            Hexagon(q, r + 1), //Sud
+            Hexagon(q - 1, r), //Ouest
+            Hexagon(q + 1, r), //Est
             Hexagon(q + 1, r - 1), //Nord-Est
-            Hexagon(q + 1, r), //Sud-Est
-            Hexagon(q - 1, r - 1), //Nord-Ouest
-            Hexagon(q - 1, r) //Sud-Ouest
+            Hexagon(q + 1, r + 1), //Sud-Est
+            Hexagon(q, r - 1), //Nord-Ouest
+            Hexagon(q, r + 1) //Sud-Ouest
         };
     }
-
     return voisins;
 }
-
 
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p){
     std::vector<Hexagon> vides; //On d�clare la liste des hexagons adjacents vides, pour le moment elle ne contient rien
@@ -219,44 +216,44 @@ void deplacementsPossiblesSauterelle(Hexagon coords, std::map<Hexagon, Insecte*>
     std::vector<Hexagon> voisins = casesAdjacentesOccupees(coords, p);
     for(size_t i =0; i<voisins.size(); i++){
         int direction = 0;
-        if(coords.getQ() % 2 == 0){
-            if(coords.getQ() == voisins.at(i).getQ() && coords.getR() == voisins.at(i).getR() - 1){
-                direction = 0; //Nord
-            }
-            else if(coords.getQ() == voisins.at(i).getQ() && coords.getR() == voisins.at(i).getR() + 1){
-                direction = 3; //Sud
+        if(coords.getR() % 2 == 0){
+            if(coords.getQ() == voisins.at(i).getQ() - 1 && coords.getR() == voisins.at(i).getR()){
+                direction = 4; //Ouest
             }
             else if(coords.getQ() == voisins.at(i).getQ() + 1 && coords.getR() == voisins.at(i).getR()){
-                direction = 1; //Nord-Est
+                direction = 1; //Est
             }
-            else if(coords.getQ() == voisins.at(i).getQ() + 1 && coords.getR() == voisins.at(i).getR() + 1){
-                direction = 2; //Sud-Est
-            }
-            else if(coords.getQ() == voisins.at(i).getQ() - 1 && coords.getR() == voisins.at(i).getR()){
-                direction = 5; //Nord-Ouest
-            }
-            else if(coords.getQ() == voisins.at(i).getQ() - 1 && coords.getR() == voisins.at(i).getR() + 1){
-                direction = 4; //Sud-Ouest
-            }
-        }
-        else{
-            if(coords.getQ() == voisins.at(i).getQ() && coords.getR() == voisins.at(i).getR() - 1){
-                direction = 0; //Nord
+            else if(coords.getQ() == voisins.at(i).getQ() && coords.getR() == voisins.at(i).getR() - 1){
+                direction = 0; //Nord-Est
             }
             else if(coords.getQ() == voisins.at(i).getQ() && coords.getR() == voisins.at(i).getR() + 1){
-                direction = 3; //Sud
-            }
-            else if(coords.getQ() == voisins.at(i).getQ() + 1 && coords.getR() == voisins.at(i).getR() - 1){
-                direction = 1; //Nord-Est
-            }
-            else if(coords.getQ() == voisins.at(i).getQ() + 1 && coords.getR() == voisins.at(i).getR()){
                 direction = 2; //Sud-Est
             }
             else if(coords.getQ() == voisins.at(i).getQ() - 1 && coords.getR() == voisins.at(i).getR() - 1){
                 direction = 5; //Nord-Ouest
             }
-            else if(coords.getQ() == voisins.at(i).getQ() - 1 && coords.getR() == voisins.at(i).getR()){
-                direction = 4; //Sud-Ouest
+            else if(coords.getQ() == voisins.at(i).getQ() - 1 && coords.getR() == voisins.at(i).getR() + 1){
+                direction = 3; //Sud-Ouest
+            }
+        }
+        else{
+            if(coords.getQ() == voisins.at(i).getQ() - 1 && coords.getR() == voisins.at(i).getR()){
+                direction = 4; //Ouest
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() + 1 && coords.getR() == voisins.at(i).getR()){
+                direction = 1; //Est
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() + 1 && coords.getR() == voisins.at(i).getR() - 1){
+                direction = 0; //Nord-Est
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() + 1 && coords.getR() == voisins.at(i).getR() + 1){
+                direction = 2; //Sud-Est
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() && coords.getR() == voisins.at(i).getR() - 1){
+                direction = 5; //Nord-Ouest
+            }
+            else if(coords.getQ() == voisins.at(i).getQ() && coords.getR() == voisins.at(i).getR() + 1){
+                direction = 3; //Sud-Ouest
             }
         }
         bool caseVide = false;
@@ -270,35 +267,35 @@ void deplacementsPossiblesSauterelle(Hexagon coords, std::map<Hexagon, Insecte*>
                 break;
                 }
             switch (direction) {
-                case 0: // Nord
-                    current = Hexagon(current.getQ(), current.getR() - 1);
+                case 0: // Ouest
+                    current = Hexagon(current.getQ() - 1, current.getR());
                     break;
                 case 1: // Nord-Est
-                    if (current.getQ() % 2 == 0)
-                        current = Hexagon(current.getQ() + 1, current.getR());
+                    if (current.getR() % 2 == 0)
+                        current = Hexagon(current.getQ(), current.getR() - 1);
                     else
                         current = Hexagon(current.getQ() + 1, current.getR() - 1);
                     break;
                 case 2: // Sud-Est
-                    if (current.getQ() % 2 == 0)
-                        current = Hexagon(current.getQ() + 1, current.getR() + 1);
+                    if (current.getR() % 2 == 0)
+                        current = Hexagon(current.getQ(), current.getR() + 1);
                     else
-                        current = Hexagon(current.getQ() + 1, current.getR());
+                        current = Hexagon(current.getQ() + 1, current.getR() + 1);
                     break;
-                case 3: // Sud
-                    current = Hexagon(current.getQ(), current.getR() + 1);
+                case 3: // Est
+                    current = Hexagon(current.getQ() + 1, current.getR());
                     break;
                 case 4: // Sud-Ouest
-                    if (current.getQ() % 2 == 0)
+                    if (current.getR() % 2 == 0)
                         current = Hexagon(current.getQ() - 1, current.getR() + 1);
                     else
-                        current = Hexagon(current.getQ() - 1, current.getR());
+                        current = Hexagon(current.getQ(), current.getR() - 1);
                     break;
                 case 5: // Nord-Ouest
-                    if (current.getQ() % 2 == 0)
-                        current = Hexagon(current.getQ() - 1, current.getR());
-                    else
+                    if (current.getR() % 2 == 0)
                         current = Hexagon(current.getQ() - 1, current.getR() - 1);
+                    else
+                        current = Hexagon(current.getQ(), current.getR() - 1);
                     break;
                 default:
                     break;
