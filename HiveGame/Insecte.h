@@ -121,8 +121,8 @@ std::vector<Hexagon> deplacementsPossiblesMoustique(Hexagon coords, std::map<Hex
 std::vector<Hexagon> getVoisins(const Hexagon& coords);
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p);
 std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, Insecte*> p);
-std::vector<Hexagon> getLongueurChaine(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
-bool getChaineBrisee(Insecte *i, std::map<Hexagon, Insecte*> p, std::vector<Hexagon> chemin);
+void getLongueurChaine(Hexagon coords, std::map<Hexagon, Insecte*> p, std::set<Hexagon> &chemin);
+bool getChaineBrisee(Hexagon coords, std::map<Hexagon, Insecte*> p, std::set<Hexagon> &chemin);
 bool getGlissementPossible(const Insecte *i, const std::map<Hexagon, Insecte*> p, const Hexagon destination);
 
 
