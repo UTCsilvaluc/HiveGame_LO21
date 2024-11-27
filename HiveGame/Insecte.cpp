@@ -27,37 +27,28 @@ std::vector<Hexagon> getVoisins(const Hexagon& coords) {
     return voisins;
 }
 
-std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, std::map<Hexagon, Insecte*> p){
-    std::vector<Hexagon> vides; //On d�clare la liste des hexagons adjacents vides, pour le moment elle ne contient rien
-    std::vector<Hexagon> voisins = getVoisins(coords); //On d�clare la liste des voisins de l'hexagon cible
-    for(size_t i=0; i<6; i++){
-        for(size_t n=0; n<p.size(); n++){
-            auto it = p.begin();
-            std::advance(it, n); // On parcours chaque voisin et v�rifions si ses coordonn�es sont d�j� enregistr�es dans le plateau,
-                                 //si c'est le cas cela signifie qu'il y a un insecte sur cette case
-            if(it != p.end()){
-                const Hexagon &hex = it->first;
-                if(voisins.at(i).getQ() != hex.getQ() || voisins.at(i).getR()!=hex.getR()){
-                    vides.push_back(voisins.at(i));
-                }
-            }
+std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, const std::map<Hexagon, Insecte*>& p) {
+    std::vector<Hexagon> vides;
+    std::vector<Hexagon> voisins = getVoisins(coords);
+
+    for (const auto& voisin : voisins) {
+        if (p.find(voisin) == p.end()) {
+            vides.push_back(voisin);
         }
     }
     return vides;
 }
 
-std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, std::map<Hexagon, Insecte*> p){
-    std::vector<Hexagon> occupees;
+std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, const std::map<Hexagon, Insecte*>& p){
+    std::vector<Hexagon> occupes;
     std::vector<Hexagon> voisins = getVoisins(coords);
-    std::vector<Hexagon> vides = casesAdjacentesVides(coords, p);
-    for (size_t i=0; i<6; i++){
-        for(size_t j=0; j<vides.size(); j++){
-            if(voisins.at(i).getQ()!=vides.at(j).getQ() || voisins.at(i).getR()!=vides.at(j).getR()){
-                occupees.push_back(voisins.at(i));
-            }
+
+    for (const auto& voisin : voisins) {
+        if (p.find(voisin) != p.end()) {
+            occupes.push_back(voisin);
         }
     }
-    return occupees;
+    return occupes;
 }
 
 void getLongueurChaine(Hexagon coords, std::map<Hexagon, Insecte*> p, std::set<Hexagon> &chemin) {
@@ -78,7 +69,6 @@ bool getChaineBrisee(Hexagon coords, const std::map<Hexagon, Insecte*> p, std::s
     getLongueurChaine(coords, p1, chemin);
     return chemin.size() < p1.size();
 }
-
 
 bool getGlissementPossible(Hexagon coords, const  std::map<Hexagon, Insecte*> p, const  Hexagon destination){
     int t =0;
