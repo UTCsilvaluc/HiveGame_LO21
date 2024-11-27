@@ -55,6 +55,15 @@ public:
         return nullptr;
     }
 
+    void ajouterInsecte(Insecte* insecte) {
+        if (insecte == nullptr) {
+            std::cerr << "Erreur : Impossible d'ajouter un insecte nul au deck." << std::endl;
+            return;
+        }
+        deck.push_back(insecte);
+}
+
+
 
 };
 

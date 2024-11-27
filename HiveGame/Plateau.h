@@ -209,6 +209,24 @@ public:
         return nullptr; // Retourne nullptr si aucun ou plusieurs insectes
     }
 
+    void supprimerInsectePlateauCoords(const Hexagon& position) {
+        auto it = plateauMap.find(position);
+        if (it == plateauMap.end()) {
+            std::cerr << "Erreur : Aucun insecte trouvé à la position (" << position.getQ()
+                      << ", " << position.getR() << ")." << std::endl;
+            return;
+        }
+        Insecte* insecteASupprimer = it->second;
+        plateauMap.erase(it); // Supprimer l'insecte de la map
+
+        // Retirer l'insecte de la liste des insectes sur le plateau
+        auto itInsecte = std::find(insectesSurPlateau.begin(), insectesSurPlateau.end(), insecteASupprimer);
+        if (itInsecte != insectesSurPlateau.end()) {
+            insectesSurPlateau.erase(itInsecte);
+        }
+        mettreAJourLimites();
+    }
+
 };
 
 #endif // PLATEAU_H
