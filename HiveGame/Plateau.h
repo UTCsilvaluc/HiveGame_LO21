@@ -6,14 +6,16 @@
 #include <vector>
 #include "Hexagon.h"
 #include "Insecte.h"
+#include <limits>
 #define RESET   "\033[0m"
 #define RED     "\033[31m"
 #define BLUE    "\033[34m"
 #define YELLOW  "\033[33m"
+#define GREEN   "\033[32m"
 class Plateau {
 private:
     std::map<Hexagon, Insecte*> plateauMap;
-    std::vector<Insecte*> insectesSurPlateau; // On peut supprimer et faire un deck de joueur, quand un joueur pose un insecte, alors l'insecte disparait de son deck grâce à ajouter Insecte
+    std::vector<Insecte*> insectesSurPlateau; // On peut supprimer et faire un deck de joueur, quand un joueur pose un insecte, alors l'insecte disparait de son deck grï¿½ce ï¿½ ajouter Insecte
     //std::vector<Action*> historiqueDesActions;
     //std::vector<Extension*> extensionsActivees;
     int nombreRetoursArriere;
@@ -21,7 +23,7 @@ private:
     int minR, maxR, minQ, maxQ;
 
 public:
-    Plateau() : nombreRetoursArriere(3), nombreTours(0), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par défaut
+    Plateau() : nombreRetoursArriere(3), nombreTours(0), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par dï¿½faut
     unsigned int getTour(){return nombreTours;}
     void incrementerTour(){++nombreTours;}
     void ajouterInsecte(Insecte* insecte, Hexagon position);
@@ -29,7 +31,7 @@ public:
     void afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2);
     void afficherPossibilitePlacement(Insecte* insecte, Joueur* j1, Joueur* j2);
     void mettreAJourLimites() {
-        // Initialiser les limites à des valeurs extrêmes
+        // Initialiser les limites ï¿½ des valeurs extrï¿½mes
         minR = std::numeric_limits<int>::max();
         maxR = std::numeric_limits<int>::min();
         minQ = std::numeric_limits<int>::max();
@@ -42,23 +44,23 @@ public:
         }
     }
     void ajouterInsecte(Insecte* insecte) {
-        plateauMap[insecte->getCoords()] = insecte; // Ajouter à la carte
-        insectesSurPlateau.push_back(insecte); // Garder une référence à l'insecte
-        mettreAJourLimites(); // Mettre à jour les limites lors de l'ajout
+        plateauMap[insecte->getCoords()] = insecte; // Ajouter ï¿½ la carte
+        insectesSurPlateau.push_back(insecte); // Garder une rï¿½fï¿½rence ï¿½ l'insecte
+        mettreAJourLimites(); // Mettre ï¿½ jour les limites lors de l'ajout
     }
 
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
         plateauMap.erase(insecte->getCoords()); // Retirer l'insecte de sa position actuelle
-        insecte->setCoords(nouvellePosition); // Mettre à jour les coordonnées de l'insecte
-        plateauMap[nouvellePosition] = insecte; // Ajouter l'insecte à la nouvelle position
-        mettreAJourLimites(); // Mettre à jour les limites
+        insecte->setCoords(nouvellePosition); // Mettre ï¿½ jour les coordonnï¿½es de l'insecte
+        plateauMap[nouvellePosition] = insecte; // Ajouter l'insecte ï¿½ la nouvelle position
+        mettreAJourLimites(); // Mettre ï¿½ jour les limites
     }
     void superposerInsecte(Insecte* currentInsecte, Insecte* newInsecte) {
         newInsecte->setDessous(currentInsecte);
         currentInsecte->setDessus(newInsecte);
         newInsecte->setCoords(currentInsecte->getCoords());
         plateauMap[newInsecte->getCoords()] = newInsecte;
-        mettreAJourLimites(); // Mettre à jour les limites lors de la superposition
+        mettreAJourLimites(); // Mettre ï¿½ jour les limites lors de la superposition
     }
 
 
@@ -66,38 +68,46 @@ public:
 
     void afficherPlateau(Joueur *p1, Joueur *p2) const {
         for (int r = minR; r <= maxR; ++r) {
-            // Décalage pour les lignes impaires pour créer l'effet hexagonal
+            // Dï¿½calage pour les lignes impaires pour crï¿½er l'effet hexagonal
             if (r % 2 != 0) {
-                std::cout << "   "; // Décalage pour simuler la forme hexagonale
+                std::cout << "   "; // Dï¿½calage pour simuler la forme hexagonale
             }
 
-            std::string couleur = RESET;
+            std::string couleurInsecte = RESET;
+            std::string couleurCoord = RESET;
             for (int q = minQ; q <= maxQ; ++q) {
                 Hexagon h(q, r);
-                couleur = RESET;
+                couleurInsecte = RESET;
+                couleurCoord = RESET;
 
-                // Affiche l'insecte si présent, sinon un point pour une case vide
+                // Affiche l'insecte si prï¿½sent, sinon un point pour une case vide
                 if (plateauMap.count(h)) {
-                    // Récupération de l'insecte sur la case
+                    // Rï¿½cupï¿½ration de l'insecte sur la case
                     Insecte *insecte = plateauMap.at(h);
                     std::string nomInsecte = insecte->getNom();
 
-                    // Changer la couleur en fonction du propriétaire de l'insecte
+                    // Changer la couleur en fonction du propriï¿½taire de l'insecte
                     if (insecte->getOwner() == p1) {
-                        couleur = RED;
+                        couleurInsecte = RED;
+                        couleurCoord = RED;
                     } else if (insecte->getOwner() == p2) {
-                        couleur = BLUE;
+                        couleurInsecte = BLUE;
+                        couleurCoord = BLUE;
                     }
 
-                    // Prendre seulement la première lettre pour éviter un affichage trop large
-                    std::cout << couleur << nomInsecte[0] << couleur << "[" << h.getQ() << "," << h.getR() << "] ";
+                    // Si c'est un l'affichage des placements/deplacements possibles
+                    if (dynamic_cast<InsecteFictif*>(insecte))
+                        couleurCoord = GREEN;
+
+                    // Prendre seulement la premiï¿½re lettre pour ï¿½viter un affichage trop large
+                    std::cout << couleurInsecte << nomInsecte[0] << couleurCoord << "[" << h.getQ() << "," << h.getR() << "] ";
                 } else {
                     // Affichage d'un point pour une case vide
                     std::cout << ".      ";
                 }
             }
 
-            // Reset de la couleur et retour à la ligne après chaque rangée
+            // Reset de la couleur et retour ï¿½ la ligne aprï¿½s chaque rangï¿½e
             std::cout << RESET << std::endl << std::endl;
         }
     }
@@ -143,7 +153,7 @@ public:
             };
         }
 
-        // Affichage des voisins pour vérification
+        // Affichage des voisins pour vï¿½rification
         std::cout << "Voisins de l'insecte (" << q << ", " << r << ") :\n";
         for (const auto& voisin : voisins) {
             std::cout << voisin << " ";
@@ -170,23 +180,23 @@ public:
             auto it = plateauMap.find(voisin);
 
             // Affichage pour debug
-            std::cout << "Vérification de la case : " << voisin << " -> ";
+            std::cout << "Vï¿½rification de la case : " << voisin << " -> ";
 
             if (it == plateauMap.end()) {
-                std::cout << "Case vide (hors du plateau ou non initialisée).\n";
+                std::cout << "Case vide (hors du plateau ou non initialisï¿½e).\n";
                 return false;
             }
 
             if (it->second == nullptr) {
-                std::cout << "Case présente mais aucun insecte.\n";
+                std::cout << "Case prï¿½sente mais aucun insecte.\n";
                 return false;
             }
 
-            // La case est occupée par un insecte
-            std::cout << "Case occupée par : " << it->second->getNom() << "\n";
+            // La case est occupï¿½e par un insecte
+            std::cout << "Case occupï¿½e par : " << it->second->getNom() << "\n";
         }
 
-        return true; // Toutes les cases voisines sont occupées
+        return true; // Toutes les cases voisines sont occupï¿½es
     }
 
 
@@ -212,7 +222,7 @@ public:
     void supprimerInsectePlateauCoords(const Hexagon& position) {
         auto it = plateauMap.find(position);
         if (it == plateauMap.end()) {
-            std::cerr << "Erreur : Aucun insecte trouvé à la position (" << position.getQ()
+            std::cerr << "Erreur : Aucun insecte trouvï¿½ ï¿½ la position (" << position.getQ()
                       << ", " << position.getR() << ")." << std::endl;
             return;
         }
