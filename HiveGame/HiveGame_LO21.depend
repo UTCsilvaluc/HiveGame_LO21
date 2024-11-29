@@ -1,0 +1,85 @@
+# depslib dependency file v1.0
+1730731907 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame_lo21\gamemaster.cpp
+	"GameMaster.h"
+
+1730731897 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame_lo21\gamemaster.h
+	"Joueur.h"
+	"Plateau.h"
+	<iostream>
+	<memory>
+	<limits>
+
+1730730007 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame_lo21\joueur.h
+	"Insecte.h"
+	<vector>
+
+1730730458 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame_lo21\insecte.h
+	"Hexagon.h"
+	<string>
+	<vector>
+	<map>
+	<set>
+	<algorithm>
+
+1730726625 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame_lo21\hexagon.h
+	<cstdlib>
+	<iostream>
+
+1730732175 c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame_lo21\plateau.h
+	<iostream>
+	<map>
+	<vector>
+	"Hexagon.h"
+	"Insecte.h"
+
+1730726589 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame_lo21\hexagon.cpp
+	"Hexagon.h"
+
+1730731201 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame_lo21\insecte.cpp
+	"Insecte.h"
+
+1730730079 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame_lo21\joueur.cpp
+	"Joueur.h"
+
+1730726615 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame_lo21\plateau.cpp
+	"Plateau.h"
+
+1730726685 source:c:\users\sillu\onedrive\bureau\utc\gi01\lo21\hivegame\hivegame_lo21\main.cpp
+	"Plateau.h"
+	"GameMaster.h"
+
+1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\main.cpp
+	"Plateau.h"
+	"GameMaster.h"
+
+1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\plateau.h
+	<iostream>
+	<map>
+	<vector>
+	"Hexagon.h"
+	"Insecte.h"
+
+1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\hexagon.h
+	<cstdlib>
+	<iostream>
+
+1731026131 c:\users\jean-\desktop\hivegame_lo21\hivegame\insecte.h
+	"Hexagon.h"
+	<string>
+	<vector>
+	<map>
+	<set>
+	<algorithm>
+	<sstream>
+
+1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\gamemaster.h
+	"Joueur.h"
+	"Plateau.h"
+	<iostream>
+	<memory>
+	<limits>
+
+1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\joueur.h
+	"Insecte.h"
+	<vector>
+

@@ -2,15 +2,17 @@
 #define HEXAGON_H
 #include <cstdlib>
 #include <iostream>
+#include <vector>
 
 class Hexagon {
 private:
-    int q;  // Coordonnée axiale q (colonne)
-    int r;  // Coordonnée axiale r (ligne)
+    int q;  // CoordonnÃ©e axiale q (colonne)
+    int r;  // CoordonnÃ©e axiale r (ligne)
 public:
     int getQ() const {return q;}
     int getR() const {return r;}
     Hexagon(int q = 0, int r = 0) : q(q), r(r) {}
+    std::string toJson() const;
 
     // Calculer la distance hexagonale , voisin => distance = 1
     int distance(const Hexagon& other) const {
@@ -21,13 +23,13 @@ public:
     }
     bool operator==(const Hexagon& other) const {return q == other.q && r == other.r;}
     void afficherCoordonnees() const {
-        std::cout << "Coordonnées: (" << q << ", " << r << ")" << std::endl;
+        std::cout << "CoordonnÃ©es: (" << q << ", " << r << ")" << std::endl;
     }
     void deplacer(const Hexagon& autre) {
         q = autre.q;
         r = autre.r;
     }
-    // Opérateur de comparaison pour std::map sinon erreur , permet d'ordonner les éléments et pas de doublon
+    // OpÃ©rateur de comparaison pour std::map sinon erreur , permet d'ordonner les Ã©lÃ©ments et pas de doublon
     bool operator<(const Hexagon& other) const {
         // Comparer d'abord par q, puis par r
         if (q != other.q) {
@@ -37,18 +39,32 @@ public:
     }
     friend std::ostream& operator<<(std::ostream& os, const Hexagon& hex);
 
+    std::vector<Hexagon> getVoisins() {
+        std::vector<Hexagon> voisins;
+        if (r % 2 == 0) {  // Colonne paire
+            voisins = {
+                Hexagon(q - 1, r - 1),
+                Hexagon(q, r - 1),
+                Hexagon(q + 1, r),
+                Hexagon(q, r + 1),
+                Hexagon(q - 1, r + 1),
+                Hexagon(q - 1, r)
+            };
+        } else {  // Colonne impaire
+            voisins = {
+                Hexagon(q, r - 1),
+                Hexagon(q + 1, r - 1),
+                Hexagon(q+1, r),
+                Hexagon(q+1, r+1),
+                Hexagon(q, r+1),
+                Hexagon(q-1, r)
+            };
+        }
+        return voisins;
+    }
+
 };
 
 
 
 #endif
-
-/*
-Direction	(dq, dr)
-Droite	(1, 0)
-Droite-Haut	(1, -1)
-Gauche-Haut	(0, -1)
-Gauche	(-1, 0)
-Gauche-Bas	(-1, 1)
-Droite-Bas	(0, 1)
-*/
