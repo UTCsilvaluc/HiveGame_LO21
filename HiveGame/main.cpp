@@ -1,4 +1,3 @@
-#include "Plateau.h"
 #include "GameMaster.h"
 int main() {
     Plateau plateau;

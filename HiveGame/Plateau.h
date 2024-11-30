@@ -29,7 +29,7 @@ public:
     void ajouterInsecte(Insecte* insecte, Hexagon position);
     void afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplacementsPossibles, Joueur* j1, Joueur* j2);
     void afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2);
-    void afficherPossibilitePlacement(Insecte* insecte, Joueur* j1, Joueur* j2);
+    std::vector<Hexagon> getPlacementsPossibles(Insecte* insecte);
     void mettreAJourLimites() {
         // Initialiser les limites � des valeurs extr�mes
         minR = std::numeric_limits<int>::max();
@@ -203,6 +203,7 @@ public:
     bool plateauEstVide(){
         return (plateauMap.size() == 0);
     }
+
     bool playerCanMoveInsecte(Joueur *joueur){
         for (const auto& [key, value] : plateauMap){ // https://en.cppreference.com/w/cpp/container/map
             if (value->getOwner() == joueur){

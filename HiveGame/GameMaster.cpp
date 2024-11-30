@@ -15,7 +15,7 @@ void GameMaster::startGame() {
         std::cin >> nom;
         joueur2 = new Joueur(nom);  // Cr�er le joueur 2
     } else {
-        joueur2 = new Joueur("IA");
+        joueur2 = new JoueurIA("IA");
     }
 
     std::cout << "Joueur 1 cr�� : " << joueur1->getName() << std::endl;
@@ -120,7 +120,12 @@ void GameMaster::jouer() {
                 std::cout << "Aucun mouvement possible, vous devez placer un pion.\n";
                 choice = 2;
             } else {
-                choice = getInputForAction(current);
+                if (dynamic_cast<JoueurIA*>(current)){
+                    choice = 1;
+                }
+                else{
+                    choice = getInputForAction(current);
+                }
             }
         }
 
@@ -137,16 +142,17 @@ void GameMaster::jouer() {
                 }
             } else if (choice == 1) {  // D�placer un pion
                 deplacerPion(current);
+                plateau.afficherPlateau(joueur1, joueur2);
                 break;  // Sortir de la boucle apr�s d�placement
             } else if (choice == 2) {  // Placer un nouveau pion
                 placerPion(current, needPlayQueen);
+                plateau.afficherPlateau(joueur1, joueur2);
                 break;  // Sortir de la boucle apr�s placement
             } else {
                 std::cout << "Choix invalide. Veuillez r�essayer.\n";
                 choice = getInputForAction(current);  // Redemander � nouveau une action valide
             }
         }
-
         // Incr�menter le compteur de tours apr�s une action valide
         tour++;
         plateau.incrementerTour();
@@ -158,24 +164,28 @@ bool positionEstValide(const Hexagon& position, const std::vector<Hexagon>& depl
 
 void GameMaster::deplacerPion(Joueur* current) {
     plateau.afficherPlateau(joueur1, joueur2);
-    Insecte* currentInsecte = selectionnerInsecte();
 
-    // V�rifier si le pion appartient au joueur actuel
-    while (!verifierProprietairePion(current, currentInsecte)) {
-        currentInsecte = selectionnerInsecte(); // Demander � nouveau la s�lection du pion
-    }
+    Insecte* currentInsecte = selectionnerInsecte(current);
 
     bool deplacementValide = false;
     Hexagon nouvellePosition;
 
+    int x=0;
+    int y=0;
+
     while (!deplacementValide) {
         std::vector<Hexagon> deplacementsPossibles = currentInsecte->deplacementsPossibles(plateau.getPlateauMap());
         plateau.afficherPossibiliteDeplacement(currentInsecte, plateau.getPlateauMap(), joueur1, joueur2);
-        for (const auto &deps:deplacementsPossibles){
-            std::cout<< deps<<"";
+        if (dynamic_cast<JoueurIA*>(current)){
+            Hexagon position = current->randomHexagonChoice(deplacementsPossibles);
+            x = position.getQ();
+            y = position.getR();
         }
-        int x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1 , plateau.getMaxQ() + 1);
-        int y = getInput("Ordonn�e pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
+        else{
+            x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1 , plateau.getMaxQ() + 1);
+            y = getInput("Ordonn�e pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
+        }
+
         nouvellePosition = Hexagon(x, y);
 
 
@@ -206,7 +216,12 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
     if (!needPlayQueen) {
         std::cout << "\nVoici votre deck : " << std::endl;
         current->afficherDeck();
-        index = getInput("Quel pion souhaitez-vous poser ? ", 1, current->getDeckSize()) - 1;
+        if (dynamic_cast<JoueurIA*>(current)){
+            index = current->randomDeckChoice();
+        }
+        else{
+            index = getInput("Quel pion souhaitez-vous poser ? ", 1, current->getDeckSize()) - 1;
+        }
         insecteAPlacer = current->getInsecteByIndex(index);
     } else {
         insecteAPlacer = current->getQueen();
@@ -220,11 +235,24 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
     Hexagon nouvellePosition;
     bool placementValide = false;
 
+    int x=0;
+    int y=0;
+
     // Boucle pour garantir un placement valide
     while (!placementValide) {
-        plateau.afficherPossibilitePlacement(insecteAPlacer, joueur1, joueur2);
-        int x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1, plateau.getMaxQ() + 1 , tour);
-        int y = getInput("Ordonn�e pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1 , tour);
+        std::vector<Hexagon> placementsPossibles = plateau.getPlacementsPossibles(insecteAPlacer);
+        plateau.afficherPlateauAvecPossibilites(placementsPossibles, joueur1, joueur2);
+
+        if (dynamic_cast<JoueurIA*>(current)){
+            Hexagon position = current->randomHexagonChoice(placementsPossibles);
+            x = position.getQ();
+            y = position.getR();
+        }
+        else{
+            x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1, plateau.getMaxQ() + 1 , tour);
+            y = getInput("Ordonn�e pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1 , tour);
+        }
+
         nouvellePosition = Hexagon(x, y);
 
         if (plateau.plateauEstVide()) {
@@ -301,15 +329,28 @@ bool GameMaster::detectWinner(Joueur *joueur1 , Joueur *joueur2) {
     return false;
 }
 
-Insecte* GameMaster::selectionnerInsecte() {
-    int x = getInput("Abscisse de la position du pion � d�placer : ", plateau.getMinQ(), plateau.getMaxQ());
-    int y = getInput("Ordonn�e de la position du pion � d�placer : ", plateau.getMinR(), plateau.getMaxR());
+Insecte* GameMaster::selectionnerInsecte(Joueur* current) {
+
+    int x=0;
+    int y=0;
+
+    if (dynamic_cast<JoueurIA*>(current)){
+        Hexagon position = current->randomPionChoice(plateau.getPlateauMap());
+        x = position.getQ();
+        y = position.getR();
+    }
+    else{
+        x = getInput("Abscisse de la position du pion � d�placer : ", plateau.getMinQ(), plateau.getMaxQ());
+        y = getInput("Ordonn�e de la position du pion � d�placer : ", plateau.getMinR(), plateau.getMaxR());
+    }
 
     Insecte* currentInsecte = plateau.getInsecteAtCoords(x, y);
-    if (!currentInsecte) {
-        std::cout << "Aucun pion � cette position. Veuillez r�essayer." << std::endl;
-        return selectionnerInsecte(); // Appel r�cursif jusqu'� obtenir un pion valide
+
+    if (!currentInsecte || !verifierProprietairePion(current, currentInsecte) || currentInsecte->deplacementsPossibles(plateau.getPlateauMap()).empty()) {
+        std::cout << "pion invalide, réessayez" << std::endl;
+        return selectionnerInsecte(current); // Appel r�cursif jusqu'� obtenir un pion valide
     }
+
     return currentInsecte;
 }
 void GameMaster::undoLastAction() {

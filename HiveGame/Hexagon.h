@@ -39,7 +39,7 @@ public:
     }
     friend std::ostream& operator<<(std::ostream& os, const Hexagon& hex);
 
-    std::vector<Hexagon> getVoisins() {
+    std::vector<Hexagon> getVoisins() const {
         std::vector<Hexagon> voisins;
         if (r % 2 == 0) {  // Colonne paire
             voisins = {

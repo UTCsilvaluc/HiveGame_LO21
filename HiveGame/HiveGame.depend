@@ -213,11 +213,14 @@
 	<memory>
 	<limits>
 
-1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\joueur.h
+1732982044 c:\users\jean-\desktop\hivegame_lo21\hivegame\joueur.h
 	"Insecte.h"
+	"Plateau.h"
 	<vector>
+	<cstdlib>
+	<ctime>
 
-1731026131 c:\users\jean-\desktop\hivegame_lo21\hivegame\insecte.h
+1732977252 c:\users\jean-\desktop\hivegame_lo21\hivegame\insecte.h
 	"Hexagon.h"
 	<string>
 	<vector>
@@ -226,26 +229,28 @@
 	<algorithm>
 	<sstream>
 
-1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\hexagon.h
+1732986695 c:\users\jean-\desktop\hivegame_lo21\hivegame\hexagon.h
 	<cstdlib>
 	<iostream>
+	<vector>
 
-1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\plateau.h
+1732984996 c:\users\jean-\desktop\hivegame_lo21\hivegame\plateau.h
 	<iostream>
 	<map>
 	<vector>
 	"Hexagon.h"
 	"Insecte.h"
+	<limits>
 
-1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\hexagon.cpp
+1732977252 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\hexagon.cpp
 	"Hexagon.h"
 	<sstream>
 
-1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\insecte.cpp
+1732977252 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\insecte.cpp
 	"Insecte.h"
 	"Joueur.h"
 
-1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\joueur.cpp
+1732977252 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\joueur.cpp
 	"Joueur.h"
 	<sstream>
 

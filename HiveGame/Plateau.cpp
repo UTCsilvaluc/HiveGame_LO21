@@ -35,34 +35,36 @@ void Plateau::ajouterInsecte(Insecte* insecte, Hexagon position) {
     }
 }
 void Plateau::afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2) {
-    // Récupérer les déplacements possibles
+    // Rï¿½cupï¿½rer les dï¿½placements possibles
     std::vector<Hexagon> deplacements = insecte->deplacementsPossibles(plateau);
-    // Afficher les déplacements
-    std::cout << "Déplacements possibles pour " << insecte->getNom() << " :\n";
+    // Afficher les dï¿½placements
+    std::cout << "Dï¿½placements possibles pour " << insecte->getNom() << " :\n";
     for (const Hexagon& hex : deplacements) {
         std::cout << "[" << hex.getQ() << ", " << hex.getR() << "]\n";
     }
     // Afficher visuellement sur le plateau si besoin
     afficherPlateauAvecPossibilites(deplacements, j1, j2);
+
 }
-void Plateau::afficherPossibilitePlacement(Insecte* insecte, Joueur* j1, Joueur* j2) {
+std::vector<Hexagon> Plateau::getPlacementsPossibles(Insecte* insecte) {
     std::vector<Hexagon> placements;
     if (nombreTours == 1) {
-        // Premier tour avec un insecte adverse placé : on place autour de cet insecte
+        // Premier tour avec un insecte adverse placï¿½ : on place autour de cet insecte
         auto it = plateauMap.begin();
         placements = getVoisins(it->first);
     }else {
         placements = insecte->placementsPossiblesDeBase(plateauMap);
     }
-    // Afficher le plateau avec les emplacements possibles marqués
+    // Afficher le plateau avec les emplacements possibles marquï¿½s
     std::cout << "Emplacements possibles pour placer " << insecte->getNom() << " :\n";
     for (const Hexagon& hex : placements) {
         std::cout << "[" << hex.getQ() << ", " << hex.getR() << "]\n";
     }
-    afficherPlateauAvecPossibilites(placements, j1, j2);
+    return placements;
 }
+
 void Plateau::afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplacementsPossibles, Joueur* j1, Joueur* j2) {
-    // Créer une copie temporaire du plateau pour l'affichage
+    // Crï¿½er une copie temporaire du plateau pour l'affichage
     std::map<Hexagon, Insecte*> plateauTemp = plateauMap;
     Joueur* current = (getTour() % 2 == 0) ? j1 : j2;
     // Ajouter des insectes fictifs aux emplacements possibles dans le plateau temporaire
@@ -72,13 +74,13 @@ void Plateau::afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplac
         }
     }
     // Afficher le plateau avec les insectes fictifs en utilisant afficherPlateau
-    std::swap(plateauMap, plateauTemp);  // Échange temporairement plateauMap et plateauTemp
+    std::swap(plateauMap, plateauTemp);  // ï¿½change temporairement plateauMap et plateauTemp
     mettreAJourLimites();
     afficherPlateau(j1, j2);
     std::swap(plateauMap, plateauTemp);  // Restaure plateauMap
-    // Nettoyer les insectes fictifs ajoutés dans le plateau temporaire
+    // Nettoyer les insectes fictifs ajoutï¿½s dans le plateau temporaire
     for (const Hexagon& hex : emplacementsPossibles) {
-        if (plateauTemp[hex]->getNom() == "?") {  // Vérifie si c'est un insecte fictif
+        if (plateauTemp[hex]->getNom() == "?") {  // Vï¿½rifie si c'est un insecte fictif
             delete plateauTemp[hex];
             plateauTemp.erase(hex);
         }
