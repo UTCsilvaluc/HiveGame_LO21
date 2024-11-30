@@ -6,29 +6,31 @@
 #include <vector>
 #include <cstdlib>
 #include <ctime>
+#include <random>
+#include <stdexcept>
 
 std::vector<Insecte*> deckDeBase(Joueur *joueur);
+
 class Joueur
 {
 private:
     std::string nom;
     std::vector<Insecte*> deck;
 public:
-    Joueur(const std::string& nom) : nom(nom) , deck(deckDeBase(this)) {}
+    Joueur(const std::string& nom) : nom(nom), deck(deckDeBase(this)) {}
     Joueur(std::string n, std::vector<Insecte*> d) {
-        if (n.empty()) {throw std::invalid_argument("Le nom ne peut pas être vide.");}
+        if (n.empty()) { throw std::invalid_argument("Le nom ne peut pas être vide."); }
         nom = n;
-        // Si un deck est fourni, l'utiliser ; sinon, utiliser le deck par défaut. Permet de gérer les extensions en cas de besoin.
         deck = d.empty() ? deckDeBase(this) : d;
     }
-    const std::string &getName() const {return nom;}
+    const std::string &getName() const { return nom; }
     const std::vector<Insecte*>& getDeck() const { return deck; }
     Insecte* getQueen() const;
     int getQueenIndex() const;
     bool hasQueen() const;
     void afficherDeck() const;
     std::string toJson() const;
-    ~Joueur() {
+    virtual ~Joueur() {
         for (Insecte* insecte : deck) {
             delete insecte;
         }
@@ -38,17 +40,19 @@ public:
         return deck.size();
     }
 
-    Insecte *getInsecteByIndex(unsigned int i){
-        if (i >= deck.size()){return nullptr;}
+    Insecte* getInsecteByIndex(unsigned int i) {
+        if (i >= deck.size()) { return nullptr; }
         return deck[i];
     }
+
     void retirerInsecte(unsigned int index) {
         if (index < deck.size()) {
-            deck.erase(deck.begin() + index);  // Retirer du deck
+            deck.erase(deck.begin() + index);
         } else {
             std::cout << "Index invalide. Aucune action effectuée." << std::endl;
         }
     }
+
     Insecte* contientInsecte(const std::string& nomInsecte) const {
         for (Insecte* insecte : deck) {
             if (insecte->getNom() == nomInsecte) {
@@ -64,7 +68,7 @@ public:
             return;
         }
         deck.push_back(insecte);
-}
+    }
 
     // Fonctions virtuelles pour l'IA
     virtual int randomChoice() {
@@ -85,40 +89,42 @@ public:
 };
 
 class JoueurIA : public Joueur {
+private:
+    std::default_random_engine generator;  // Générateur de nombres aléatoires
+
 public:
     JoueurIA(const std::string& nom) : Joueur(nom) {
-        // Initialiser la graine aléatoire une seule fois
-        static bool initialized = false;
-        if (!initialized) {
-            std::srand(std::time(nullptr));
-            initialized = true;
-        }
+        // Initialiser le générateur de nombres aléatoires avec la graine actuelle
+        std::random_device rd;
+        generator = std::default_random_engine(rd());
     }
 
     // Fonction pour choisir aléatoirement entre "poser" ou "déplacer"
-    int randomChoice() {
-        return (std::rand() % 2) + 1; // Retourne 1 ("poser") ou 2 ("déplacer")
+    int randomChoice() override {
+        std::uniform_int_distribution<int> distribution(1, 2);  // Distribution entre 1 et 2
+        return distribution(generator);  // Retourne 1 ("poser") ou 2 ("déplacer")
     }
 
     // Fonction pour choisir un Hexagon aléatoire parmi les options de déplacement disponibles
-    Hexagon randomHexagonChoice(const std::vector<Hexagon>& options) {
+    Hexagon randomHexagonChoice(const std::vector<Hexagon>& options) override {
         if (options.empty()) {
             throw std::runtime_error("Aucun déplacement possible");
         }
-        int index = std::rand() % options.size();
-        return options[index];
+        std::uniform_int_distribution<size_t> distribution(0, options.size() - 1);
+        return options[distribution(generator)];
     }
 
     // Fonction pour choisir un Insecte aléatoire du deck du joueur
-    int randomDeckChoice() {
+    int randomDeckChoice() override {
         if (getDeckSize() == 0) {
             throw std::runtime_error("Deck vide");
         }
-        return (std::rand() % getDeckSize()) + 1; // Retourne un index entre 1 et la taille du deck
+        std::uniform_int_distribution<int> distribution(1, getDeckSize());
+        return distribution(generator);
     }
 
     // Fonction pour choisir aléatoirement un pion du plateau appartenant au joueur
-    Hexagon randomPionChoice(const std::map<Hexagon, Insecte*>& plateauMap) {
+    Hexagon randomPionChoice(const std::map<Hexagon, Insecte*>& plateauMap) override {
         // Filtrer les pions appartenant au joueur
         std::vector<Hexagon> pionsJoueur;
         for (const auto& entry : plateauMap) {
@@ -131,11 +137,9 @@ public:
             throw std::runtime_error("Aucun pion appartenant au joueur sur le plateau");
         }
 
-        // Choisir un pion aléatoire parmi ceux appartenant au joueur
-        int index = std::rand() % pionsJoueur.size();
-        return pionsJoueur[index];
+        std::uniform_int_distribution<size_t> distribution(0, pionsJoueur.size() - 1);
+        return pionsJoueur[distribution(generator)];
     }
 };
-
 
 #endif // JOUEUR_H

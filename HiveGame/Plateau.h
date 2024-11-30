@@ -203,6 +203,7 @@ public:
     bool plateauEstVide(){
         return (plateauMap.size() == 0);
     }
+
     bool playerCanMoveInsecte(Joueur *joueur){
         for (const auto& [key, value] : plateauMap){ // https://en.cppreference.com/w/cpp/container/map
             if (value->getOwner() == joueur){

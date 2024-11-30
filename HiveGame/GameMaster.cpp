@@ -176,9 +176,6 @@ void GameMaster::deplacerPion(Joueur* current) {
     while (!deplacementValide) {
         std::vector<Hexagon> deplacementsPossibles = currentInsecte->deplacementsPossibles(plateau.getPlateauMap());
         plateau.afficherPossibiliteDeplacement(currentInsecte, plateau.getPlateauMap(), joueur1, joueur2);
-        for (const auto &deps:deplacementsPossibles){
-            std::cout<< deps<<"";
-        }
         if (dynamic_cast<JoueurIA*>(current)){
             Hexagon position = current->randomHexagonChoice(deplacementsPossibles);
             x = position.getQ();
@@ -349,14 +346,9 @@ Insecte* GameMaster::selectionnerInsecte(Joueur* current) {
 
     Insecte* currentInsecte = plateau.getInsecteAtCoords(x, y);
 
-    if (!currentInsecte) {
-        std::cout << "Aucun pion � cette position. Veuillez r�essayer." << std::endl;
+    if (!currentInsecte || !verifierProprietairePion(current, currentInsecte) || currentInsecte->deplacementsPossibles(plateau.getPlateauMap()).empty()) {
+        std::cout << "pion invalide, réessayez" << std::endl;
         return selectionnerInsecte(current); // Appel r�cursif jusqu'� obtenir un pion valide
-    }
-
-    // V�rifier si le pion appartient au joueur actuel
-    if (!verifierProprietairePion(current, currentInsecte)) {
-        currentInsecte = selectionnerInsecte(current); // Demander � nouveau la s�lection du pion
     }
 
     return currentInsecte;
