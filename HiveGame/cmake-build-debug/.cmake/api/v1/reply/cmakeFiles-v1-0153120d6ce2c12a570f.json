@@ -21,6 +21,11 @@
 		{
 			"isCMake" : true,
 			"isExternal" : true,
+			"path" : "D:/jean-/Appli/CLion 2024.1/bin/cmake/win/x64/share/cmake-3.28/Modules/CMakeMinGWFindMake.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
 			"path" : "D:/jean-/Appli/CLion 2024.1/bin/cmake/win/x64/share/cmake-3.28/Modules/CMakeSystemSpecificInitialize.cmake"
 		},
 		{
@@ -569,6 +574,21 @@
 		{
 			"isCMake" : true,
 			"isExternal" : true,
+			"path" : "D:/jean-/Appli/CLion 2024.1/bin/cmake/win/x64/share/cmake-3.28/Modules/CMakeFindCodeBlocks.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/jean-/Appli/CLion 2024.1/bin/cmake/win/x64/share/cmake-3.28/Modules/CMakeExtraGeneratorDetermineCompilerMacrosAndIncludeDirs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/jean-/Appli/CLion 2024.1/bin/cmake/win/x64/share/cmake-3.28/Modules/ProcessorCount.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
 			"path" : "D:/jean-/Appli/CLion 2024.1/bin/cmake/win/x64/share/cmake-3.28/Modules/CMakeCInformation.cmake"
 		},
 		{
@@ -802,8 +822,8 @@
 	"kind" : "cmakeFiles",
 	"paths" : 
 	{
-		"build" : "C:/Users/jean-/Desktop/F/HiveGame_LO21/HiveGame/cmake-build-debug",
-		"source" : "C:/Users/jean-/Desktop/F/HiveGame_LO21/HiveGame"
+		"build" : "C:/Users/jean-/Desktop/HiveGame_LO21/HiveGame/cmake-build-debug",
+		"source" : "C:/Users/jean-/Desktop/HiveGame_LO21/HiveGame"
 	},
 	"version" : 
 	{

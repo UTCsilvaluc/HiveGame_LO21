@@ -25,7 +25,7 @@ private:
 public:
     bool hasPlayQueen(Joueur *currentPlayer);
     GameMaster() : joueur1(nullptr), joueur2(nullptr) , mode(0) {}
-    Insecte* selectionnerInsecte();
+    Insecte* selectionnerInsecte(Joueur* current);
     GameMaster(Plateau plateau, unsigned int maxRetourArriere = 5)
         : joueur1(nullptr), joueur2(nullptr), mode(0), tour(0), plateau(plateau), maxRetourArriere(maxRetourArriere) {}
     void startGame();
