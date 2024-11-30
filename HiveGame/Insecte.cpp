@@ -389,7 +389,9 @@ std::string Insecte::toJson() const {
 
 std::vector<Hexagon> Insecte::placementsPossiblesDeBase(const std::map<Hexagon, Insecte*>& plateau) const {
     std::vector<Hexagon> positionsValides;
-    for (const auto& [position, insecteSurCase] : plateau) {
+    for (const auto& pair : plateau) {
+        const auto& position = pair.first;
+        const auto& insecteSurCase = pair.second;
         if (insecteSurCase->getOwner() == this->owner) {
             std::vector<Hexagon> videsAdjacents = casesAdjacentesVides(position, plateau);
             for (const Hexagon& caseVide : videsAdjacents) {

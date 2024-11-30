@@ -36,7 +36,9 @@ public:
         maxR = std::numeric_limits<int>::min();
         minQ = std::numeric_limits<int>::max();
         maxQ = std::numeric_limits<int>::min();
-        for (const auto& [coords, insecte] : plateauMap) {
+        for (const auto& pair : plateauMap) {
+            const auto& coords = pair.first;
+            const auto& insecte = pair.second;
             if (coords.getR() < minR) minR = coords.getR();
             if (coords.getR() > maxR) maxR = coords.getR();
             if (coords.getQ() < minQ) minQ = coords.getQ();
@@ -164,9 +166,10 @@ public:
     }
 
 
-    Insecte *getReineAbeille(Joueur *joueur) const{// ou utiliser insectesSurPlateau
-        for (const auto& [key, value] : plateauMap){ // https://en.cppreference.com/w/cpp/container/map
-            if (value->getNom() == "Reine" && value->getOwner() == joueur){
+    Insecte* getReineAbeille(Joueur* joueur) const { // ou utiliser insectesSurPlateau
+        for (const auto& pair : plateauMap) {
+            const auto& value = pair.second;
+            if (value->getNom() == "Reine" && value->getOwner() == joueur) {
                 return value;
             }
         }
@@ -204,9 +207,10 @@ public:
         return (plateauMap.size() == 0);
     }
 
-    bool playerCanMoveInsecte(Joueur *joueur){
-        for (const auto& [key, value] : plateauMap){ // https://en.cppreference.com/w/cpp/container/map
-            if (value->getOwner() == joueur){
+    bool playerCanMoveInsecte(Joueur* joueur) {
+        for (const auto& pair : plateauMap) {
+            const auto& value = pair.second;
+            if (value->getOwner() == joueur) {
                 return true;
             }
         }
