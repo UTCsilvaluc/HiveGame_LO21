@@ -388,40 +388,32 @@ std::string Insecte::toJson() const {
 }
 
 std::vector<Hexagon> Insecte::placementsPossiblesDeBase(const std::map<Hexagon, Insecte*>& plateau) const {
-    std::vector<Hexagon> positionsValides;
+    std::vector<Hexagon> validPositions;
+    std::vector<Hexagon> enemyNeighbors;
 
+    // Étape 1 : Trouver les cases vides adjacentes aux insectes alliés
+    std::vector<Hexagon> potentialPositions;
     for (const auto& pair : plateau) {
-        const Hexagon& position = pair.first;
-        Insecte* insecteSurCase = pair.second;
-
-        // Vérifiez si l'insecte sur cette case appartient au joueur actuel
-        if (insecteSurCase && insecteSurCase->getOwner() == this->owner) {
-            std::vector<Hexagon> videsAdjacents = casesAdjacentesVides(position, plateau);
-
-            // Vérifiez chaque case vide adjacente
-            for (const Hexagon& caseVide : videsAdjacents) {
-                bool caseValide = true;
-
-                // Vérifiez les voisins de la case vide
-                for (const Hexagon& voisin : getVoisins(caseVide)) {
-                    if (plateau.count(voisin) > 0) {
-                        Insecte* voisinInsecte = plateau.at(voisin);
-                        if (voisinInsecte && voisinInsecte->getOwner() != this->owner) {
-                            caseValide = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (caseValide) {
-                    positionsValides.push_back(caseVide);
-                }
-            }
+        Insecte* insecte = pair.second;
+        if (insecte && insecte->getOwner() == this->owner) {
+            std::vector<Hexagon> videsAdjacents = casesAdjacentesVides(insecte->getCoords(), plateau);
+            potentialPositions.insert(potentialPositions.end(), videsAdjacents.begin(), videsAdjacents.end());
+        } else if (insecte) {
+            std::vector<Hexagon> voisins = insecte->getCoords().getVoisins();
+            enemyNeighbors.insert(enemyNeighbors.end(), voisins.begin(), voisins.end());
         }
     }
 
-    return positionsValides;
+    // Étape 2 : Filtrer les cases vides sans ennemis adjacents
+    for (const auto& caseVide : potentialPositions) {
+        if (std::find(enemyNeighbors.begin(), enemyNeighbors.end(), caseVide) == enemyNeighbors.end()) {
+            validPositions.push_back(caseVide);
+        }
+    }
+
+    return validPositions;
 }
+
 
 
 

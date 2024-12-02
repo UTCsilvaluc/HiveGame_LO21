@@ -31,7 +31,9 @@ std::vector<Hexagon> Plateau::getPlacementsPossibles(Insecte* insecte) {
     if (plateauMap.size() == 1) {
         Insecte* seulInsecte = getSeulInsecteSurPlateau();
         placements = getVoisins(seulInsecte->getCoords());
+        std::cout <<"quatorze";
     }else {
+        std::cout <<"quinze";
         placements = insecte->placementsPossiblesDeBase(plateauMap);
     }
     // Afficher le plateau avec les emplacements possibles marqu�s
@@ -39,6 +41,7 @@ std::vector<Hexagon> Plateau::getPlacementsPossibles(Insecte* insecte) {
     for (const Hexagon& hex : placements) {
         std::cout << "[" << hex.getQ() << ", " << hex.getR() << "]\n";
     }
+    std::cout <<"seize";
     return placements;
 }
 

@@ -121,7 +121,7 @@ void GameMaster::jouer() {
                 choice = 2;
             } else {
                 if (dynamic_cast<JoueurIA*>(current)){
-                    choice = current->randomChoice();
+                    choice = 2;
                 }
                 else{
                     choice = getInputForAction(current);
@@ -230,24 +230,24 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
     if (!plateau.plateauEstVide()) {
         plateau.afficherPlateau(joueur1, joueur2);
     }
-
+    std::cout<<"abah";
     Hexagon position;
     bool placementValide = false;
 
-    int x=0;
-    int y=0;
-
     // Boucle pour garantir un placement valide
     while (!placementValide) {
+        std::cout<<"douze";
         std::vector<Hexagon> placementsPossibles = plateau.getPlacementsPossibles(insecteAPlacer);
+        std::cout<<"treize";
         plateau.afficherPlateauAvecPossibilites(placementsPossibles, joueur1, joueur2, current);
+        std::cout<<"quatorze";
 
         if (dynamic_cast<JoueurIA*>(current)){
             position = current->randomHexagonChoice(placementsPossibles);
         }
         else{
-            x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1, plateau.getMaxQ() + 1 , tour);
-            y = getInput("Ordonn�e pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1 , tour);
+            int x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1, plateau.getMaxQ() + 1 , tour);
+            int y = getInput("Ordonn�e pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1 , tour);
             position = Hexagon(x, y);
         }
 
@@ -255,7 +255,9 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
             placementValide = true;
         }
     }
+    std::cout<<"abahaaaaa";
     plateau.ajouterInsecte(insecteAPlacer, position);
+    std::cout<<"abahaaakhsbdjsbfjksdaa";
     current->retirerInsecte(index); // Retirer le pion du deck apr�s placement
 
     Insecte* insecteEnDessous = plateau.getInsecteAtCoords(position.getQ(), position.getR());
