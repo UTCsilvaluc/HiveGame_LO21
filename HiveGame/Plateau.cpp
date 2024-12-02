@@ -30,8 +30,12 @@ std::vector<Hexagon> Plateau::getPlacementsPossibles(Insecte* insecte) {
     std::vector<Hexagon> placements;
     if (plateauMap.size() == 1) {
         Insecte* seulInsecte = getSeulInsecteSurPlateau();
+        if (seulInsecte == nullptr) {
+            std::cerr << "Erreur : Aucun insecte trouvé sur le plateau." << std::endl;
+            return {};  // Retourne un vecteur vide en cas d'erreur.
+        }
         placements = getVoisins(seulInsecte->getCoords());
-        std::cout <<"quatorze";
+        std::cout << "quatorze";
     }else {
         std::cout <<"quinze";
         placements = insecte->placementsPossiblesDeBase(plateauMap);

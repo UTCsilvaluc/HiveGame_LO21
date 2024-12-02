@@ -56,8 +56,6 @@ public:
         return std::string(1, this->nom[0]);
     }
 
-    std::vector<Hexagon> collectValidPositions(const std::map<Hexagon, Insecte*>& plateau);
-
     std::vector<Hexagon> placementsPossiblesDeBase(const std::map<Hexagon, Insecte*>& plateau) const;
 };
 

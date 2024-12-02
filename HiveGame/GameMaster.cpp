@@ -212,19 +212,22 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
     int index = 0;
 
     // S�lection du pion � placer
-    if (!needPlayQueen) {
-        std::cout << "\nVoici votre deck : " << std::endl;
-        current->afficherDeck();
-        if (dynamic_cast<JoueurIA*>(current)){
-            index = current->randomDeckChoice();
+    while (insecteAPlacer == nullptr){
+        if (joueur1->getDeckSize()==0 || joueur2->getDeckSize()==0) break;
+        if (!needPlayQueen) {
+            std::cout << "\nVoici votre deck : " << std::endl;
+            current->afficherDeck();
+            if (dynamic_cast<JoueurIA*>(current)){
+                index = current->randomDeckChoice();
+            }
+            else{
+                index = getInput("Quel pion souhaitez-vous poser ? ", 1, current->getDeckSize()) - 1;
+            }
+            insecteAPlacer = current->getInsecteByIndex(index);
+        } else {
+            insecteAPlacer = current->getQueen();
+            index = current->getQueenIndex();
         }
-        else{
-            index = getInput("Quel pion souhaitez-vous poser ? ", 1, current->getDeckSize()) - 1;
-        }
-        insecteAPlacer = current->getInsecteByIndex(index);
-    } else {
-        insecteAPlacer = current->getQueen();
-        index = current->getQueenIndex();
     }
 
     if (!plateau.plateauEstVide()) {

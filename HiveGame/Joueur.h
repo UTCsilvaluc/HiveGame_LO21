@@ -41,7 +41,7 @@ public:
     }
 
     Insecte* getInsecteByIndex(unsigned int i) {
-        if (i >= deck.size()) { return nullptr; }
+        if (i >= deck.size()) { std::cout<<"nul a chier"; return nullptr; }
         return deck[i];
     }
 
