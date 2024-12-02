@@ -19,15 +19,12 @@ private:
     //std::vector<Action*> historiqueDesActions;
     //std::vector<Extension*> extensionsActivees;
     int nombreRetoursArriere;
-    int nombreTours;
     int minR, maxR, minQ, maxQ;
 
 public:
-    Plateau() : nombreRetoursArriere(3), nombreTours(0), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par d�faut
-    unsigned int getTour(){return nombreTours;}
-    void incrementerTour(){++nombreTours;}
-    void afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplacementsPossibles, Joueur* j1, Joueur* j2);
-    void afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2);
+    Plateau() : nombreRetoursArriere(3), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par d�faut
+    void afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplacementsPossibles, Joueur* j1, Joueur* j2, Joueur* current);
+    void afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2, Joueur* current);
     std::vector<Hexagon> getPlacementsPossibles(Insecte* insecte);
     void mettreAJourLimites() {
         // Initialiser les limites � des valeurs extr�mes

@@ -155,7 +155,6 @@ void GameMaster::jouer() {
         }
         // Incr�menter le compteur de tours apr�s une action valide
         tour++;
-        plateau.incrementerTour();
     }
 }
 bool positionEstValide(const Hexagon& position, const std::vector<Hexagon>& deplacementsPossibles) {
@@ -175,7 +174,7 @@ void GameMaster::deplacerPion(Joueur* current) {
 
     while (!deplacementValide) {
         std::vector<Hexagon> deplacementsPossibles = currentInsecte->deplacementsPossibles(plateau.getPlateauMap());
-        plateau.afficherPossibiliteDeplacement(currentInsecte, plateau.getPlateauMap(), joueur1, joueur2);
+        plateau.afficherPossibiliteDeplacement(currentInsecte, plateau.getPlateauMap(), joueur1, joueur2, current);
         if (dynamic_cast<JoueurIA*>(current)){
             Hexagon position = current->randomHexagonChoice(deplacementsPossibles);
             x = position.getQ();
@@ -241,7 +240,7 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
     // Boucle pour garantir un placement valide
     while (!placementValide) {
         std::vector<Hexagon> placementsPossibles = plateau.getPlacementsPossibles(insecteAPlacer);
-        plateau.afficherPlateauAvecPossibilites(placementsPossibles, joueur1, joueur2);
+        plateau.afficherPlateauAvecPossibilites(placementsPossibles, joueur1, joueur2, current);
 
         if (dynamic_cast<JoueurIA*>(current)){
             position = current->randomHexagonChoice(placementsPossibles);

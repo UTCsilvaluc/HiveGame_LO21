@@ -14,7 +14,7 @@ void Plateau::ajouterInsecte(Insecte* insecte, Hexagon position) {
         std::cout << "Pion plac� avec succ�s en " << position << "." << std::endl;
     }
 }
-void Plateau::afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2) {
+void Plateau::afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2, Joueur* current) {
     // R�cup�rer les d�placements possibles
     std::vector<Hexagon> deplacements = insecte->deplacementsPossibles(plateau);
     // Afficher les d�placements
@@ -23,7 +23,7 @@ void Plateau::afficherPossibiliteDeplacement(Insecte* insecte, const std::map<He
         std::cout << "[" << hex.getQ() << ", " << hex.getR() << "]\n";
     }
     // Afficher visuellement sur le plateau si besoin
-    afficherPlateauAvecPossibilites(deplacements, j1, j2);
+    afficherPlateauAvecPossibilites(deplacements, j1, j2, current);
 
 }
 std::vector<Hexagon> Plateau::getPlacementsPossibles(Insecte* insecte) {
@@ -42,10 +42,9 @@ std::vector<Hexagon> Plateau::getPlacementsPossibles(Insecte* insecte) {
     return placements;
 }
 
-void Plateau::afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplacementsPossibles, Joueur* j1, Joueur* j2) {
+void Plateau::afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplacementsPossibles, Joueur* j1, Joueur* j2, Joueur* current) {
     // Cr�er une copie temporaire du plateau pour l'affichage
     std::map<Hexagon, Insecte*> plateauTemp = plateauMap;
-    Joueur* current = (getTour() % 2 == 0) ? j1 : j2;
     // Ajouter des insectes fictifs aux emplacements possibles dans le plateau temporaire
     for (const Hexagon& hex : emplacementsPossibles) {
         if (plateauTemp.find(hex) == plateauTemp.end()) {  // Si la position est vide
