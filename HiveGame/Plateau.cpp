@@ -1,37 +1,17 @@
 #include "Plateau.h"
 
 void Plateau::ajouterInsecte(Insecte* insecte, Hexagon position) {
-    if (nombreTours == 0) {
-        std::cout << "Placement obligatoire du premier insecte." << std::endl;
-        if (plateauMap.empty()) {
-            plateauMap[position] = insecte;
-            insectesSurPlateau.push_back(insecte);
-            mettreAJourLimites();
-            return;
-        } else {
-            std::cerr << "Erreur : placement initial incorrect." << std::endl;
-            return;
-        }
-    }
-    std::vector<Hexagon> emplacementsValides;
-    if (nombreTours == 1){
-        emplacementsValides = getVoisinsInsectePlateau(insecte);
-    }
-    else{
-        emplacementsValides = insecte->placementsPossiblesDeBase(plateauMap);
-    }
-    bool positionValide = std::find(emplacementsValides.begin(), emplacementsValides.end(), position) != emplacementsValides.end();
-    if (!positionValide) {
-        std::cerr << "Erreur : emplacement invalide." << std::endl;
-        return;
-    }
+
     if (plateauMap.count(position)) {
         Insecte* insecteEnDessous = plateauMap[position];
         superposerInsecte(insecteEnDessous, insecte);
+        std::cout << "Pion plac� avec succ�s en " << position << "." << std::endl;
     } else {
         plateauMap[position] = insecte;
+        insecte->setCoords(position);
         insectesSurPlateau.push_back(insecte);
         mettreAJourLimites();
+        std::cout << "Pion plac� avec succ�s en " << position << "." << std::endl;
     }
 }
 void Plateau::afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2) {
@@ -48,10 +28,9 @@ void Plateau::afficherPossibiliteDeplacement(Insecte* insecte, const std::map<He
 }
 std::vector<Hexagon> Plateau::getPlacementsPossibles(Insecte* insecte) {
     std::vector<Hexagon> placements;
-    if (nombreTours == 1) {
-        // Premier tour avec un insecte adverse plac� : on place autour de cet insecte
-        auto it = plateauMap.begin();
-        placements = getVoisins(it->first);
+    if (plateauMap.size() == 1) {
+        Insecte* seulInsecte = getSeulInsecteSurPlateau();
+        placements = getVoisins(seulInsecte->getCoords());
     }else {
         placements = insecte->placementsPossiblesDeBase(plateauMap);
     }

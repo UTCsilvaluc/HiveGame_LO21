@@ -389,27 +389,40 @@ std::string Insecte::toJson() const {
 
 std::vector<Hexagon> Insecte::placementsPossiblesDeBase(const std::map<Hexagon, Insecte*>& plateau) const {
     std::vector<Hexagon> positionsValides;
+
     for (const auto& pair : plateau) {
-        const auto& position = pair.first;
-        const auto& insecteSurCase = pair.second;
-        if (insecteSurCase->getOwner() == this->owner) {
+        const Hexagon& position = pair.first;
+        Insecte* insecteSurCase = pair.second;
+
+        // Vérifiez si l'insecte sur cette case appartient au joueur actuel
+        if (insecteSurCase && insecteSurCase->getOwner() == this->owner) {
             std::vector<Hexagon> videsAdjacents = casesAdjacentesVides(position, plateau);
+
+            // Vérifiez chaque case vide adjacente
             for (const Hexagon& caseVide : videsAdjacents) {
                 bool caseValide = true;
+
+                // Vérifiez les voisins de la case vide
                 for (const Hexagon& voisin : getVoisins(caseVide)) {
-                    if (plateau.count(voisin) > 0 && plateau.at(voisin)->getOwner() != this->owner) {
-                        caseValide = false;
-                        break;
+                    if (plateau.count(voisin) > 0) {
+                        Insecte* voisinInsecte = plateau.at(voisin);
+                        if (voisinInsecte && voisinInsecte->getOwner() != this->owner) {
+                            caseValide = false;
+                            break;
+                        }
                     }
                 }
+
                 if (caseValide) {
                     positionsValides.push_back(caseVide);
                 }
             }
         }
     }
+
     return positionsValides;
 }
+
 
 
 

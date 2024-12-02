@@ -36,6 +36,7 @@ public:
     void saveGame();
     bool verifierProprietairePion(Joueur* current, Insecte* insecte);
     bool verifierDeplacementsPossiblesPourTousLesInsectes(Joueur* current);
+    bool verifierDeplacementPossibleDeInsecte(Insecte* currentInsecte);
     void undoLastAction();
     // Destructeur pour libérer la mémoire
     ~GameMaster();
