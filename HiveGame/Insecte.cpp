@@ -388,26 +388,33 @@ std::string Insecte::toJson() const {
 }
 
 std::vector<Hexagon> Insecte::placementsPossiblesDeBase(const std::map<Hexagon, Insecte*>& plateau) const {
-    std::vector<Hexagon> positionsValides;
-    for (const auto& [position, insecteSurCase] : plateau) {
-        if (insecteSurCase->getOwner() == this->owner) {
-            std::vector<Hexagon> videsAdjacents = casesAdjacentesVides(position, plateau);
-            for (const Hexagon& caseVide : videsAdjacents) {
-                bool caseValide = true;
-                for (const Hexagon& voisin : getVoisins(caseVide)) {
-                    if (plateau.count(voisin) > 0 && plateau.at(voisin)->getOwner() != this->owner) {
-                        caseValide = false;
-                        break;
-                    }
-                }
-                if (caseValide) {
-                    positionsValides.push_back(caseVide);
-                }
-            }
+    std::vector<Hexagon> validPositions;
+    std::vector<Hexagon> enemyNeighbors;
+
+    // Étape 1 : Trouver les cases vides adjacentes aux insectes alliés
+    std::vector<Hexagon> potentialPositions;
+    for (const auto& pair : plateau) {
+        Insecte* insecte = pair.second;
+        if (insecte && insecte->getOwner() == this->owner) {
+            std::vector<Hexagon> videsAdjacents = casesAdjacentesVides(insecte->getCoords(), plateau);
+            potentialPositions.insert(potentialPositions.end(), videsAdjacents.begin(), videsAdjacents.end());
+        } else if (insecte) {
+            std::vector<Hexagon> voisins = insecte->getCoords().getVoisins();
+            enemyNeighbors.insert(enemyNeighbors.end(), voisins.begin(), voisins.end());
         }
     }
-    return positionsValides;
+
+    // Étape 2 : Filtrer les cases vides sans ennemis adjacents
+    for (const auto& caseVide : potentialPositions) {
+        if (std::find(enemyNeighbors.begin(), enemyNeighbors.end(), caseVide) == enemyNeighbors.end()) {
+            validPositions.push_back(caseVide);
+        }
+    }
+
+    return validPositions;
 }
+
+
 
 
 

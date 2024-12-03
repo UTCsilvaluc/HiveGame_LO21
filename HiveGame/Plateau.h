@@ -19,35 +19,30 @@ private:
     //std::vector<Action*> historiqueDesActions;
     //std::vector<Extension*> extensionsActivees;
     int nombreRetoursArriere;
-    int nombreTours;
     int minR, maxR, minQ, maxQ;
 
 public:
-    Plateau() : nombreRetoursArriere(3), nombreTours(0), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par d�faut
-    unsigned int getTour(){return nombreTours;}
-    void incrementerTour(){++nombreTours;}
-    void ajouterInsecte(Insecte* insecte, Hexagon position);
-    void afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplacementsPossibles, Joueur* j1, Joueur* j2);
-    void afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2);
-    void afficherPossibilitePlacement(Insecte* insecte, Joueur* j1, Joueur* j2);
+    Plateau() : nombreRetoursArriere(3), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par d�faut
+    void afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplacementsPossibles, Joueur* j1, Joueur* j2, Joueur* current);
+    void afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2, Joueur* current);
+    std::vector<Hexagon> getPlacementsPossibles(Insecte* insecte);
     void mettreAJourLimites() {
         // Initialiser les limites � des valeurs extr�mes
         minR = std::numeric_limits<int>::max();
         maxR = std::numeric_limits<int>::min();
         minQ = std::numeric_limits<int>::max();
         maxQ = std::numeric_limits<int>::min();
-        for (const auto& [coords, insecte] : plateauMap) {
+        for (const auto& pair : plateauMap) {
+            const auto& coords = pair.first;
+            const auto& insecte = pair.second;
             if (coords.getR() < minR) minR = coords.getR();
             if (coords.getR() > maxR) maxR = coords.getR();
             if (coords.getQ() < minQ) minQ = coords.getQ();
             if (coords.getQ() > maxQ) maxQ = coords.getQ();
         }
     }
-    void ajouterInsecte(Insecte* insecte) {
-        plateauMap[insecte->getCoords()] = insecte; // Ajouter � la carte
-        insectesSurPlateau.push_back(insecte); // Garder une r�f�rence � l'insecte
-        mettreAJourLimites(); // Mettre � jour les limites lors de l'ajout
-    }
+
+    void ajouterInsecte(Insecte* insecte, Hexagon position);
 
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
         plateauMap.erase(insecte->getCoords()); // Retirer l'insecte de sa position actuelle
@@ -164,9 +159,10 @@ public:
     }
 
 
-    Insecte *getReineAbeille(Joueur *joueur) const{// ou utiliser insectesSurPlateau
-        for (const auto& [key, value] : plateauMap){ // https://en.cppreference.com/w/cpp/container/map
-            if (value->getNom() == "Reine" && value->getOwner() == joueur){
+    Insecte* getReineAbeille(Joueur* joueur) const { // ou utiliser insectesSurPlateau
+        for (const auto& pair : plateauMap) {
+            const auto& value = pair.second;
+            if (value->getNom() == "Reine" && value->getOwner() == joueur) {
                 return value;
             }
         }
@@ -203,14 +199,17 @@ public:
     bool plateauEstVide(){
         return (plateauMap.size() == 0);
     }
-    bool playerCanMoveInsecte(Joueur *joueur){
-        for (const auto& [key, value] : plateauMap){ // https://en.cppreference.com/w/cpp/container/map
-            if (value->getOwner() == joueur){
+
+    bool playerCanMoveInsecte(Joueur* joueur) {
+        for (const auto& pair : plateauMap) {
+            const auto& insecte = pair.second;
+            if (insecte->getOwner() == joueur && !insecte->deplacementsPossibles(plateauMap).empty()) {
                 return true;
             }
         }
         return false;
     }
+
 
     Insecte* getSeulInsecteSurPlateau() const {
         if (plateauMap.size() == 1) {

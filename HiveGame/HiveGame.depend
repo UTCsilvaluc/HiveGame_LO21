@@ -89,53 +89,65 @@
 	<limits>
 	<stack>
 
-1730374840 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\gamemaster.cpp
+1732991083 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\gamemaster.cpp
 	"GameMaster.h"
 
-1730376135 c:\users\debru\documents\github\hivegame_lo21\hivegame\gamemaster.h
+1732991083 c:\users\debru\documents\github\hivegame_lo21\hivegame\gamemaster.h
 	"Joueur.h"
 	"Plateau.h"
+	"Action.h"
 	<iostream>
 	<memory>
 	<limits>
+	<stack>
 
-1730375345 c:\users\debru\documents\github\hivegame_lo21\hivegame\joueur.h
+1732991083 c:\users\debru\documents\github\hivegame_lo21\hivegame\joueur.h
 	"Insecte.h"
+	"Plateau.h"
 	<vector>
+	<cstdlib>
+	<ctime>
+	<random>
+	<stdexcept>
 
-1730656008 c:\users\debru\documents\github\hivegame_lo21\hivegame\insecte.h
+1732878590 c:\users\debru\documents\github\hivegame_lo21\hivegame\insecte.h
 	"Hexagon.h"
 	<string>
 	<vector>
 	<map>
 	<set>
 	<algorithm>
+	<sstream>
 
-1730374840 c:\users\debru\documents\github\hivegame_lo21\hivegame\hexagon.h
+1732991083 c:\users\debru\documents\github\hivegame_lo21\hivegame\hexagon.h
 	<cstdlib>
 	<iostream>
+	<vector>
 
-1730384798 c:\users\debru\documents\github\hivegame_lo21\hivegame\plateau.h
+1732991495 c:\users\debru\documents\github\hivegame_lo21\hivegame\plateau.h
 	<iostream>
 	<map>
 	<vector>
 	"Hexagon.h"
 	"Insecte.h"
+	<limits>
 
-1730374840 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\hexagon.cpp
+1732878590 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\hexagon.cpp
 	"Hexagon.h"
+	<sstream>
 
-1730474609 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\insecte.cpp
+1732991547 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\insecte.cpp
 	"Insecte.h"
-
-1730374840 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\joueur.cpp
 	"Joueur.h"
 
-1730374840 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\main.cpp
-	"Plateau.h"
+1732878590 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\joueur.cpp
+	"Joueur.h"
+	<sstream>
+
+1732991083 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\main.cpp
 	"GameMaster.h"
 
-1730374840 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\plateau.cpp
+1732991083 source:c:\users\debru\documents\github\hivegame_lo21\hivegame\plateau.cpp
 	"Plateau.h"
 
 1732830670 source:c:\users\debru\onedrive\documents\github\hivegame_lo21\hivegame\gamemaster.cpp
@@ -205,11 +217,14 @@
 	<memory>
 	<limits>
 
-1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\joueur.h
+1732982044 c:\users\jean-\desktop\hivegame_lo21\hivegame\joueur.h
 	"Insecte.h"
+	"Plateau.h"
 	<vector>
+	<cstdlib>
+	<ctime>
 
-1731026131 c:\users\jean-\desktop\hivegame_lo21\hivegame\insecte.h
+1732977252 c:\users\jean-\desktop\hivegame_lo21\hivegame\insecte.h
 	"Hexagon.h"
 	<string>
 	<vector>
@@ -218,26 +233,28 @@
 	<algorithm>
 	<sstream>
 
-1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\hexagon.h
+1732986695 c:\users\jean-\desktop\hivegame_lo21\hivegame\hexagon.h
 	<cstdlib>
 	<iostream>
+	<vector>
 
-1731025733 c:\users\jean-\desktop\hivegame_lo21\hivegame\plateau.h
+1732984996 c:\users\jean-\desktop\hivegame_lo21\hivegame\plateau.h
 	<iostream>
 	<map>
 	<vector>
 	"Hexagon.h"
 	"Insecte.h"
+	<limits>
 
-1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\hexagon.cpp
+1732977252 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\hexagon.cpp
 	"Hexagon.h"
 	<sstream>
 
-1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\insecte.cpp
+1732977252 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\insecte.cpp
 	"Insecte.h"
 	"Joueur.h"
 
-1731025733 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\joueur.cpp
+1732977252 source:c:\users\jean-\desktop\hivegame_lo21\hivegame\joueur.cpp
 	"Joueur.h"
 	<sstream>
 
@@ -317,6 +334,12 @@
 	"Plateau.h"
 
 1732830670 c:\users\debru\onedrive\documents\github\hivegame_lo21\hivegame\action.h
+	"Hexagon.h"
+	"Insecte.h"
+	"Plateau.h"
+	"Joueur.h"
+
+1732878590 c:\users\debru\documents\github\hivegame_lo21\hivegame\action.h
 	"Hexagon.h"
 	"Insecte.h"
 	"Plateau.h"

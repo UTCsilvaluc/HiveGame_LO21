@@ -55,6 +55,7 @@ public:
     std::string getFirstCarac() {
         return std::string(1, this->nom[0]);
     }
+
     std::vector<Hexagon> placementsPossiblesDeBase(const std::map<Hexagon, Insecte*>& plateau) const;
 };
 
