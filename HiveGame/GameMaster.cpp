@@ -1,8 +1,8 @@
 #include "GameMaster.h"
 void GameMaster::startGame() {
-    std::cout << "\nD�marrage du jeu HiveGame en cours...\n" << std::endl;
-    mode = getInput("Merci de s�lectionner le mode de jeu :\n1 - Joueur vs Joueur (JvJ)\n2 - Joueur vs IA (JvIA)\n", 1, 2);
-    std::cout << "Vous avez s�lectionn� le mode : " << (mode == 1 ? "JvJ" : "JvIA") << "\n";
+    std::cout << "\nDemarrage du jeu HiveGame en cours...\n" << std::endl;
+    mode = getInput("Merci de selectionner le mode de jeu :\n1 - Joueur vs Joueur (JvJ)\n2 - Joueur vs IA (JvIA)\n", 1, 2);
+    std::cout << "Vous avez selectionne le mode : " << (mode == 1 ? "JvJ" : "JvIA") << "\n";
 
     std::string nom;
     std::cout << "\nMerci de saisir le nom du Joueur" << std::endl;
@@ -18,8 +18,8 @@ void GameMaster::startGame() {
         joueur2 = new JoueurIA("IA");
     }
 
-    std::cout << "Joueur 1 cr�� : " << joueur1->getName() << std::endl;
-    std::cout << "Joueur 2 cr�� : " << joueur2->getName() << std::endl;
+    std::cout << "Joueur 1 cree : " << joueur1->getName() << std::endl;
+    std::cout << "Joueur 2 cree : " << joueur2->getName() << std::endl;
 
     jouer();
 }
@@ -47,7 +47,7 @@ int getInput(const std::string& prompt, int minValue, int maxValue, unsigned int
         if (std::cin.fail() || choice < minValue || choice > maxValue) {
             std::cin.clear(); // R�initialiser l'�tat d'erreur
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caract�res restants
-            std::cout << "S'il vous pla�t, entrez un nombre valide entre " << minValue << " et " << maxValue << ".\n";
+            std::cout << "S'il vous plait, entrez un nombre valide entre " << minValue << " et " << maxValue << ".\n";
         } else {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caract�res restants
             break; // Sortir de la boucle si l'entr�e est valide
@@ -65,7 +65,7 @@ int getInput(const std::string& prompt, int minValue, int maxValue) {
         if (std::cin.fail() || choice < minValue || choice > maxValue) {
             std::cin.clear(); // R�initialiser l'�tat d'erreur
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caract�res restants
-            std::cout << "S'il vous pla�t, entrez un nombre valide entre " << minValue << " et " << maxValue << ".\n";
+            std::cout << "S'il vous plait, entrez un nombre valide entre " << minValue << " et " << maxValue << ".\n";
         } else {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caract�res restants
             break; // Sortir de la boucle si l'entr�e est valide
@@ -78,9 +78,9 @@ int GameMaster::getInputForAction(Joueur* current) {
     int choice = 0;
     while (true) {
         std::cout << "Que voulez-vous faire ?\n"
-                  << "1 - D�placer un pion \n"
+                  << "1 - Deplacer un pion \n"
                   << (current->getDeckSize() > 0 ? "2 - Placer un pion \n" : "")
-                  << "3 - Retour arri�re (Annuler la derni�re action)\n";
+                  << "3 - Retour arriere (Annuler la derni�re action)\n";
         std::cin >> choice;
 
         if (std::cin.fail() || (choice != 1 && (choice != 2 || current->getDeckSize() == 0)) && choice != 3) {
@@ -136,7 +136,7 @@ void GameMaster::jouer() {
                     undoLastAction();  // Annule la derni�re action
                     break;  // Sortir de la boucle apr�s retour arri�re
                 } else {
-                    std::cout << "Aucune action � annuler, essayez une autre option.\n";
+                    std::cout << "Aucune action a annuler, essayez une autre option.\n";
                     choice = getInputForAction(current);  // Demander � nouveau une action
                     continue;  // Redemander le choix de l'action sans avancer au tour suivant
                 }
@@ -149,7 +149,7 @@ void GameMaster::jouer() {
                 plateau.afficherPlateau(joueur1, joueur2);
                 break;  // Sortir de la boucle apr�s placement
             } else {
-                std::cout << "Choix invalide. Veuillez r�essayer.\n";
+                std::cout << "Choix invalide. Veuillez reessayer.\n";
                 choice = getInputForAction(current);  // Redemander � nouveau une action valide
             }
         }
@@ -182,7 +182,7 @@ void GameMaster::deplacerPion(Joueur* current) {
         }
         else{
             x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1 , plateau.getMaxQ() + 1);
-            y = getInput("Ordonn�e pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
+            y = getInput("Ordonnee pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
         }
 
         nouvellePosition = Hexagon(x, y);
@@ -233,24 +233,20 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
     if (!plateau.plateauEstVide()) {
         plateau.afficherPlateau(joueur1, joueur2);
     }
-    std::cout<<"abah";
     Hexagon position;
     bool placementValide = false;
 
     // Boucle pour garantir un placement valide
     while (!placementValide) {
-        std::cout<<"douze";
         std::vector<Hexagon> placementsPossibles = plateau.getPlacementsPossibles(insecteAPlacer);
-        std::cout<<"treize";
         plateau.afficherPlateauAvecPossibilites(placementsPossibles, joueur1, joueur2, current);
-        std::cout<<"quatorze";
 
         if (dynamic_cast<JoueurIA*>(current)){
             position = current->randomHexagonChoice(placementsPossibles);
         }
         else{
             int x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1, plateau.getMaxQ() + 1 , tour);
-            int y = getInput("Ordonn�e pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1 , tour);
+            int y = getInput("Ordonnee pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1 , tour);
             position = Hexagon(x, y);
         }
 
@@ -258,9 +254,7 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
             placementValide = true;
         }
     }
-    std::cout<<"abahaaaaa";
     plateau.ajouterInsecte(insecteAPlacer, position);
-    std::cout<<"abahaaakhsbdjsbfjksdaa";
     current->retirerInsecte(index); // Retirer le pion du deck apr�s placement
 
     Insecte* insecteEnDessous = plateau.getInsecteAtCoords(position.getQ(), position.getR());
@@ -301,20 +295,20 @@ Insecte* GameMaster::selectionnerInsecte(Joueur* current) {
             x = position.getQ();
             y = position.getR();
         } else {
-            x = getInput("Abscisse de la position du pion à déplacer : ", plateau.getMinQ(), plateau.getMaxQ());
-            y = getInput("Ordonnée de la position du pion à déplacer : ", plateau.getMinR(), plateau.getMaxR());
+            x = getInput("Abscisse de la position du pion a deplacer : ", plateau.getMinQ(), plateau.getMaxQ());
+            y = getInput("Ordonnée de la position du pion a deplacer : ", plateau.getMinR(), plateau.getMaxR());
         }
 
         currentInsecte = plateau.getInsecteAtCoords(x, y);
 
         // Vérifiez si l'insecte est invalide, appartient à un autre joueur ou ne peut pas se déplacer.
         if (!currentInsecte) {
-            std::cout << "Aucun insecte à cette position, réessayez." << std::endl;
+            std::cout << "Aucun insecte à cette position, reessayez." << std::endl;
             continue; // Demande à nouveau une position.
         }
 
         if (!verifierProprietairePion(current, currentInsecte)) {
-            std::cout << "Ce pion n'appartient pas au joueur actuel, réessayez." << std::endl;
+            std::cout << "Ce pion n'appartient pas au joueur actuel, reessayez." << std::endl;
             continue; // Demande à nouveau une position.
         }
 
@@ -327,7 +321,7 @@ Insecte* GameMaster::selectionnerInsecte(Joueur* current) {
 
 void GameMaster::undoLastAction() {
     if (actionsPile.empty()) {
-        std::cout << "Aucune action � annuler, la pile est vide.\n";
+        std::cout << "Aucune action a annuler, la pile est vide.\n";
         return;  // Aucune action � annuler
     }
 
@@ -339,7 +333,7 @@ void GameMaster::undoLastAction() {
     lastAction->undo(plateau);  // Vous devez passer le plateau pour que undo fonctionne
 
     delete lastAction;  // Lib�rer la m�moire de l'action
-    std::cout << "Derni�re action annul�e.\n";
+    std::cout << "Derniere action annulee.\n";
     tour--;
 }
 
@@ -347,7 +341,7 @@ bool GameMaster::verifierProprietairePion(Joueur* current, Insecte* insecte) {
     if (insecte && insecte->getOwner() == current) {
         return true;
     }
-    std::cout << "Ce pion ne vous appartient pas. Veuillez s�lectionner un de vos pions.\n";
+    std::cout << "Ce pion ne vous appartient pas. Veuillez selectionner un de vos pions.\n";
     return false;
 }
 

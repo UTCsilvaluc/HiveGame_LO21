@@ -48,6 +48,12 @@ public:
     void setCoords(Hexagon newCoords){
         coords = newCoords;
     }
+    Insecte* getDessus(){
+        return dessus;
+    }
+    Insecte* getDessous(){
+        return dessous;
+    }
     std::string toJson() const;
 
     virtual std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) = 0;
