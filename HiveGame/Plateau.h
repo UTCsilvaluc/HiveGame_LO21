@@ -45,14 +45,22 @@ public:
     void ajouterInsecte(Insecte* insecte, Hexagon position);
 
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
-        plateauMap.erase(insecte->getCoords()); // Retirer l'insecte de sa position actuelle
-        insecte->setCoords(nouvellePosition); // Mettre � jour les coordonn�es de l'insecte
-        plateauMap[nouvellePosition] = insecte; // Ajouter l'insecte � la nouvelle position
-        mettreAJourLimites(); // Mettre � jour les limites
+        // Vérifier si un insecte existe déjà à la nouvelle position
+        if (plateauMap.count(nouvellePosition)) {
+            Insecte* insecteExistant = plateauMap[nouvellePosition];
+            superposerInsecte(insecteExistant, insecte);
+        } else {
+            plateauMap.erase(insecte->getCoords()); // Retirer l'insecte de sa position actuelle
+            insecte->setCoords(nouvellePosition); // Mettre à jour les coordonnées de l'insecte
+            plateauMap[nouvellePosition] = insecte; // Ajouter l'insecte à la nouvelle position
+        }
+        mettreAJourLimites(); // Mettre à jour les limites du plateau
     }
+
     void superposerInsecte(Insecte* currentInsecte, Insecte* newInsecte) {
         newInsecte->setDessous(currentInsecte);
         currentInsecte->setDessus(newInsecte);
+        plateauMap.erase(newInsecte->getCoords()); // Retirer l'insecte de sa position actuelle
         newInsecte->setCoords(currentInsecte->getCoords());
         plateauMap[newInsecte->getCoords()] = newInsecte;
         mettreAJourLimites(); // Mettre � jour les limites lors de la superposition

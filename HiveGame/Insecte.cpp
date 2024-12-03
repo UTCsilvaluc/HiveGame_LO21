@@ -174,10 +174,10 @@ std::vector<Hexagon> deplacementsPossiblesScarabee(Hexagon coords, std::map<Hexa
         return voisins;
     }
     else{
-    Insecte* s = p[coords]->getDessous();
-    p.insert(std::make_pair(coords, s));
-    std::vector<Hexagon> voisins = getVoisins(coords);
-    return voisins;
+        Insecte* s = p[coords]->getDessous();
+        p.insert(std::make_pair(coords, s));
+        std::vector<Hexagon> voisins = getVoisins(coords);
+        return voisins;
     }
 }
 
@@ -190,47 +190,53 @@ void deplacementsPossiblesCoccinelle(Hexagon coords, std::map<Hexagon, Insecte*>
         return;
     }
     visited.insert(coords);
-    std::set<Hexagon> chemin;
-    if(getChaineBrisee(coords, p, chemin)){
-        return;
-    }
-    if(i!=0){
+
+    if (i > 0) {
         std::vector<Hexagon> voisinsOccupes = casesAdjacentesOccupees(coords, p);
-        for (int j = 0; j<voisinsOccupes.size(); j++){
-            deplacementsPossiblesCoccinelle(voisinsOccupes.at(j), p, i-1, cheminFinal, visited);
+        for (Hexagon voisin : voisinsOccupes) {
+            deplacementsPossiblesCoccinelle(voisin, p, i - 1, cheminFinal, visited);
         }
-    }
-    else{
+    } else {
         std::vector<Hexagon> voisinsVides = casesAdjacentesVides(coords, p);
-        for(int k=0; k<voisinsVides.size(); k++){
-            for(int l=0; l<cheminFinal.size(); l++){
-                if(voisinsVides.at(k).getQ() != cheminFinal.at(l).getQ() || voisinsVides.at(k).getR() != cheminFinal.at(l).getR()){
-                    cheminFinal.push_back(voisinsVides.at(k));
-                }
+        for (Hexagon voisinVide : voisinsVides) {
+            if (visited.find(voisinVide) == visited.end()) {
+                cheminFinal.push_back(voisinVide);
+                visited.insert(voisinVide);
             }
         }
     }
 }
 
-std::vector<Hexagon> Coccinelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
-    int i=0;
+std::vector<Hexagon> Coccinelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p) {
+    std::set<Hexagon> chemin;
+    if (getChaineBrisee(this->getCoords(), p, chemin)) {
+        return {};
+    }
+    int i = 2;
     std::vector<Hexagon> cheminFinal;
     std::set<Hexagon> visited;
     deplacementsPossiblesCoccinelle(this->getCoords(), p, i, cheminFinal, visited);
-    return std::vector<Hexagon>(cheminFinal.begin(), cheminFinal.end());
+
+    return cheminFinal;
 }
 
 void deplacementsPossiblesSauterelle(Hexagon coords, std::map<Hexagon, Insecte*> p, std::vector<Hexagon>& cheminFinal) {
-    std::set<Hexagon> chemin;
-    if (getChaineBrisee(coords, p, chemin)) {
-        return;
-    }
     std::vector<Hexagon> voisins = casesAdjacentesOccupees(coords, p);
+
     for (Hexagon voisin : voisins) {
         Hexagon current = voisin;
         bool caseVide = false;
         int dQ = voisin.getQ() - coords.getQ();
         int dR = voisin.getR() - coords.getR();
+
+        if (coords.getR() % 2 != 0) {
+            if (dR == -1) dQ += 1;
+            if (dR == 1) dQ += 1;
+        } else {
+            if (dR == -1) dQ += 1;
+            if (dR == 1) dQ += 1;
+        }
+
         while (!caseVide) {
             if (p.find(current) == p.end()) {
                 cheminFinal.push_back(current);
@@ -242,7 +248,12 @@ void deplacementsPossiblesSauterelle(Hexagon coords, std::map<Hexagon, Insecte*>
     }
 }
 
+
 std::vector<Hexagon> Sauterelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p) {
+    std::set<Hexagon> chemin;
+    if (getChaineBrisee(this->getCoords(), p, chemin)) {
+        return {};
+    }
     std::vector<Hexagon> cheminFinal;
     deplacementsPossiblesSauterelle(this->getCoords(), p, cheminFinal);
     std::vector<Hexagon> voisinsVides = casesAdjacentesVides(this->getCoords(), p);
@@ -282,7 +293,7 @@ void deplacementsPossiblesAraignee(Hexagon coords, std::map<Hexagon, Insecte*> p
             }
         }
     }
-    else{
+    else if (cheminInsecte.size() == 4) {
         deplacementsFinaux.insert(coords);
     }
     cheminInsecte.pop_back();

@@ -37,6 +37,12 @@ public:
         }
         return r < other.r;
     }
+    bool operator!=(const Hexagon& other) const {
+        if (q != other.q || r != other.r) {
+            return false;
+        }
+        return true;
+    }
     friend std::ostream& operator<<(std::ostream& os, const Hexagon& hex);
 
     std::vector<Hexagon> getVoisins() const {
