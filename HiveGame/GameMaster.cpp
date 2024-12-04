@@ -278,7 +278,7 @@ void GameMaster::jouer() {
             }
         }
         tour++;
-        saveGame();
+        //saveGame();
     }
 }
 
