@@ -248,7 +248,6 @@ void deplacementsPossiblesSauterelle(Hexagon coords, std::map<Hexagon, Insecte*>
     }
 }
 
-
 std::vector<Hexagon> Sauterelle::deplacementsPossibles(std::map<Hexagon, Insecte*> p) {
     std::set<Hexagon> chemin;
     if (getChaineBrisee(this->getCoords(), p, chemin)) {
