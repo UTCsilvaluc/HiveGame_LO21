@@ -25,6 +25,7 @@ private:
     std::string toJson() const;
     void saveGame() const;
     void displaySaveGame();
+    void undoLastTwoActions();
 public:
     bool hasPlayQueen(Joueur *currentPlayer);
     GameMaster() : joueur1(nullptr), joueur2(nullptr) , mode(0) {}

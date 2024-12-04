@@ -257,7 +257,7 @@ void GameMaster::jouer() {
         while (true) {
             if (choice == 3) {
                 if (actionsPile.size() >= 2) {
-                    undoLastAction();
+                    undoLastTwoActions();
                     break;
                 } else {
                     std::cout << "Aucune action � annuler, essayez une autre option.\n";
@@ -498,6 +498,25 @@ void GameMaster::saveGame() {
     }
 }
 
+void GameMaster::undoLastTwoActions() {
+    if (actionsPile.size() < 2) {
+        std::cout << "Pas assez d'actions dans la pile pour annuler. Minimum requis : 2.\n";
+        return;  // Pas assez d'actions à annuler
+    }
+
+    for (int i = 0; i < 2; ++i) {
+        // Récupérer la dernière action de la pile
+        Action* lastAction = actionsPile.top();
+        actionsPile.pop();  // Retirer l'action du sommet de la pile
+
+        // Appeler la méthode `undo` de l'action
+        lastAction->undo(plateau);  // Passer le plateau pour que undo fonctionne correctement
+
+        delete lastAction;  // Libérer la mémoire de l'action
+        std::cout << "Action annulée (" << (i + 1) << "/2).\n";
+        tour--;  // Réduire le numéro du tour
+    }
+}
 
 #include <fstream>
 #include <sstream>
