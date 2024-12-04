@@ -8,6 +8,7 @@
 #include <memory>
 #include <limits>
 #include <stack>
+
 int getInput(const std::string& prompt, int minValue, int maxValue);
 bool positionEstValide(const Hexagon& position, const std::vector<Hexagon>& deplacementsPossibles);
 class GameMaster {
@@ -100,7 +101,6 @@ public:
             std::cerr << "Erreur: Impossible d'ouvrir le fichier de sauvegarde." << std::endl;
             return;
         }
-
         // Lire le contenu du fichier JSON
         std::stringstream buffer;
         buffer << file.rdbuf();

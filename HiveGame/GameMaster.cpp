@@ -1,6 +1,7 @@
 #include "GameMaster.h"
 void GameMaster::startGame() {
-    displaySaveGame();
+    //displaySaveGame();
+    std::ifstream file("game_save82.json");
     std::cout << "\nD�marrage du jeu HiveGame en cours...\n" << std::endl;
     //choixExtensions();
     mode = getInput("Merci de s�lectionner le mode de jeu :\n1 - Joueur vs Joueur (JvJ)\n2 - Joueur vs IA (JvIA)\n", 1, 2);
@@ -568,3 +569,6 @@ void GameMaster::loadGame(const std::string& fileName) {
     std::cout << "Partie chargée avec succès depuis " << fileName << "." << std::endl;
 }
 */
+
+
+
