@@ -1,0 +1,229 @@
+{
+  "plateau": {
+  "plateauMap": {
+    "{ "q": 0, "r": 0 }": {
+  "id": "0x2822f90",
+  "nom": "Reine",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+},
+    "{ "q": 1, "r": 0 }": {
+  "id": "0x28229a0",
+  "nom": "Reine",
+  "coords": { "q": 1, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+},
+    "{ "q": 1, "r": 1 }": {
+  "id": "0x28225c0",
+  "nom": "Scarabee",
+  "coords": { "q": 1, "r": 1 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}
+  },
+  "insectesSurPlateau": [{
+  "id": "0x28229a0",
+  "nom": "Reine",
+  "coords": { "q": 1, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822f90",
+  "nom": "Reine",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x28225c0",
+  "nom": "Scarabee",
+  "coords": { "q": 1, "r": 1 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}],
+  "nombreRetoursArriere": 3,
+  "minR": 0,
+  "maxR": 1,
+  "minQ": 0,
+  "maxQ": 1
+},
+  "joueur1": {
+  "nom": "l",
+  "deck": [{
+  "id": "0x28224e0",
+  "nom": "Araignée",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822550",
+  "nom": "Araignée",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822640",
+  "nom": "Scarabee",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822690",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822730",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822780",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x28227d0",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822820",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x28226e0",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822900",
+  "nom": "Coccinelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822950",
+  "nom": "Moustique",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "l",
+  "dessus": null,
+  "dessous": null
+}]
+},
+  "joueur2": {
+  "nom": "r",
+  "deck": [{
+  "id": "0x2822a40",
+  "nom": "Araignée",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822db0",
+  "nom": "Araignée",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822e50",
+  "nom": "Scarabee",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822d10",
+  "nom": "Scarabee",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x28231c0",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822d60",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822ea0",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822e00",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822bd0",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822cc0",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822ef0",
+  "nom": "Coccinelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x2822f40",
+  "nom": "Moustique",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "r",
+  "dessus": null,
+  "dessous": null
+}]
+},
+  "mode": 1,
+  "tour": 3,
+  "maxRetourArriere": 5
+}

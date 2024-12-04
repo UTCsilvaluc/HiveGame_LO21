@@ -336,11 +336,12 @@ bool ReineAbeille::estEntouree(const std::map<Hexagon, Insecte*>& p) const {
 std::string Insecte::toJson() const {
     std::stringstream jsonData;
     jsonData << "{\n";
+    jsonData << "  \"id\": \"" << static_cast<const void*>(this) << "\",\n";  // Identifiant unique basé sur l'adresse mémoire
     jsonData << "  \"nom\": \"" << nom << "\",\n";
     jsonData << "  \"coords\": " << coords.toJson() << ",\n";
     jsonData << "  \"owner\": \"" << (owner ? owner->getName() : "null") << "\",\n";
-    jsonData << "  \"dessus\": " << (dessus ? "\"" + dessus->getNom() + "\"" : "null") << ",\n";
-    jsonData << "  \"dessous\": " << (dessous ? "\"" + dessous->getNom() + "\"" : "null") << "\n";
+    jsonData << "  \"dessus\": " << (dessus ? "\"" + std::to_string(reinterpret_cast<std::uintptr_t>(dessus)) + "\"" : "null") << ",\n";
+    jsonData << "  \"dessous\": " << (dessous ? "\"" + std::to_string(reinterpret_cast<std::uintptr_t>(dessous)) + "\"" : "null") << "\n";
     jsonData << "}";
 
     return jsonData.str();

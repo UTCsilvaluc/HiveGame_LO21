@@ -13,6 +13,7 @@ public:
 
     // Méthode virtuelle pure pour annuler l'action
     virtual void undo(Plateau& plateau) = 0;
+    virtual std::string toJson() const = 0;
 };
 
 class PlacementAction : public Action {
@@ -45,6 +46,17 @@ public:
             insectBelow->setDessus(nullptr);
         }
     }
+    std::string toJson() const override {
+        std::string json = "{";
+        json += "\"type\": \"PlacementAction\",";
+        json += "\"insecte\": " + (insecte ? insecte->toJson() : "null") + ",";
+        json += "\"position\": " + position.toJson() + ",";
+        json += "\"joueur\": " + (joueur ? joueur->toJson() : "null") + ",";
+        json += "\"insectBelow\": " + (insectBelow ? insectBelow->toJson() : "null");
+        json += "}";
+        return json;
+    }
+
 };
 
 class DeplacementAction : public Action {
@@ -79,6 +91,18 @@ public:
             insectAbove->setDessous(nullptr);
         }
     }
+    std::string toJson() const override{
+        std::string json = "{";
+        json += "\"type\": \"DeplacementAction\",";
+        json += "\"insecte\": " + (insecte ? insecte->toJson() : "null") + ",";
+        json += "\"oldPosition\": " + oldPosition.toJson() + ",";
+        json += "\"newPosition\": " + newPosition.toJson() + ",";
+        json += "\"insectBelow\": " + (insectBelow ? insectBelow->toJson() : "null") + ",";
+        json += "\"insectAbove\": " + (insectAbove ? insectAbove->toJson() : "null");
+        json += "}";
+        return json;
+    }
+
 };
 
 

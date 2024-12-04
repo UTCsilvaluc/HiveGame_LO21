@@ -1,0 +1,221 @@
+{
+  "plateau": {
+  "plateauMap": {
+    "{ "q": 1, "r": 1 }": {
+  "id": "0x25e29a0",
+  "nom": "Reine",
+  "coords": { "q": 1, "r": 1 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+},
+    "{ "q": 2, "r": 1 }": {
+  "id": "0x25e3080",
+  "nom": "Reine",
+  "coords": { "q": 2, "r": 1 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}
+  },
+  "insectesSurPlateau": [{
+  "id": "0x25e29a0",
+  "nom": "Reine",
+  "coords": { "q": 1, "r": 1 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e3080",
+  "nom": "Reine",
+  "coords": { "q": 2, "r": 1 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}],
+  "nombreRetoursArriere": 3,
+  "minR": 1,
+  "maxR": 1,
+  "minQ": 1,
+  "maxQ": 2
+},
+  "joueur1": {
+  "nom": "k",
+  "deck": [{
+  "id": "0x25e24e0",
+  "nom": "Araignée",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2550",
+  "nom": "Araignée",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e25c0",
+  "nom": "Scarabee",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2640",
+  "nom": "Scarabee",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2690",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2730",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2780",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e27d0",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2820",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e26e0",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2900",
+  "nom": "Coccinelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2950",
+  "nom": "Moustique",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "k",
+  "dessus": null,
+  "dessous": null
+}]
+},
+  "joueur2": {
+  "nom": "m",
+  "deck": [{
+  "id": "0x25e2a40",
+  "nom": "Araignée",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2d60",
+  "nom": "Araignée",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2bd0",
+  "nom": "Scarabee",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2ef0",
+  "nom": "Scarabee",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2d10",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2c20",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e3170",
+  "nom": "Fourmi",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e30d0",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2f90",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e31c0",
+  "nom": "Sauterelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2c70",
+  "nom": "Coccinelle",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}, {
+  "id": "0x25e2db0",
+  "nom": "Moustique",
+  "coords": { "q": 0, "r": 0 },
+  "owner": "m",
+  "dessus": null,
+  "dessous": null
+}]
+},
+  "mode": 1,
+  "tour": 2,
+  "maxRetourArriere": 5
+}

@@ -45,8 +45,17 @@ public:
     void ajouterInsecte(Insecte* insecte, Hexagon position);
 
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
+        std::cout<<"\n\n ------------3------------ \n\n";
+        if (insecte->getDessous() != nullptr){
+            std::cout<<"\n\n ------------Scarabée superposait un insecte !------------ \n\n";
+            Insecte *dessous = insecte->getDessous();
+            plateauMap[dessous->getCoords()] = dessous;
+            insecte->setDessous(nullptr);
+            dessous->setDessus(nullptr);
+        }
         // Vérifier si un insecte existe déjà à la nouvelle position
         if (plateauMap.count(nouvellePosition)) {
+            std::cout<<"\n\n ------------Scarabée vient de superposer !------------ \n\n";
             Insecte* insecteExistant = plateauMap[nouvellePosition];
             superposerInsecte(insecteExistant, insecte);
         } else {
@@ -54,15 +63,18 @@ public:
             insecte->setCoords(nouvellePosition); // Mettre à jour les coordonnées de l'insecte
             plateauMap[nouvellePosition] = insecte; // Ajouter l'insecte à la nouvelle position
         }
+        std::cout<<"\n\n ------------4------------ \n\n";
         mettreAJourLimites(); // Mettre à jour les limites du plateau
     }
 
-    void superposerInsecte(Insecte* currentInsecte, Insecte* newInsecte) {
-        newInsecte->setDessous(currentInsecte);
-        currentInsecte->setDessus(newInsecte);
-        plateauMap.erase(newInsecte->getCoords()); // Retirer l'insecte de sa position actuelle
-        newInsecte->setCoords(currentInsecte->getCoords());
-        plateauMap[newInsecte->getCoords()] = newInsecte;
+    void superposerInsecte(Insecte* insecteExistant, Insecte* newInsecte) {
+        //newInsecte est le scarabé
+        std::cout<<"\n\n ------------On superpose !------------ \n\n";
+        newInsecte->setDessous(insecteExistant);
+        insecteExistant->setDessus(newInsecte);
+        plateauMap.erase(newInsecte->getCoords());
+        plateauMap[insecteExistant->getCoords()] = newInsecte;
+        newInsecte->setCoords(insecteExistant->getCoords());
         mettreAJourLimites(); // Mettre � jour les limites lors de la superposition
     }
 
@@ -200,6 +212,7 @@ public:
             std::cout << "Case occup�e par : " << it->second->getNom() << "\n";
         }
 
+
         return true; // Toutes les cases voisines sont occup�es
     }
 
@@ -209,14 +222,39 @@ public:
     }
 
     bool playerCanMoveInsecte(Joueur* joueur) {
+        // Parcours de tous les insectes dans le plateau
         for (const auto& pair : plateauMap) {
             const auto& insecte = pair.second;
-            if (insecte->getOwner() == joueur && !insecte->deplacementsPossibles(plateauMap).empty()) {
-                return true;
+
+            // Vérifie si l'insecte appartient au joueur
+            if (insecte->getOwner() == joueur) {
+                // Affichage des informations sur l'insecte
+                std::cout << "Insecte: " << insecte->getNom() << " à la position ("
+                          << insecte->getCoords().getQ() << ", "
+                          << insecte->getCoords().getR() << ")\n";
+
+                // Vérification des déplacements possibles de cet insecte
+                std::vector<Hexagon> deplacementsPossibles = insecte->deplacementsPossibles(plateauMap);
+
+                // Affichage des déplacements possibles
+                if (!deplacementsPossibles.empty()) {
+                    std::cout << "Déplacements possibles pour " << insecte->getNom() << " : ";
+                    for (const Hexagon& hex : deplacementsPossibles) {
+                        std::cout << "(" << hex.getQ() << ", " << hex.getR() << ") ";
+                    }
+                    std::cout << std::endl;
+                    return true;  // Si au moins un déplacement est possible, retourner true
+                } else {
+                    std::cout << "Aucun déplacement possible pour " << insecte->getNom() << std::endl;
+                }
             }
         }
+
+        // Si aucun insecte du joueur n'a de déplacements possibles
+        std::cout << "Aucun insecte du joueur n'a de déplacements possibles." << std::endl;
         return false;
     }
+
 
 
     Insecte* getSeulInsecteSurPlateau() const {
@@ -243,6 +281,55 @@ public:
         }
         mettreAJourLimites();
     }
+    std::vector<Insecte*> getInsectesDuJoueur(Joueur* joueur) const {
+    std::vector<Insecte*> insectesDuJoueur;
+        for (const auto& pair : plateauMap) {
+            Insecte* insecte = pair.second;
+            if (insecte->getOwner() == joueur) {
+                insectesDuJoueur.push_back(insecte);
+            }
+        }
+        return insectesDuJoueur;
+    }
+    std::string toJson() const {
+        std::stringstream jsonData;
+        jsonData << "{\n";
+
+        // plateauMap
+        jsonData << "  \"plateauMap\": {\n";
+        for (auto it = plateauMap.begin(); it != plateauMap.end(); ++it) {
+            if (it != plateauMap.begin()) {
+                jsonData << ",\n";
+            }
+            jsonData << "    \"" << it->first.toJson() << "\": "
+                     << (it->second ? it->second->toJson() : "null");
+        }
+        jsonData << "\n  },\n";
+
+        // insectesSurPlateau
+        jsonData << "  \"insectesSurPlateau\": [";
+        for (size_t i = 0; i < insectesSurPlateau.size(); ++i) {
+            if (i != 0) {
+                jsonData << ", ";
+            }
+            jsonData << (insectesSurPlateau[i] ? insectesSurPlateau[i]->toJson() : "null");
+        }
+        jsonData << "],\n";
+
+        // nombreRetoursArriere
+        jsonData << "  \"nombreRetoursArriere\": " << nombreRetoursArriere << ",\n";
+
+        // minR, maxR, minQ, maxQ
+        jsonData << "  \"minR\": " << minR << ",\n";
+        jsonData << "  \"maxR\": " << maxR << ",\n";
+        jsonData << "  \"minQ\": " << minQ << ",\n";
+        jsonData << "  \"maxQ\": " << maxQ << "\n";
+
+        jsonData << "}";
+
+        return jsonData.str();
+    }
+
 
 };
 
