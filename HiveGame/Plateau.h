@@ -45,38 +45,48 @@ public:
     void ajouterInsecte(Insecte* insecte, Hexagon position);
 
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
-        std::cout<<"\n\n ------------3------------ \n\n";
-        if (insecte->getDessous() != nullptr){
-            std::cout<<"\n\n ------------Scarabée superposait un insecte !------------ \n\n";
-            Insecte *dessous = insecte->getDessous();
-            plateauMap[dessous->getCoords()] = dessous;
-            insecte->setDessous(nullptr);
-            dessous->setDessus(nullptr);
-        }
-        // Vérifier si un insecte existe déjà à la nouvelle position
+        bool anciennePosHasDessous = false;
+        Hexagon ancienneCoords = insecte->getCoords();
         if (plateauMap.count(nouvellePosition)) {
-            std::cout<<"\n\n ------------Scarabée vient de superposer !------------ \n\n";
+            if (insecte->getDessous() != nullptr){
+                anciennePosHasDessous = true;
+                Insecte* dessous = insecte->getDessous();
+                plateauMap[dessous->getCoords()] = dessous;
+                dessous->setDessus(nullptr);
+                insecte->setDessous(nullptr);
+            }
+            if (anciennePosHasDessous == false){
+                plateauMap.erase(ancienneCoords);
+            }
             Insecte* insecteExistant = plateauMap[nouvellePosition];
             superposerInsecte(insecteExistant, insecte);
         } else {
-            plateauMap.erase(insecte->getCoords()); // Retirer l'insecte de sa position actuelle
-            insecte->setCoords(nouvellePosition); // Mettre à jour les coordonnées de l'insecte
-            plateauMap[nouvellePosition] = insecte; // Ajouter l'insecte à la nouvelle position
+            if (insecte->getDessous() != nullptr){
+                Insecte* dessous = insecte->getDessous();
+                plateauMap[dessous->getCoords()] = dessous;
+                dessous->setDessus(nullptr);
+                insecte->setDessous(nullptr);
+                insecte->setCoords(nouvellePosition);
+                plateauMap[nouvellePosition] = insecte;
+            } else {
+                plateauMap.erase(insecte->getCoords());
+                insecte->setCoords(nouvellePosition);
+                plateauMap[nouvellePosition] = insecte;
+            }
         }
-        std::cout<<"\n\n ------------4------------ \n\n";
-        mettreAJourLimites(); // Mettre à jour les limites du plateau
+        mettreAJourLimites();
     }
 
+
     void superposerInsecte(Insecte* insecteExistant, Insecte* newInsecte) {
-        //newInsecte est le scarabé
-        std::cout<<"\n\n ------------On superpose !------------ \n\n";
+        std::cout << "\n\n ------------On superpose !------------ \n\n";
         newInsecte->setDessous(insecteExistant);
         insecteExistant->setDessus(newInsecte);
-        plateauMap.erase(newInsecte->getCoords());
         plateauMap[insecteExistant->getCoords()] = newInsecte;
         newInsecte->setCoords(insecteExistant->getCoords());
-        mettreAJourLimites(); // Mettre � jour les limites lors de la superposition
+        mettreAJourLimites();
     }
+
 
 
 

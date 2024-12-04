@@ -83,3 +83,55 @@
 	"Insecte.h"
 	<vector>
 
+1733341484 source:c:\users\sillu\hivegame_lo21\hivegame\main.cpp
+	"GameMaster.h"
+
+1733341484 c:\users\sillu\hivegame_lo21\hivegame\gamemaster.h
+	<fstream>
+	"Joueur.h"
+	"Plateau.h"
+	"Action.h"
+	<iostream>
+	<memory>
+	<limits>
+	<stack>
+
+1733341484 c:\users\sillu\hivegame_lo21\hivegame\joueur.h
+	"Insecte.h"
+	"Plateau.h"
+	<vector>
+	<cstdlib>
+	<ctime>
+	<random>
+	<stdexcept>
+
+1733341484 c:\users\sillu\hivegame_lo21\hivegame\insecte.h
+	"Hexagon.h"
+	<string>
+	<vector>
+	<map>
+	<set>
+	<algorithm>
+	<sstream>
+	<iostream>
+	<functional>
+
+1733341484 c:\users\sillu\hivegame_lo21\hivegame\hexagon.h
+	<cstdlib>
+	<iostream>
+	<vector>
+
+1733341484 c:\users\sillu\hivegame_lo21\hivegame\plateau.h
+	<iostream>
+	<map>
+	<vector>
+	"Hexagon.h"
+	"Insecte.h"
+	<limits>
+
+1733341484 c:\users\sillu\hivegame_lo21\hivegame\action.h
+	"Hexagon.h"
+	"Insecte.h"
+	"Plateau.h"
+	"Joueur.h"
+
