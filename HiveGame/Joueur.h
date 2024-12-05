@@ -147,4 +147,22 @@ public:
     }
 };
 
+enum ActionType { PLACER = 1, DEPLACER = 2, AUCUN = 0 };
+
+class JoueurIANiveau2 : public JoueurIA {
+private:
+    ActionType actionChoisie;  // PLACER, DEPLACER, AUCUN
+    Hexagon positionChoisie;   // Pour mémoriser la position choisie
+    Insecte* insecteChoisi;    // Pour mémoriser l'insecte choisi (peut être dans le deck ou sur le plateau)
+public:
+    JoueurIANiveau2(std::string nom) : JoueurIA(nom), actionChoisie(AUCUN), positionChoisie(), insecteChoisi(nullptr) {}
+
+    void choisirAction(std::map<Hexagon, Insecte*>& plateau);
+    void choisirDeplacementOuPlacement(std::map<Hexagon, Insecte*>& plateau);
+
+    int getActionPourGameMaster() const { return static_cast<int>(actionChoisie); }
+    Hexagon getPositionChoisie() const { return positionChoisie; }
+    Insecte* getInsecteChoisi() const { return insecteChoisi; }
+};
+
 #endif // JOUEUR_H

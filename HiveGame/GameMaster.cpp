@@ -5,7 +5,12 @@ void GameMaster::startGame() {
     std::cout << "\nD�marrage du jeu HiveGame en cours...\n" << std::endl;
     //choixExtensions();
     mode = getInput("Merci de s�lectionner le mode de jeu :\n1 - Joueur vs Joueur (JvJ)\n2 - Joueur vs IA (JvIA)\n", 1, 2);
-    std::cout << "Vous avez s�lectionn� le mode : " << (mode == 1 ? "JvJ" : "JvIA") << "\n";
+    //std::cout << "Vous avez s�lectionn� le mode : " << (mode == 1 ? "JvJ" : "JvIA") << "\n";
+    if (mode == 1 ) std::cout << "Vous avez s�lectionn� le mode : JvJ" << "\n";
+    else{
+        modeIA = getInput("\nMerci de s�lectionner le niveau de l'IA :\n1 - Niveau 1 (IA Aleatoire)\n2 - Niveau 2 (IA Heuristique)\n", 1, 2);
+        std::cout << "Vous avez s�lectionn� le niveau : " << (modeIA == 1 ? "Niveau 1" : "Niveau 2") << "\n";
+    }
 
     std::string nom;
     std::cout << "\nMerci de saisir le nom du Joueur" << std::endl;
@@ -17,8 +22,10 @@ void GameMaster::startGame() {
         std::cout << "\nMerci de saisir le nom du second Joueur" << std::endl;
         std::cin >> nom;
         joueur2 = new Joueur(nom);  // Cr�er le joueur 2
-    } else {
+    } else if (modeIA == 1) {
         joueur2 = new JoueurIA("IA");
+    }else{
+        joueur2 = new JoueurIANiveau2("IA");
     }
 
     std::cout << "Joueur 1 cr�� : " << joueur1->getName() << std::endl;
