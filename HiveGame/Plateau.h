@@ -48,6 +48,7 @@ public:
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
         bool anciennePosHasDessous = false;
         Hexagon ancienneCoords = insecte->getCoords();
+        // Vérifier si un insecte existe déjà à la nouvelle position
         if (plateauMap.count(nouvellePosition)) {
             if (insecte->getDessous() != nullptr){
                 anciennePosHasDessous = true;
@@ -55,6 +56,8 @@ public:
                 plateauMap[dessous->getCoords()] = dessous;
                 dessous->setDessus(nullptr);
                 insecte->setDessous(nullptr);
+                //insecte->setCoords(nouvellePosition);
+                //plateauMap[nouvellePosition] = insecte;
             }
             if (anciennePosHasDessous == false){
                 plateauMap.erase(ancienneCoords);
@@ -75,7 +78,7 @@ public:
                 plateauMap[nouvellePosition] = insecte;
             }
         }
-        mettreAJourLimites();
+        mettreAJourLimites(); // Mettre à jour les limites du plateau
     }
 
 
