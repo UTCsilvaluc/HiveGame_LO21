@@ -14,18 +14,22 @@ void Plateau::ajouterInsecte(Insecte* insecte, Hexagon position) {
         std::cout << "Pion place avec succes en " << position << "." << std::endl;
     }
 }
-void Plateau::afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2, Joueur* current) {
-    // R�cup�rer les d�placements possibles
-    std::vector<Hexagon> deplacements = insecte->deplacementsPossibles(plateau);
-    // Afficher les d�placements
-    std::cout << "Deplacements possibles pour " << insecte->getNom() << " :\n";
-    for (const Hexagon& hex : deplacements) {
-        std::cout << "[" << hex.getQ() << ", " << hex.getR() << "]\n";
+void Plateau::afficherPossibilitesDeplacements(const Insecte* insecte, const std::vector<Hexagon> deplacementsPossibles) const {
+    std::cout << "Déplacements possibles pour " << insecte->getNom() << " : \n";
+    for (size_t i = 0; i < deplacementsPossibles.size(); ++i) {
+        std::cout << i + 1 << ". (" << deplacementsPossibles[i].getQ() << ", " << deplacementsPossibles[i].getR() << ")\n";
     }
-    // Afficher visuellement sur le plateau si besoin
-    afficherPlateauAvecPossibilites(deplacements, j1, j2, current);
+    std::cout << "-1. Annuler le déplacement\n";
 
 }
+void Plateau::afficherPossibilitesPlacements(const Insecte* insecte, const std::vector<Hexagon> placementsPossibles) const{
+    std::cout << "Placements possibles pour " << insecte->getNom() << " : \n";
+    for (size_t i = 0; i < placementsPossibles.size(); ++i) {
+        std::cout << i + 1 << ". (" << placementsPossibles[i].getQ() << ", " << placementsPossibles[i].getR() << ")\n";
+    }
+    std::cout << "-1. Annuler le placement\n";
+}
+
 std::vector<Hexagon> Plateau::getPlacementsPossibles(Insecte* insecte) {
     std::vector<Hexagon> placements;
     if (plateauMap.size() == 1) {
@@ -37,11 +41,6 @@ std::vector<Hexagon> Plateau::getPlacementsPossibles(Insecte* insecte) {
         placements = getVoisins(seulInsecte->getCoords());
     }else {
         placements = insecte->placementsPossiblesDeBase(plateauMap);
-    }
-    // Afficher le plateau avec les emplacements possibles marqu�s
-    std::cout << "Emplacements possibles pour placer " << insecte->getNom() << " :\n";
-    for (const Hexagon& hex : placements) {
-        std::cout << "[" << hex.getQ() << ", " << hex.getR() << "]\n";
     }
     return placements;
 }

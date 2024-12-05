@@ -24,7 +24,8 @@ private:
 public:
     Plateau() : nombreRetoursArriere(3), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par d�faut
     void afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplacementsPossibles, Joueur* j1, Joueur* j2, Joueur* current);
-    void afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2, Joueur* current);
+    void afficherPossibilitesDeplacements(const Insecte* insecte, const std::vector<Hexagon> deplacementsPossibles) const;
+    void afficherPossibilitesPlacements(const Insecte* insecte, const std::vector<Hexagon> placementsPossibles) const;
     std::vector<Hexagon> getPlacementsPossibles(Insecte* insecte);
     void mettreAJourLimites() {
         // Initialiser les limites � des valeurs extr�mes
@@ -45,38 +46,48 @@ public:
     void ajouterInsecte(Insecte* insecte, Hexagon position);
 
     void deplacerInsecte(Insecte* insecte, const Hexagon& nouvellePosition) {
-        std::cout<<"\n\n ------------3------------ \n\n";
-        if (insecte->getDessous() != nullptr){
-            std::cout<<"\n\n ------------Scarabée superposait un insecte !------------ \n\n";
-            Insecte *dessous = insecte->getDessous();
-            plateauMap[dessous->getCoords()] = dessous;
-            insecte->setDessous(nullptr);
-            dessous->setDessus(nullptr);
-        }
-        // Vérifier si un insecte existe déjà à la nouvelle position
+        bool anciennePosHasDessous = false;
+        Hexagon ancienneCoords = insecte->getCoords();
         if (plateauMap.count(nouvellePosition)) {
-            std::cout<<"\n\n ------------Scarabée vient de superposer !------------ \n\n";
+            if (insecte->getDessous() != nullptr){
+                anciennePosHasDessous = true;
+                Insecte* dessous = insecte->getDessous();
+                plateauMap[dessous->getCoords()] = dessous;
+                dessous->setDessus(nullptr);
+                insecte->setDessous(nullptr);
+            }
+            if (anciennePosHasDessous == false){
+                plateauMap.erase(ancienneCoords);
+            }
             Insecte* insecteExistant = plateauMap[nouvellePosition];
             superposerInsecte(insecteExistant, insecte);
         } else {
-            plateauMap.erase(insecte->getCoords()); // Retirer l'insecte de sa position actuelle
-            insecte->setCoords(nouvellePosition); // Mettre à jour les coordonnées de l'insecte
-            plateauMap[nouvellePosition] = insecte; // Ajouter l'insecte à la nouvelle position
+            if (insecte->getDessous() != nullptr){
+                Insecte* dessous = insecte->getDessous();
+                plateauMap[dessous->getCoords()] = dessous;
+                dessous->setDessus(nullptr);
+                insecte->setDessous(nullptr);
+                insecte->setCoords(nouvellePosition);
+                plateauMap[nouvellePosition] = insecte;
+            } else {
+                plateauMap.erase(insecte->getCoords());
+                insecte->setCoords(nouvellePosition);
+                plateauMap[nouvellePosition] = insecte;
+            }
         }
-        std::cout<<"\n\n ------------4------------ \n\n";
-        mettreAJourLimites(); // Mettre à jour les limites du plateau
+        mettreAJourLimites();
     }
 
+
     void superposerInsecte(Insecte* insecteExistant, Insecte* newInsecte) {
-        //newInsecte est le scarabé
-        std::cout<<"\n\n ------------On superpose !------------ \n\n";
+        std::cout << "\n\n ------------On superpose !------------ \n\n";
         newInsecte->setDessous(insecteExistant);
         insecteExistant->setDessus(newInsecte);
-        plateauMap.erase(newInsecte->getCoords());
         plateauMap[insecteExistant->getCoords()] = newInsecte;
         newInsecte->setCoords(insecteExistant->getCoords());
-        mettreAJourLimites(); // Mettre � jour les limites lors de la superposition
+        mettreAJourLimites();
     }
+
 
 
 
@@ -150,21 +161,21 @@ public:
         int r = insecte->getCoords().getR();
         if (r % 2 == 0) {  // Colonne paire
             voisins = {
-                Hexagon(q - 1, r - 1),
-                Hexagon(q, r - 1),
-                Hexagon(q + 1, r),
-                Hexagon(q, r + 1),
-                Hexagon(q - 1, r + 1),
-                Hexagon(q - 1, r)
+                    Hexagon(q - 1, r - 1),
+                    Hexagon(q, r - 1),
+                    Hexagon(q + 1, r),
+                    Hexagon(q, r + 1),
+                    Hexagon(q - 1, r + 1),
+                    Hexagon(q - 1, r)
             };
         } else {  // Colonne impaire
             voisins = {
-                Hexagon(q, r - 1),
-                Hexagon(q + 1, r - 1),
-                Hexagon(q+1, r),
-                Hexagon(q+1, r+1),
-                Hexagon(q, r+1),
-                Hexagon(q-1, r)
+                    Hexagon(q, r - 1),
+                    Hexagon(q + 1, r - 1),
+                    Hexagon(q+1, r),
+                    Hexagon(q+1, r+1),
+                    Hexagon(q, r+1),
+                    Hexagon(q-1, r)
             };
         }
 
@@ -280,16 +291,6 @@ public:
             insectesSurPlateau.erase(itInsecte);
         }
         mettreAJourLimites();
-    }
-    std::vector<Insecte*> getInsectesDuJoueur(Joueur* joueur) const {
-    std::vector<Insecte*> insectesDuJoueur;
-        for (const auto& pair : plateauMap) {
-            Insecte* insecte = pair.second;
-            if (insecte->getOwner() == joueur) {
-                insectesDuJoueur.push_back(insecte);
-            }
-        }
-        return insectesDuJoueur;
     }
     std::string toJson() const {
         std::stringstream jsonData;

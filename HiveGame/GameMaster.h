@@ -8,6 +8,7 @@
 #include <memory>
 #include <limits>
 #include <stack>
+
 int getInput(const std::string& prompt, int minValue, int maxValue);
 bool positionEstValide(const Hexagon& position, const std::vector<Hexagon>& deplacementsPossibles);
 class GameMaster {
@@ -25,12 +26,13 @@ private:
     std::string toJson() const;
     void saveGame() const;
     void displaySaveGame();
+    void undoLastTwoActions();
 public:
     bool hasPlayQueen(Joueur *currentPlayer);
     GameMaster() : joueur1(nullptr), joueur2(nullptr) , mode(0) {}
     Insecte* selectionnerInsecte(Joueur* current);
     GameMaster(Plateau plateau, unsigned int maxRetourArriere = 5)
-        : joueur1(nullptr), joueur2(nullptr), mode(0), tour(0), plateau(plateau), maxRetourArriere(maxRetourArriere) {}
+            : joueur1(nullptr), joueur2(nullptr), mode(0), tour(0), plateau(plateau), maxRetourArriere(maxRetourArriere) {}
     void startGame();
     void jouer();
     int getInputForAction(Joueur* current);
@@ -87,7 +89,6 @@ public:
     void saveGame();
     bool verifierProprietairePion(Joueur* current, Insecte* insecte);
     bool verifierDeplacementsPossiblesPourTousLesInsectes(Joueur* current);
-    bool verifierDeplacementPossibleDeInsecte(Insecte* currentInsecte);
     void undoLastAction();
     // Destructeur pour libérer la mémoire
     ~GameMaster();
@@ -99,7 +100,6 @@ public:
             std::cerr << "Erreur: Impossible d'ouvrir le fichier de sauvegarde." << std::endl;
             return;
         }
-
         // Lire le contenu du fichier JSON
         std::stringstream buffer;
         buffer << file.rdbuf();

@@ -2,7 +2,6 @@
 #ifndef JOUEUR_H
 #define JOUEUR_H
 #include "Insecte.h"
-#include "Plateau.h" //besoin des données du plateau pour implémenter une IA
 #include <vector>
 #include <cstdlib>
 #include <ctime>
@@ -70,6 +69,17 @@ public:
         deck.push_back(insecte);
     }
 
+    std::vector<Insecte*> getInsectesDuJoueur(const std::map<Hexagon, Insecte*>& plateauMap) const {
+        std::vector<Insecte*> insectesDuJoueur;
+        for (const auto& pair : plateauMap) {
+            Insecte* insecte = pair.second;
+            if (insecte->getOwner() == this) {
+                insectesDuJoueur.push_back(insecte);
+            }
+        }
+        return insectesDuJoueur;
+    }
+
     // Fonctions virtuelles pour l'IA
     virtual int randomChoice() {
         throw std::logic_error("La méthode randomChoice() n'est pas applicable pour un joueur humain.");
@@ -83,7 +93,7 @@ public:
         throw std::logic_error("La méthode randomDeckChoice() n'est pas applicable pour un joueur humain.");
     }
 
-    virtual Hexagon randomPionChoice(const std::map<Hexagon, Insecte*>& plateauMap) {
+    virtual int randomPionIndexChoice(const std::map<Hexagon, Insecte*>& plateauMap) {
         throw std::logic_error("La méthode randomPionChoice() n'est pas applicable pour un joueur humain.");
     }
 };
@@ -124,21 +134,16 @@ public:
     }
 
     // Fonction pour choisir aléatoirement un pion du plateau appartenant au joueur
-    Hexagon randomPionChoice(const std::map<Hexagon, Insecte*>& plateauMap) override {
+    int randomPionIndexChoice(const std::map<Hexagon, Insecte*>& plateauMap) override {
         // Filtrer les pions appartenant au joueur
-        std::vector<Hexagon> pionsJoueur;
-        for (const auto& entry : plateauMap) {
-            if (entry.second->getOwner() == this) {
-                pionsJoueur.push_back(entry.first);
-            }
-        }
+        std::vector<Insecte*> pionsJoueur = getInsectesDuJoueur(plateauMap);
 
         if (pionsJoueur.empty()) {
             throw std::runtime_error("Aucun pion appartenant au joueur sur le plateau");
         }
 
-        std::uniform_int_distribution<size_t> distribution(0, pionsJoueur.size() - 1);
-        return pionsJoueur[distribution(generator)];
+        std::uniform_int_distribution<int> distribution(0,pionsJoueur.size() - 1);
+        return distribution(generator);
     }
 };
 
