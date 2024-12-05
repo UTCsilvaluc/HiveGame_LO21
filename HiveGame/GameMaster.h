@@ -32,7 +32,7 @@ public:
     GameMaster() : joueur1(nullptr), joueur2(nullptr) , mode(0) {}
     Insecte* selectionnerInsecte(Joueur* current);
     GameMaster(Plateau plateau, unsigned int maxRetourArriere = 5)
-        : joueur1(nullptr), joueur2(nullptr), mode(0), tour(0), plateau(plateau), maxRetourArriere(maxRetourArriere) {}
+            : joueur1(nullptr), joueur2(nullptr), mode(0), tour(0), plateau(plateau), maxRetourArriere(maxRetourArriere) {}
     void startGame();
     void jouer();
     int getInputForAction(Joueur* current);
@@ -89,7 +89,6 @@ public:
     void saveGame();
     bool verifierProprietairePion(Joueur* current, Insecte* insecte);
     bool verifierDeplacementsPossiblesPourTousLesInsectes(Joueur* current);
-    bool verifierDeplacementPossibleDeInsecte(Insecte* currentInsecte);
     void undoLastAction();
     // Destructeur pour libérer la mémoire
     ~GameMaster();

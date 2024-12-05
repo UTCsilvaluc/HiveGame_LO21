@@ -24,7 +24,8 @@ private:
 public:
     Plateau() : nombreRetoursArriere(3), minR(0), maxR(0), minQ(0), maxQ(0) {} // Initialisation par d�faut
     void afficherPlateauAvecPossibilites(const std::vector<Hexagon>& emplacementsPossibles, Joueur* j1, Joueur* j2, Joueur* current);
-    void afficherPossibiliteDeplacement(Insecte* insecte, const std::map<Hexagon, Insecte*>& plateau, Joueur* j1, Joueur* j2, Joueur* current);
+    void afficherPossibilitesDeplacements(const Insecte* insecte, const std::vector<Hexagon> deplacementsPossibles) const;
+    void afficherPossibilitesPlacements(const Insecte* insecte, const std::vector<Hexagon> placementsPossibles) const;
     std::vector<Hexagon> getPlacementsPossibles(Insecte* insecte);
     void mettreAJourLimites() {
         // Initialiser les limites � des valeurs extr�mes
@@ -160,21 +161,21 @@ public:
         int r = insecte->getCoords().getR();
         if (r % 2 == 0) {  // Colonne paire
             voisins = {
-                Hexagon(q - 1, r - 1),
-                Hexagon(q, r - 1),
-                Hexagon(q + 1, r),
-                Hexagon(q, r + 1),
-                Hexagon(q - 1, r + 1),
-                Hexagon(q - 1, r)
+                    Hexagon(q - 1, r - 1),
+                    Hexagon(q, r - 1),
+                    Hexagon(q + 1, r),
+                    Hexagon(q, r + 1),
+                    Hexagon(q - 1, r + 1),
+                    Hexagon(q - 1, r)
             };
         } else {  // Colonne impaire
             voisins = {
-                Hexagon(q, r - 1),
-                Hexagon(q + 1, r - 1),
-                Hexagon(q+1, r),
-                Hexagon(q+1, r+1),
-                Hexagon(q, r+1),
-                Hexagon(q-1, r)
+                    Hexagon(q, r - 1),
+                    Hexagon(q + 1, r - 1),
+                    Hexagon(q+1, r),
+                    Hexagon(q+1, r+1),
+                    Hexagon(q, r+1),
+                    Hexagon(q-1, r)
             };
         }
 
@@ -290,16 +291,6 @@ public:
             insectesSurPlateau.erase(itInsecte);
         }
         mettreAJourLimites();
-    }
-    std::vector<Insecte*> getInsectesDuJoueur(Joueur* joueur) const {
-    std::vector<Insecte*> insectesDuJoueur;
-        for (const auto& pair : plateauMap) {
-            Insecte* insecte = pair.second;
-            if (insecte->getOwner() == joueur) {
-                insectesDuJoueur.push_back(insecte);
-            }
-        }
-        return insectesDuJoueur;
     }
     std::string toJson() const {
         std::stringstream jsonData;
