@@ -1,8 +1,8 @@
 #include "Joueur.h"
 std::vector<Insecte*> deckDeBase(Joueur *joueur){
     std::vector<Insecte*> newDeck;
-    for (int i = 0; i < 2; ++i) { newDeck.push_back(new Araignee(Hexagon(0, 0) , joueur)); }  // Araignée x2
-    for (int i = 0; i < 2; ++i) { newDeck.push_back(new Scarabee(Hexagon(0, 0) , joueur)); }  // Scarabée x2
+    for (int i = 0; i < 2; ++i) { newDeck.push_back(new Araignee(Hexagon(0, 0) , joueur)); }  // Araignï¿½e x2
+    for (int i = 0; i < 2; ++i) { newDeck.push_back(new Scarabee(Hexagon(0, 0) , joueur)); }  // Scarabï¿½e x2
     for (int i = 0; i < 3; ++i) { newDeck.push_back(new Fourmi(Hexagon(0, 0) , joueur)); }    // Fourmi x3
     for (int i = 0; i < 3; ++i) { newDeck.push_back(new Sauterelle(Hexagon(0, 0) , joueur)); } // Sauterelle x3
     newDeck.push_back(new Coccinelle(Hexagon(0, 0) , joueur));  // Coccinelle x1
@@ -20,7 +20,7 @@ void Joueur::afficherDeck() const {
 Insecte* Joueur::getQueen() const {
     for (auto it = deck.begin(); it != deck.end(); ++it) {
         if ((*it)->getNom() == "Reine") {
-            return *it; // Retourne un pointeur vers la Reine concrète
+            return *it; // Retourne un pointeur vers la Reine concrï¿½te
         }
     }
     return nullptr;
@@ -28,7 +28,7 @@ Insecte* Joueur::getQueen() const {
 int Joueur::getQueenIndex() const {
     for (size_t i = 0; i < deck.size(); ++i) {
         if (deck[i]->getNom() == "Reine") {
-            return i;  // Retourne l'index si la reine est trouvée
+            return i;  // Retourne l'index si la reine est trouvï¿½e
         }
     }
     return -1;
@@ -42,6 +42,45 @@ bool Joueur::hasQueen() const {
     return false;
 }
 
+int getInput(const std::string& prompt, int minValue, int maxValue, unsigned int tour) {
+    int choice;
+    if (tour == 0){
+        minValue = std::numeric_limits<int>::min();
+        maxValue = std::numeric_limits<int>::max();
+    }
+    while (true) {
+        std::cout << prompt;
+        std::cin >> choice;
+        if (std::cin.fail() || choice < minValue || choice > maxValue) {
+            std::cin.clear(); // Rï¿½initialiser l'ï¿½tat d'erreur
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caractï¿½res restants
+            std::cout << "S'il vous plaï¿½t, entrez un nombre valide entre " << minValue << " et " << maxValue << ".\n";
+        } else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caractï¿½res restants
+            break; // Sortir de la boucle si l'entrï¿½e est valide
+        }
+    }
+    return choice;
+}
+
+int getInput(const std::string& prompt, int minValue, int maxValue) {
+    int choice;
+    while (true) {
+        std::cout << prompt;
+        std::cin >> choice;
+
+        if (std::cin.fail() || choice < minValue || choice > maxValue) {
+            std::cin.clear(); // Rï¿½initialiser l'ï¿½tat d'erreur
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caractï¿½res restants
+            std::cout << "S'il vous plaï¿½t, entrez un nombre valide entre " << minValue << " et " << maxValue << ".\n";
+        } else {
+            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caractï¿½res restants
+            break; // Sortir de la boucle si l'entrï¿½e est valide
+        }
+    }
+    return choice;
+}
+
 #include <sstream>
 std::string Joueur::toJson() const {
     std::stringstream jsonData;
@@ -51,7 +90,7 @@ std::string Joueur::toJson() const {
     jsonData << "  \"deck\": [";
     for (size_t i = 0; i < deck.size(); ++i) {
         if (i != 0) {
-            jsonData << ", ";  // Séparateur entre les insectes
+            jsonData << ", ";  // Sï¿½parateur entre les insectes
         }
         jsonData << deck[i]->toJson();  // Appel de toJson pour chaque Insecte
     }

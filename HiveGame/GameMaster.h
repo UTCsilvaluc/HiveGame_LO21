@@ -9,7 +9,6 @@
 #include <limits>
 #include <stack>
 
-int getInput(const std::string& prompt, int minValue, int maxValue);
 bool positionEstValide(const Hexagon& position, const std::vector<Hexagon>& deplacementsPossibles);
 class GameMaster {
 private:
@@ -36,7 +35,6 @@ public:
             : joueur1(nullptr), joueur2(nullptr), mode(0), tour(0), plateau(plateau), maxRetourArriere(maxRetourArriere) {}
     void startGame();
     void jouer();
-    int getInputForAction(Joueur* current);
     bool detectWinner(Joueur *joueur1 , Joueur *joueur2);
     void choixExtensions() {
         // Afficher la liste des extensions disponibles
