@@ -253,6 +253,8 @@ void GameMaster::jouer() {
                 if (dynamic_cast<JoueurIA*>(current)){
                     choice = current->randomChoice();
                 }
+                else if (dynamic_cast<JoueurIANiveau2*>(current)){
+                }
                 else{
                     choice = getInputForAction(current);
                 }

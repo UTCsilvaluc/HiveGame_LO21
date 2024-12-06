@@ -39,7 +39,8 @@ public:
 
     Hexagon getCoords() const { return coords; }
     std::string getNom() const { return nom; }
-    Joueur* getOwner() { return owner; }
+    const Joueur* getOwner() const { return owner; }
+    virtual bool isQueen() const {return false;} // Par défaut, un insecte n'est pas une Reine
 
     void setDessus(Insecte *insecte){
         dessus = insecte;
@@ -65,6 +66,12 @@ public:
     }
 
     std::vector<Hexagon> placementsPossiblesDeBase(const std::map<Hexagon, Insecte*>& plateau) const;
+
+    // Méthode dans Insecte.h pour obtenir la liste des coordonnées des voisins ennemis
+    std::vector<Hexagon>getVoisinsEnnemis(const std::vector<Hexagon>& voisins, const std::map<Hexagon, Insecte*>& plateau) const;
+
+    // Nouvelle méthode dans Insecte pour obtenir les placements possibles
+    std::vector<Hexagon> getPlacementsPossibles(const std::map<Hexagon, Insecte*>& plateau) const;
 };
 
 // Adaptation des constructeurs pour chaque classe d'insecte dérivée
@@ -73,6 +80,7 @@ public:
     ReineAbeille(Hexagon coords, Joueur *owner) : Insecte("Reine", coords, owner) {}
     std::vector<Hexagon> deplacementsPossibles(std::map<Hexagon, Insecte*> p) override;
     bool estEntouree(const std::map<Hexagon, Insecte*>& p) const;
+    bool isQueen() const override {return true;} // ReineAbeille est une Reine
 };
 
 class Fourmi : public Insecte {
@@ -233,6 +241,7 @@ std::vector<Hexagon> casesAdjacentesOccupees(Hexagon coords, const std::map<Hexa
 void getLongueurChaine(Hexagon coords, std::map<Hexagon, Insecte*> p, std::set<Hexagon> &chemin);
 bool getChaineBrisee(Hexagon coords, std::map<Hexagon, Insecte*> p, std::set<Hexagon> &chemin);
 bool getGlissementPossible(const Insecte *i, const std::map<Hexagon, Insecte*> p, const Hexagon destination);
+Insecte* trouverReine(Joueur* joueur, const std::map<Hexagon, Insecte*>& plateau);
 
 
 #endif // INSECTE_H

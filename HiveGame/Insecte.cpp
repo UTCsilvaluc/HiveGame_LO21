@@ -27,6 +27,27 @@ std::vector<Hexagon> getVoisins(const Hexagon& coords) {
     return voisins;
 }
 
+// Méthode dans Insecte.h pour obtenir la liste des coordonnées des voisins ennemis
+std::vector<Hexagon> Insecte::getVoisinsEnnemis(const std::vector<Hexagon>& voisins, const std::map<Hexagon, Insecte*>& plateau) const {
+    std::vector<Hexagon> voisinsEnnemis;
+    for (const auto& voisin : voisins) {
+        auto it = plateau.find(voisin);
+        if (it != plateau.end() && it->second != nullptr && it->second->getOwner() != this->getOwner()) {
+            voisinsEnnemis.push_back(voisin);
+        }
+    }
+    return voisinsEnnemis;
+}
+
+Insecte* trouverReine(Joueur* joueur, const std::map<Hexagon, Insecte*>& plateau) {
+    for (const auto& [position, insecte] : plateau) {
+        if (insecte != nullptr && insecte->getOwner() == joueur && insecte->isQueen()) {
+            return insecte;
+        }
+    }
+    return nullptr;
+}
+
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, const std::map<Hexagon, Insecte*>& p) {
     std::vector<Hexagon> vides;
     std::vector<Hexagon> voisins = getVoisins(coords);
@@ -120,6 +141,22 @@ std::vector<Hexagon> deplacementsPossiblesReineAbeille(Hexagon coords, std::map<
         }
     }
     return voisinsVides;
+}
+
+// Nouvelle méthode dans Insecte pour obtenir les placements possibles
+std::vector<Hexagon> Insecte::getPlacementsPossibles(const std::map<Hexagon, Insecte*>& plateau) const {
+    std::vector<Hexagon> placements;
+    if (plateau.size() == 1) {
+        Insecte* seulInsecte = plateau.begin()->second;
+        if (seulInsecte == nullptr) {
+            std::cerr << "Erreur : Aucun insecte trouvé sur le plateau." << std::endl;
+            return {};  // Retourne un vecteur vide en cas d'erreur.
+        }
+        placements = getVoisins(seulInsecte->getCoords());
+    } else {
+        placements = this->placementsPossiblesDeBase(plateau);
+    }
+    return placements;
 }
 
 std::vector<Hexagon> ReineAbeille::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
