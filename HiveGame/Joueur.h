@@ -145,6 +145,9 @@ public:
 
 
 
+
+
+
 class JoueurIA : public Joueur {
 private:
     std::default_random_engine generator;  // Générateur de nombres aléatoires
@@ -162,6 +165,7 @@ public:
 
     Hexagon getFirstPlacementCoordinates(int minQ, int maxQ, int minR, int maxR, unsigned int tour){
         //A implémenter si on veut faire commencer IA ou faire jouer IA contre IA
+        return Hexagon(0,0);
     }
 
     int getInputForDeckIndex(){
@@ -215,15 +219,25 @@ public:
     }
 };
 
+
+
+
+
+
+
 enum HeuristiqueType { PROTEGER_REINE, ATTAQUER_REINE, COMPACTER_RUCHE, AUCUN_HEURISTIQUE }; // Ajout d'une énumération pour les types d'heuristiques
 
 enum ActionType { PLACER = 1, DEPLACER = 2, AUCUN_ACTION = 0 };
 
 class JoueurIANiveau2 : public JoueurIA {
 private:
-    ActionType actionChoisie;  // PLACER, DEPLACER, AUCUN
-    Hexagon positionChoisie;   // Pour mémoriser la position choisie
-    Insecte* insecteChoisi;    // Pour mémoriser l'insecte choisi (peut être dans le deck ou sur le plateau)
+    ActionType actionChoisie;                          // PLACER, DEPLACER, AUCUN
+    Hexagon positionChoisie;                           // Pour mémoriser la position choisie
+    Insecte* insecteChoisi;                            // Pour mémoriser l'insecte choisi (peut être dans le deck ou sur le plateau)
+    std::vector<Hexagon> placementsPossibles;          // Liste des placements possibles après analyse
+    std::vector<Hexagon> deplacementsPossibles;        // Liste des déplacements possibles après analyse
+    std::vector<Insecte*> insectesPossibles;           // Liste des insectes qui peuvent être déplacés ou placés
+
 public:
     JoueurIANiveau2(std::string nom) : JoueurIA(nom), actionChoisie(AUCUN_ACTION), positionChoisie(), insecteChoisi(nullptr) {}
 
@@ -249,8 +263,10 @@ public:
             return PROTEGER_REINE;
         }
 
-        // Vérifier si l'un des insectes alliés peut atteindre la Reine adverse
-        for (const auto& [position, insecte] : plateau) {
+// Vérifier si l'un des insectes alliés peut atteindre la Reine adverse
+        for (auto it = plateau.begin(); it != plateau.end(); ++it) {
+            Insecte* insecte = it->second;
+
             if (insecte != nullptr && insecte->getOwner() == joueur) {
                 std::vector<Hexagon> deplacementsPossibles = insecte->deplacementsPossibles(plateau);
                 if (std::find(deplacementsPossibles.begin(), deplacementsPossibles.end(), reineAdverse->getCoords()) != deplacementsPossibles.end()) {
@@ -258,6 +274,7 @@ public:
                 }
             }
         }
+
 
         // Sinon, jouer de manière défensive pour compacter la ruche
         return COMPACTER_RUCHE;
@@ -355,6 +372,26 @@ public:
         // Si aucune action n'a été trouvée
         actionChoisie = AUCUN_ACTION;
         insecteChoisi = nullptr;
+    }
+
+    int getInputForAction() override{
+    }
+
+    Hexagon getFirstPlacementCoordinates(int minQ, int maxQ, int minR, int maxR, unsigned int tour) override{
+        //A implémenter si on veut faire commencer IA ou faire jouer IA contre IA
+        return Hexagon(0,0);
+    }
+
+    int getInputForDeckIndex() override{
+    }
+
+    int getInputForPlacementIndex(std::vector<Hexagon> placementsPossibles) override{
+    }
+
+    int getInputIndexForInsectToMove(std::vector<Insecte*> insectesDuJoueur) override{
+    }
+
+    int getInputForMovementIndex(std::vector<Hexagon> deplacementsPossibles) override{
     }
 };
 
