@@ -126,25 +126,18 @@ void GameMaster::deplacerPion(Joueur* current) {
         plateau.afficherPlateauAvecPossibilites(deplacementsPossibles, joueur1, joueur2, current);
         plateau.afficherPossibilitesDeplacements(currentInsecte, deplacementsPossibles);
 
+        int choix = current->getInputForMovementIndex(deplacementsPossibles);
 
-        if (dynamic_cast<JoueurIA*>(current)) {
-            Hexagon position = current->randomHexagonChoice(deplacementsPossibles);
-            x = position.getQ();
-            y = position.getR();
-        } else {
-            int choix = current->getInputForMovement(deplacementsPossibles);
-
-            // Annuler si l'utilisateur entre -1
-            if (choix == -1) {
-                std::cout << "Déplacement annulé.\n";
-                tour--;
-                return;
-            }
-
-            Hexagon position = deplacementsPossibles[choix - 1];
-            x = position.getQ();
-            y = position.getR();
+        // Annuler si l'utilisateur entre -1
+        if (choix == -1) {
+            std::cout << "Déplacement annulé.\n";
+            tour--;
+            return;
         }
+
+        Hexagon position = deplacementsPossibles[choix - 1];
+        x = position.getQ();
+        y = position.getR();
 
         nouvellePosition = Hexagon(x, y);
         if (positionEstValide(nouvellePosition, deplacementsPossibles)) {
@@ -192,14 +185,7 @@ void GameMaster::jouer() {
                 std::cout << "Aucun mouvement possible, vous devez placer un pion.\n";
                 choice = 2;
             } else {
-                if (dynamic_cast<JoueurIA*>(current)){
-                    choice = current->randomChoice();
-                }
-                else if (dynamic_cast<JoueurIANiveau2*>(current)){
-                }
-                else{
-                    choice = current->getInputForAction();
-                }
+                choice = current->getInputForAction();
             }
         }
         while (true) {
@@ -240,12 +226,7 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
         if (!needPlayQueen) {
             std::cout << "\nVoici votre deck : " << std::endl;
             current->afficherDeck();
-            if (dynamic_cast<JoueurIA*>(current)){
-                index = current->randomDeckChoice();
-            }
-            else{
-                index = current->getInputForDeckIndex();
-            }
+            index = current->getInputForDeckIndex();
             insecteAPlacer = current->getInsecteByIndex(index);
         } else {
             insecteAPlacer = current->getQueen();
@@ -272,18 +253,15 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
             plateau.afficherPlateauAvecPossibilites(placementsPossibles, joueur1, joueur2, current);
             plateau.afficherPossibilitesPlacements(insecteAPlacer, placementsPossibles);
 
-            if (dynamic_cast<JoueurIA*>(current)) {
-                position = current->randomHexagonChoice(placementsPossibles);
-            } else {
-                int choix = current->getInputForPlacementIndex(placementsPossibles);
+            int choix = current->getInputForPlacementIndex(placementsPossibles);
 
-                if (choix == -1) {
-                    std::cout << "Placement annulé.\n";
-                    tour--;
-                    return;
-                }
-                position = placementsPossibles[choix - 1];
+            if (choix == -1) {
+                std::cout << "Placement annulé.\n";
+                tour--;
+                return;
             }
+            position = placementsPossibles[choix - 1];
+
             if (std::find(placementsPossibles.begin(), placementsPossibles.end(), position) != placementsPossibles.end() || plateau.plateauEstVide()){
                 placementValide = true;
             }
@@ -340,14 +318,10 @@ Insecte* GameMaster::selectionnerInsecte(Joueur* current) {
                       << insectesDuJoueur[i]->getCoords().getR() << ")\n";
         }
 
-        if (dynamic_cast<JoueurIA*>(current)) {
-            indexChoisi = current->randomPionIndexChoice(plateau.getPlateauMap());
-        } else {
-            indexChoisi = current->getInputIndexForInsectToMove(insectesDuJoueur);
-            if (indexChoisi == -1) {
-                std::cout << "Action annulée.\n";
-                return nullptr;
-            }
+        indexChoisi = current->getInputIndexForInsectToMove(insectesDuJoueur);
+        if (indexChoisi == -1) {
+            std::cout << "Action annulée.\n";
+            return nullptr;
         }
 
         deplacementsPossiblesPion = insectesDuJoueur[indexChoisi]->deplacementsPossibles(plateau.getPlateauMap());
