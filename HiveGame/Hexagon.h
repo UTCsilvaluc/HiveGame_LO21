@@ -1,6 +1,5 @@
 #ifndef HEXAGON_H
 #define HEXAGON_H
-#include <cstdlib>
 #include <iostream>
 #include <vector>
 
@@ -37,6 +36,12 @@ public:
         }
         return r < other.r;
     }
+    bool operator!=(const Hexagon& other) const {
+        if (q != other.q || r != other.r) {
+            return false;
+        }
+        return true;
+    }
     friend std::ostream& operator<<(std::ostream& os, const Hexagon& hex);
 
     std::vector<Hexagon> getVoisins() const {
@@ -61,6 +66,30 @@ public:
             };
         }
         return voisins;
+    }
+
+    static Hexagon fromJson(const std::string& json) {
+        int q = 0;
+        int r = 0;
+
+        // Trouver la position de "q" et "r" dans la chaîne
+        size_t qPos = json.find("\"q\":");
+        size_t rPos = json.find("\"r\":");
+
+        if (qPos != std::string::npos && rPos != std::string::npos) {
+            // Extraire la valeur de "q"
+            size_t qStart = json.find(":", qPos) + 1;
+            size_t qEnd = json.find(",", qStart);
+            if (qEnd == std::string::npos) qEnd = json.find("}", qStart);
+            q = std::stoi(json.substr(qStart, qEnd - qStart));
+
+            // Extraire la valeur de "r"
+            size_t rStart = json.find(":", rPos) + 1;
+            size_t rEnd = json.find("}", rStart);
+            r = std::stoi(json.substr(rStart, rEnd - rStart));
+        }
+
+        return Hexagon(q, r);
     }
 
 };

@@ -1,98 +1,164 @@
 #include "GameMaster.h"
 void GameMaster::startGame() {
+    //displaySaveGame();
+    std::ifstream file("game_save82.json");
     std::cout << "\nD�marrage du jeu HiveGame en cours...\n" << std::endl;
+    //choixExtensions();
     mode = getInput("Merci de s�lectionner le mode de jeu :\n1 - Joueur vs Joueur (JvJ)\n2 - Joueur vs IA (JvIA)\n", 1, 2);
-    std::cout << "Vous avez s�lectionn� le mode : " << (mode == 1 ? "JvJ" : "JvIA") << "\n";
+    //std::cout << "Vous avez s�lectionn� le mode : " << (mode == 1 ? "JvJ" : "JvIA") << "\n";
+    if (mode == 1 ) std::cout << "Vous avez s�lectionn� le mode : JvJ" << "\n";
+    else{
+        modeIA = getInput("\nMerci de s�lectionner le niveau de l'IA :\n1 - Niveau 1 (IA Aleatoire)\n2 - Niveau 2 (IA Heuristique)\n", 1, 2);
+        std::cout << "Vous avez s�lectionn� le niveau : " << (modeIA == 1 ? "Niveau 1" : "Niveau 2") << "\n";
+    }
 
     std::string nom;
     std::cout << "\nMerci de saisir le nom du Joueur" << std::endl;
     std::cin >> nom;
 
-    joueur1 = new Joueur(nom);  // Cr�er le joueur 1
+    joueur1 = new JoueurHumain(nom);  // Cr�er le joueur 1
 
     if (mode == 1) {
         std::cout << "\nMerci de saisir le nom du second Joueur" << std::endl;
         std::cin >> nom;
-        joueur2 = new Joueur(nom);  // Cr�er le joueur 2
-    } else {
+        joueur2 = new JoueurHumain(nom);  // Cr�er le joueur 2
+    } else if (modeIA == 1) {
         joueur2 = new JoueurIA("IA");
+    }else{
+        joueur2 = new JoueurIANiveau2("IA");
     }
 
     std::cout << "Joueur 1 cr�� : " << joueur1->getName() << std::endl;
     std::cout << "Joueur 2 cr�� : " << joueur2->getName() << std::endl;
-
     jouer();
 }
+
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include "GameMaster.h"
+#include "Insecte.h"  // Supposons que tu as une classe Insecte avec les coordonnées q, r
+
+#include <fstream>
+#include <iostream>
+#include <sstream>
+#include <string>
+#include "GameMaster.h"
+#include "Insecte.h"  // Supposons que tu as une classe Insecte avec les coordonnées q, r
+
+void GameMaster::displaySaveGame() {
+    // Ouvre le fichier save_game.json
+    std::ifstream file("game_save2.json");
+
+    if (!file.is_open()) {
+        std::cerr << "Erreur : Impossible d'ouvrir le fichier game_save2.json" << std::endl;
+        return;
+    }
+
+    std::stringstream jsonData;
+    jsonData << file.rdbuf();  // Lire tout le contenu du fichier dans un stringstream
+    file.close();  // Fermer le fichier après la lecture
+
+    std::string jsonContent = jsonData.str();  // Contenu du fichier sous forme de chaîne de caractères
+
+    std::cout << "Affichage des insectes dans le fichier game_save2.json..." << std::endl;
+
+    // Exemple d'extraction et d'affichage de données des insectes
+    size_t pos = 0;
+    std::string insectPattern = "\"nom\": \"";
+    while ((pos = jsonContent.find(insectPattern, pos)) != std::string::npos) {
+        size_t startNom = jsonContent.find("\"nom\": \"", pos) + 8;  // Début du nom
+        size_t endNom = jsonContent.find("\"", startNom);  // Fin du nom
+        std::string nomInsecte = jsonContent.substr(startNom, endNom - startNom);  // Extraire le nom
+
+        // Extraire les coordonnées
+        size_t startQ = jsonContent.find("\"q\":", endNom) + 4;
+        size_t endQ = jsonContent.find(",", startQ);
+        int q = std::stoi(jsonContent.substr(startQ, endQ - startQ));  // Extraire q
+
+        size_t startR = jsonContent.find("\"r\":", endQ) + 4;
+        size_t endR = jsonContent.find("}", startR);
+        int r = std::stoi(jsonContent.substr(startR, endR - startR));  // Extraire r
+
+        // Extraire le nom du propriétaire
+        size_t startOwner = jsonContent.find("\"owner\": \"", endR) + 10;
+        size_t endOwner = jsonContent.find("\"", startOwner);
+        std::string owner = jsonContent.substr(startOwner, endOwner - startOwner);  // Extraire le propriétaire
+
+        // Afficher les informations de l'insecte
+        std::cout << "Insecte : " << nomInsecte << ", Coordonnées (q, r) : (" << q << ", " << r << "), Propriétaire : " << owner << std::endl;
+
+        // Avance la position dans le fichier JSON
+        pos = endR;
+    }
+}
+
+
 GameMaster::~GameMaster() {
     delete joueur1;
     delete joueur2;
 
     // Lib�rer la m�moire de la pile d'actions
-    while (!actionsPile.empty()) {
-        delete actionsPile.top();
-        actionsPile.pop();
+    while (!actionsDeque.empty()) {
+        delete actionsDeque.back();
+        actionsDeque.pop_back();
     }
 }
 
-int getInput(const std::string& prompt, int minValue, int maxValue, unsigned int tour) {
-    int choice;
-    if (tour == 0){
-        minValue = std::numeric_limits<int>::min();
-        maxValue = std::numeric_limits<int>::max();
-    }
-    while (true) {
-        std::cout << prompt;
-        std::cin >> choice;
+bool positionEstValide(const Hexagon& position, const std::vector<Hexagon>& deplacementsPossibles) {
+    return std::find(deplacementsPossibles.begin(), deplacementsPossibles.end(), position) != deplacementsPossibles.end();
+}
 
-        if (std::cin.fail() || choice < minValue || choice > maxValue) {
-            std::cin.clear(); // R�initialiser l'�tat d'erreur
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caract�res restants
-            std::cout << "S'il vous pla�t, entrez un nombre valide entre " << minValue << " et " << maxValue << ".\n";
+void GameMaster::deplacerPion(Joueur* current) {
+    plateau.afficherPlateau(joueur1, joueur2);
+
+    Insecte* currentInsecte = selectionnerInsecte(current);
+
+    bool deplacementValide = false;
+    Hexagon nouvellePosition;
+
+    int x = 0;
+    int y = 0;
+
+    while (!deplacementValide) {
+        std::vector<Hexagon> deplacementsPossibles = currentInsecte->deplacementsPossibles(plateau.getPlateauMap());
+        plateau.afficherPlateauAvecPossibilites(deplacementsPossibles, joueur1, joueur2, current);
+        plateau.afficherPossibilitesDeplacements(currentInsecte, deplacementsPossibles);
+
+        int choix = current->getInputForMovementIndex(deplacementsPossibles);
+
+        // Annuler si l'utilisateur entre -1
+        if (choix == -1) {
+            std::cout << "Déplacement annulé.\n";
+            tour--;
+            return;
+        }
+
+        Hexagon position = deplacementsPossibles[choix - 1];
+        x = position.getQ();
+        y = position.getR();
+
+        nouvellePosition = Hexagon(x, y);
+        if (positionEstValide(nouvellePosition, deplacementsPossibles)) {
+            deplacementValide = true;
         } else {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caract�res restants
-            break; // Sortir de la boucle si l'entr�e est valide
+            std::cout << "Déplacement invalide. Veuillez choisir une coordonnée valide." << std::endl;
         }
     }
-    return choice;
-}
 
-int getInput(const std::string& prompt, int minValue, int maxValue) {
-    int choice;
-    while (true) {
-        std::cout << prompt;
-        std::cin >> choice;
 
-        if (std::cin.fail() || choice < minValue || choice > maxValue) {
-            std::cin.clear(); // R�initialiser l'�tat d'erreur
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caract�res restants
-            std::cout << "S'il vous pla�t, entrez un nombre valide entre " << minValue << " et " << maxValue << ".\n";
-        } else {
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Ignorer les caract�res restants
-            break; // Sortir de la boucle si l'entr�e est valide
-        }
+
+    Action* action = currentInsecte->actionDeplacer(nouvellePosition);
+    action->executerAction(plateau); // `plateau` est l'instance de Plateau utilisée dans votre jeu;
+    if (actionsDeque.size() >= maxRetourArriere) {
+        Action* actionToDelete = actionsDeque.front();
+        delete actionToDelete;
+        actionsDeque.pop_front();
     }
-    return choice;
+    actionsDeque.push_back(action);
 }
 
-int GameMaster::getInputForAction(Joueur* current) {
-    int choice = 0;
-    while (true) {
-        std::cout << "Que voulez-vous faire ?\n"
-                  << "1 - D�placer un pion \n"
-                  << (current->getDeckSize() > 0 ? "2 - Placer un pion \n" : "")
-                  << "3 - Retour arri�re (Annuler la derni�re action)\n";
-        std::cin >> choice;
-
-        if (std::cin.fail() || (choice != 1 && (choice != 2 || current->getDeckSize() == 0)) && choice != 3) {
-            std::cin.clear();
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-            std::cout << "Merci de saisir 1, 2 (si deck disponible), ou 3 pour retourner en arri�re.\n";
-        } else {
-            break; // Sortir de la boucle si l'entr�e est valide
-        }
-    }
-    return choice;
-}
 
 void GameMaster::jouer() {
     bool hasWinner = false;
@@ -109,6 +175,7 @@ void GameMaster::jouer() {
                       << " tours pour jouer votre reine." << std::endl;
         }
 
+
         int choice = 0;
         bool needPlayQueen = (playerTurn >= 4) && current->hasQueen();
 
@@ -116,96 +183,39 @@ void GameMaster::jouer() {
             std::cout << "Vous devez obligatoirement poser votre Reine !\n";
             choice = 2; // Forcer le choix de poser la reine
         } else {
-            if (!plateau.playerCanMoveInsecte(current) || !verifierDeplacementsPossiblesPourTousLesInsectes(current)) {
+            if (!plateau.playerCanMoveInsecte(current)) {
                 std::cout << "Aucun mouvement possible, vous devez placer un pion.\n";
                 choice = 2;
             } else {
-                if (dynamic_cast<JoueurIA*>(current)){
-                    choice = 1;
-                }
-                else{
-                    choice = getInputForAction(current);
-                }
+                choice = current->getInputForAction();
             }
         }
-
-        // Boucle pour garantir qu'une action valide est choisie avant de passer au tour suivant
         while (true) {
-            if (choice == 3) {  // Retour arri�re (annulation)
-                if (!actionsPile.empty()) {
-                    undoLastAction();  // Annule la derni�re action
-                    break;  // Sortir de la boucle apr�s retour arri�re
+            if (choice == 3) {
+                if (actionsDeque.size() >= 2) {
+                    undoLastTwoActions();
+                    break;
                 } else {
                     std::cout << "Aucune action � annuler, essayez une autre option.\n";
-                    choice = getInputForAction(current);  // Demander � nouveau une action
-                    continue;  // Redemander le choix de l'action sans avancer au tour suivant
+                    choice = current->getInputForAction();
+                    continue;
                 }
-            } else if (choice == 1) {  // D�placer un pion
+            } else if (choice == 1) {
                 deplacerPion(current);
                 plateau.afficherPlateau(joueur1, joueur2);
-                break;  // Sortir de la boucle apr�s d�placement
+                break;
             } else if (choice == 2) {  // Placer un nouveau pion
                 placerPion(current, needPlayQueen);
                 plateau.afficherPlateau(joueur1, joueur2);
-                break;  // Sortir de la boucle apr�s placement
+                break;
             } else {
                 std::cout << "Choix invalide. Veuillez r�essayer.\n";
-                choice = getInputForAction(current);  // Redemander � nouveau une action valide
+                choice = current->getInputForAction();
             }
         }
-        // Incr�menter le compteur de tours apr�s une action valide
         tour++;
-        plateau.incrementerTour();
+        //saveGame();
     }
-}
-bool positionEstValide(const Hexagon& position, const std::vector<Hexagon>& deplacementsPossibles) {
-    return std::find(deplacementsPossibles.begin(), deplacementsPossibles.end(), position) != deplacementsPossibles.end();
-}
-
-void GameMaster::deplacerPion(Joueur* current) {
-    plateau.afficherPlateau(joueur1, joueur2);
-
-    Insecte* currentInsecte = selectionnerInsecte(current);
-
-    bool deplacementValide = false;
-    Hexagon nouvellePosition;
-
-    int x=0;
-    int y=0;
-
-    while (!deplacementValide) {
-        std::vector<Hexagon> deplacementsPossibles = currentInsecte->deplacementsPossibles(plateau.getPlateauMap());
-        plateau.afficherPossibiliteDeplacement(currentInsecte, plateau.getPlateauMap(), joueur1, joueur2);
-        if (dynamic_cast<JoueurIA*>(current)){
-            Hexagon position = current->randomHexagonChoice(deplacementsPossibles);
-            x = position.getQ();
-            y = position.getR();
-        }
-        else{
-            x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1 , plateau.getMaxQ() + 1);
-            y = getInput("Ordonn�e pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1);
-        }
-
-        nouvellePosition = Hexagon(x, y);
-
-
-        if (positionEstValide(nouvellePosition, deplacementsPossibles)) {
-            deplacementValide = true;
-        } else {
-            std::cout << "D�placement invalide. Veuillez choisir une coordonn�e valide." << std::endl;
-        }
-    }
-
-    // Ajouter l'action � la pile apr�s le d�placement
-    actionsPile.push(new DeplacementAction(currentInsecte, currentInsecte->getCoords(), nouvellePosition));
-
-    // Si la pile d�passe la taille max, supprimer l'action la plus ancienne
-    if (actionsPile.size() > maxRetourArriere) {
-        delete actionsPile.top();
-        actionsPile.pop();
-    }
-
-    plateau.deplacerInsecte(currentInsecte, nouvellePosition);
 }
 
 void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
@@ -213,107 +223,65 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
     int index = 0;
 
     // S�lection du pion � placer
-    if (!needPlayQueen) {
-        std::cout << "\nVoici votre deck : " << std::endl;
-        current->afficherDeck();
-        if (dynamic_cast<JoueurIA*>(current)){
-            index = current->randomDeckChoice();
+    while (insecteAPlacer == nullptr){
+        if (current->getDeckSize()==0) break;
+        if (!needPlayQueen) {
+            std::cout << "\nVoici votre deck : " << std::endl;
+            current->afficherDeck();
+            index = current->getInputForDeckIndex();
+            insecteAPlacer = current->getInsecteByIndex(index);
+        } else {
+            insecteAPlacer = current->getQueen();
+            index = current->getQueenIndex();
         }
-        else{
-            index = getInput("Quel pion souhaitez-vous poser ? ", 1, current->getDeckSize()) - 1;
-        }
-        insecteAPlacer = current->getInsecteByIndex(index);
-    } else {
-        insecteAPlacer = current->getQueen();
-        index = current->getQueenIndex();
     }
 
     if (!plateau.plateauEstVide()) {
         plateau.afficherPlateau(joueur1, joueur2);
     }
 
-    Hexagon nouvellePosition;
+    Hexagon position;
     bool placementValide = false;
-
-    int x=0;
-    int y=0;
 
     // Boucle pour garantir un placement valide
     while (!placementValide) {
-        std::vector<Hexagon> placementsPossibles = plateau.getPlacementsPossibles(insecteAPlacer);
-        plateau.afficherPlateauAvecPossibilites(placementsPossibles, joueur1, joueur2);
-
-        if (dynamic_cast<JoueurIA*>(current)){
-            Hexagon position = current->randomHexagonChoice(placementsPossibles);
-            x = position.getQ();
-            y = position.getR();
+        if (plateau.plateauEstVide()) {
+            position = current->getFirstPlacementCoordinates(plateau.getMinQ(), plateau.getMaxQ(), plateau.getMinR(), plateau.getMaxR(), tour);
+            placementValide = true;
         }
         else{
-            x = getInput("Abscisse pour poser le pion : ", plateau.getMinQ() - 1, plateau.getMaxQ() + 1 , tour);
-            y = getInput("Ordonn�e pour poser le pion : ", plateau.getMinR() - 1, plateau.getMaxR() + 1 , tour);
-        }
+            std::vector<Hexagon> placementsPossibles = plateau.getPlacementsPossibles(insecteAPlacer);
 
-        nouvellePosition = Hexagon(x, y);
+            plateau.afficherPlateauAvecPossibilites(placementsPossibles, joueur1, joueur2, current);
+            plateau.afficherPossibilitesPlacements(insecteAPlacer, placementsPossibles);
 
-        if (plateau.plateauEstVide()) {
-            // Si le plateau est vide, tout placement est valide
-            placementValide = true;
-        } else {
-            // V�rifier les voisins du premier insecte sur le plateau
-            if (!plateau.playerCanMoveInsecte(current)) {
-                Insecte* seulInsecte = plateau.getSeulInsecteSurPlateau();
-                if (!seulInsecte) {
-                    std::cout << "Erreur : aucun insecte trouv� sur le plateau." << std::endl;
-                    return;
-                }
+            int choix = current->getInputForPlacementIndex(placementsPossibles);
 
-                // R�cup�rer les voisins de l'insecte
-                std::vector<Hexagon> deplacementsPossibles = seulInsecte->getCoords().getVoisins();
+            if (choix == -1) {
+                std::cout << "Placement annulé.\n";
+                tour--;
+                return;
+            }
+            position = placementsPossibles[choix - 1];
 
-                if (std::find(deplacementsPossibles.begin(), deplacementsPossibles.end(), nouvellePosition) != deplacementsPossibles.end()) {
-                    placementValide = true;
-                } else {
-                    std::cout << "Placement invalide. Vous devez �tre adjacent au premier pion du plateau. Essayez � nouveau.\n";
-                }
-            } else {
-                std::vector<Hexagon> voisins = nouvellePosition.getVoisins();
-                bool adjacentAllie = false;
-                bool toucheEnnemi = false;
-
-                for (const Hexagon& voisin : voisins) {
-                    Insecte* insecteVoisin = plateau.getInsecteAtCoords(voisin.getQ(), voisin.getR());
-                    if (insecteVoisin) {
-                        if (insecteVoisin->getOwner() == current) {
-                            adjacentAllie = true;
-                        } else {
-                            toucheEnnemi = true;
-                        }
-                    }
-                }
-
-                if (adjacentAllie && !toucheEnnemi) {
-                    placementValide = true;
-                } else {
-                    std::cout << "Placement invalide. Votre pion doit �tre adjacent � un de vos pions et ne pas toucher un pion ennemi. Essayez � nouveau.\n";
-                }
+            if (std::find(placementsPossibles.begin(), placementsPossibles.end(), position) != placementsPossibles.end() || plateau.plateauEstVide()){
+                placementValide = true;
             }
         }
-    }
-    insecteAPlacer->setCoords(nouvellePosition);
-    plateau.ajouterInsecte(insecteAPlacer);
-    current->retirerInsecte(index); // Retirer le pion du deck apr�s placement
-    Insecte* insecteEnDessous = plateau.getInsecteAtCoords(nouvellePosition.getQ(), nouvellePosition.getR());
-    PlacementAction* action = new PlacementAction(insecteAPlacer, nouvellePosition, current, insecteEnDessous);
-    std::cout << "Pion plac� avec succ�s en " << nouvellePosition << "." << std::endl;
-    if (actionsPile.size() >= maxRetourArriere) {
-        // Acc�der � l'�l�ment au sommet (le plus ancien)
-        Action* actionToDelete = actionsPile.top();
-        delete actionToDelete;  // Lib�rer la m�moire si n�cessaire
-        actionsPile.pop();  // Retirer l'�l�ment du sommet
-    }
 
-    actionsPile.push(action);
+    }
+    Action* action = insecteAPlacer->actionPlacer(position);
+    action->executerAction(plateau); // `plateau` est l'instance de Plateau utilisée dans votre jeu
+    current->retirerInsecte(index);
+    Insecte* insecteEnDessous = plateau.getInsecteAt(position);
+    if (actionsDeque.size() >= maxRetourArriere) {
+        Action* actionToDelete = actionsDeque.front();
+        delete actionToDelete;
+        actionsDeque.pop_front();
+    }
+    actionsDeque.push_back(action);
 }
+
 
 bool GameMaster::detectWinner(Joueur *joueur1 , Joueur *joueur2) {
     Insecte* reineP1 = plateau.getReineAbeille(joueur1);
@@ -330,45 +298,72 @@ bool GameMaster::detectWinner(Joueur *joueur1 , Joueur *joueur2) {
 }
 
 Insecte* GameMaster::selectionnerInsecte(Joueur* current) {
-
-    int x=0;
-    int y=0;
-
-    if (dynamic_cast<JoueurIA*>(current)){
-        Hexagon position = current->randomPionChoice(plateau.getPlateauMap());
-        x = position.getQ();
-        y = position.getR();
-    }
-    else{
-        x = getInput("Abscisse de la position du pion � d�placer : ", plateau.getMinQ(), plateau.getMaxQ());
-        y = getInput("Ordonn�e de la position du pion � d�placer : ", plateau.getMinR(), plateau.getMaxR());
+    std::vector<Insecte*> insectesDuJoueur = current->getInsectesDuJoueur(plateau.getPlateauMap());
+    if (insectesDuJoueur.empty()) {
+        std::cout << "Aucun insecte du joueur sur le plateau." << std::endl;
+        return nullptr;
     }
 
-    Insecte* currentInsecte = plateau.getInsecteAtCoords(x, y);
+    std::vector<Hexagon> deplacementsPossiblesPion;
+    int indexChoisi = -1;
 
-    if (!currentInsecte || !verifierProprietairePion(current, currentInsecte) || currentInsecte->deplacementsPossibles(plateau.getPlateauMap()).empty()) {
-        std::cout << "pion invalide, réessayez" << std::endl;
-        return selectionnerInsecte(current); // Appel r�cursif jusqu'� obtenir un pion valide
-    }
+    do {
+        std::cout << "Choisissez un insecte par son index :\n";
+        for (size_t i = 0; i < insectesDuJoueur.size(); ++i) {
+            std::cout << i << ": " << insectesDuJoueur[i]->getNom() << " - Position: ("
+                      << insectesDuJoueur[i]->getCoords().getQ() << ", "
+                      << insectesDuJoueur[i]->getCoords().getR() << ")\n";
+        }
 
-    return currentInsecte;
+        indexChoisi = current->getInputIndexForInsectToMove(insectesDuJoueur);
+        if (indexChoisi == -1) {
+            std::cout << "Action annulée.\n";
+            return nullptr;
+        }
+
+        deplacementsPossiblesPion = insectesDuJoueur[indexChoisi]->deplacementsPossibles(plateau.getPlateauMap());
+
+        if (deplacementsPossiblesPion.empty()) {
+            std::cout << "Cet insecte n'a pas de déplacements possibles. Veuillez en choisir un autre.\n";
+        }
+
+    } while (deplacementsPossiblesPion.empty());
+
+    return insectesDuJoueur[indexChoisi];
 }
+
+
+
 void GameMaster::undoLastAction() {
-    if (actionsPile.empty()) {
+    if (actionsDeque.size() < 2) {
         std::cout << "Aucune action � annuler, la pile est vide.\n";
         return;  // Aucune action � annuler
     }
 
     // R�cup�rer la derni�re action de la pile
-    Action* lastAction = actionsPile.top();  // Utilisation de top() au lieu de back()
-    actionsPile.pop();  // Retirer l'action du sommet de la pile
-
-    // Appeler la m�thode `undo` de l'action
-    lastAction->undo(plateau);  // Vous devez passer le plateau pour que undo fonctionne
-
-    delete lastAction;  // Lib�rer la m�moire de l'action
+    Action* lastAction = actionsDeque.back();
+    lastAction->undo();
+    actionsDeque.pop_back();
+    delete lastAction;
     std::cout << "Derni�re action annul�e.\n";
     tour--;
+}
+
+void GameMaster::undoLastTwoActions() {
+    if (actionsPile.size() < 2) {
+        std::cout << "Pas assez d'actions dans la pile pour annuler. Minimum requis : 2.\n";
+        return;  // Pas assez d'actions à annuler
+    }
+
+    for (int i = 0; i < 2; ++i) {
+        // Récupérer la dernière action de la pile
+        Action* lastAction = actionsDeque.back();
+        lastAction->undo();
+        actionsDeque.pop_back();
+        delete lastAction;
+        std::cout << "Action annulée (" << (i + 1) << "/2).\n";
+        tour--;  // Réduire le numéro du tour
+    }
 }
 
 bool GameMaster::verifierProprietairePion(Joueur* current, Insecte* insecte) {
@@ -388,5 +383,170 @@ bool GameMaster::verifierDeplacementsPossiblesPourTousLesInsectes(Joueur* curren
     }
     return false;
 }
+
+
+#include <fstream>
+#include <sstream>
+
+std::string GameMaster::toJson() const {
+    std::stringstream jsonData;
+    jsonData << "{\n";
+
+    // Plateau
+    jsonData << "  \"plateau\": " << plateau.toJson() << ",\n";
+
+    // Joueur 1
+    jsonData << "  \"joueur1\": "
+             << (joueur1 ? joueur1->toJson() : "null") << ",\n";
+
+    // Joueur 2
+    jsonData << "  \"joueur2\": "
+             << (joueur2 ? joueur2->toJson() : "null") << ",\n";
+
+    // Mode
+    jsonData << "  \"mode\": " << mode << ",\n";
+
+    // Tour
+    jsonData << "  \"tour\": " << tour << ",\n";
+
+    // Max retours arrière
+    jsonData << "  \"maxRetourArriere\": " << maxRetourArriere << "\n";
+
+    jsonData << "}";
+    return jsonData.str();
+}
+
+#include <fstream>
+#include <sstream>
+
+bool fileExists(const std::string& fileName) {
+    std::ifstream file(fileName);
+    return file.good();
+}
+
+void GameMaster::saveGame() {
+    std::string baseFileName = "game_save";
+    std::string fileExtension = ".json";
+    std::string fileName = baseFileName + fileExtension;
+
+    // Vérifier si un fichier existe déjà
+    int fileIndex = 0;
+    while (fileExists(fileName)) {
+        ++fileIndex;
+        std::ostringstream oss;
+        oss << baseFileName << fileIndex << fileExtension;
+        fileName = oss.str();
+    }
+
+    // Écrire dans le fichier disponible
+    std::ofstream file(fileName);
+    if (file.is_open()) {
+        file << toJson();
+        file.close();
+        std::cout << "Partie sauvegardée dans le fichier : " << fileName << std::endl;
+    } else {
+        std::cerr << "Erreur : Impossible de sauvegarder la partie." << std::endl;
+    }
+}
+
+void GameMaster::undoLastTwoActions() {
+    if (actionsPile.size() < 2) {
+        std::cout << "Pas assez d'actions dans la pile pour annuler. Minimum requis : 2.\n";
+        return;  // Pas assez d'actions à annuler
+    }
+
+    for (int i = 0; i < 2; ++i) {
+        // Récupérer la dernière action de la pile
+        Action* lastAction = actionsPile.top();
+        actionsPile.pop();  // Retirer l'action du sommet de la pile
+
+        // Appeler la méthode `undo` de l'action
+        lastAction->undo(plateau);  // Passer le plateau pour que undo fonctionne correctement
+
+        delete lastAction;  // Libérer la mémoire de l'action
+        std::cout << "Action annulée (" << (i + 1) << "/2).\n";
+        tour--;  // Réduire le numéro du tour
+    }
+}
+
+Insecte* Joueur::contientInsecte(const std::string& nomInsecte) const {
+    for (Insecte* insecte : deck) {
+        if (insecte->getNom() == nomInsecte) {
+            return insecte;
+        }
+    }
+    return nullptr;
+}
+
+void Joueur::ajouterInsecte(Insecte* insecte) {
+    if (insecte == nullptr) {
+        std::cerr << "Erreur : Impossible d'ajouter un insecte nul au deck." << std::endl;
+        return;
+    }
+    deck.push_back(insecte);
+}
+
+std::vector<Insecte*> Joueur::getInsectesDuJoueur(const std::map<Hexagon, Insecte*>& plateauMap) const {
+    std::vector<Insecte*> insectesDuJoueur;
+    for (const auto& pair : plateauMap) {
+        Insecte* insecte = pair.second;
+        if (insecte->getOwner() == this) {
+            insectesDuJoueur.push_back(insecte);
+        }
+    }
+    return insectesDuJoueur;
+}
+
+#include <fstream>
+#include <sstream>
+#include <iostream>
+#include <stdexcept>
+/*
+void GameMaster::loadGame(const std::string& fileName) {
+    std::ifstream file(fileName);
+    if (!file.is_open()) {
+        throw std::runtime_error("Erreur : Impossible d'ouvrir le fichier de sauvegarde.");
+    }
+
+    std::stringstream buffer;
+    buffer << file.rdbuf();
+    std::string jsonContent = buffer.str();
+
+    // Simple parsing pour extraire les parties de données du JSON
+    // Vous devrez probablement ajuster cela pour que ce soit plus robuste
+
+    // Exemple de découpe basique du JSON
+    if (jsonContent.find("\"plateau\"") != std::string::npos) {
+        // Extraire et reconstruire l'objet Plateau
+        size_t startPos = jsonContent.find("\"plateau\":") + 10;
+        size_t endPos = jsonContent.find("\"joueur1\":");
+        std::string plateauData = jsonContent.substr(startPos, endPos - startPos);
+
+        // Appel de la méthode fromJson pour Plateau
+        plateau.fromJson(plateauData); // Implémentez fromJson pour Plateau
+
+        // Extraire et reconstruire les joueurs
+        startPos = endPos + 10;
+        endPos = jsonContent.find("\"mode\":");
+        std::string joueur1Data = jsonContent.substr(startPos, endPos - startPos);
+
+        joueur1->fromJson(joueur1Data); // Implémentez fromJson pour Joueur
+
+        // Idem pour le joueur2 et autres paramètres
+        startPos = endPos + 7;
+        endPos = jsonContent.find("\"maxRetourArriere\":");
+        std::string joueur2Data = jsonContent.substr(startPos, endPos - startPos);
+
+        joueur2->fromJson(joueur2Data);
+        mode = std::stoi(jsonContent.substr(endPos + 19, 1)); // Extraction de mode
+        tour = std::stoi(jsonContent.substr(endPos + 27, 1)); // Extraction de tour
+        maxRetourArriere = std::stoi(jsonContent.substr(endPos + 41, 1)); // Extraction de maxRetourArriere
+    }
+
+    file.close();
+    std::cout << "Partie chargée avec succès depuis " << fileName << "." << std::endl;
+}
+*/
+
 
 

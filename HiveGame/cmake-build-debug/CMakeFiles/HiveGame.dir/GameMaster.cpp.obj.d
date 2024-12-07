@@ -1,34 +1,12 @@
 CMakeFiles/HiveGame.dir/GameMaster.cpp.obj: \
  C:\Users\jean-\Desktop\HiveGame_LO21\HiveGame\GameMaster.cpp \
  C:\Users\jean-\Desktop\HiveGame_LO21\HiveGame\GameMaster.h \
- C:\Users\jean-\Desktop\HiveGame_LO21\HiveGame\Joueur.h \
- C:\Users\jean-\Desktop\HiveGame_LO21\HiveGame\Insecte.h \
- C:\Users\jean-\Desktop\HiveGame_LO21\HiveGame\Hexagon.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cstdlib \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/fstream \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/requires_hosted.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++config.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/os_defines.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/cpu_defines.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/stdlib.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/corecrt.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/_mingw.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/_mingw_mac.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/_mingw_secapi.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/vadefs.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/corecrt_wstdlib.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/limits.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/syslimits.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/limits.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/crtdefs.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/stdlib.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/malloc.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mm_malloc.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/errno.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_abs.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iostream \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/requires_hosted.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ostream \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/istream \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ios \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iosfwd \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stringfwd.h \
@@ -36,7 +14,14 @@ CMakeFiles/HiveGame.dir/GameMaster.cpp.obj: \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/postypes.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cwchar \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/wchar.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/corecrt.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/_mingw.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/_mingw_mac.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/_mingw_secapi.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/vadefs.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/sdks/_mingw_ddk.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/corecrt_stdio_config.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/corecrt_wstdlib.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/_mingw_off_t.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/_mingw_stat64.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/swprintf.inl \
@@ -48,6 +33,7 @@ CMakeFiles/HiveGame.dir/GameMaster.cpp.obj: \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/cxxabi_init_exception.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stddef.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/stddef.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/crtdefs.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/typeinfo \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/hash_bytes.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/new \
@@ -68,9 +54,13 @@ CMakeFiles/HiveGame.dir/GameMaster.cpp.obj: \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/gthr.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/gthr-default.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/pthread.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/errno.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/sys/types.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/process.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/corecrt_startup.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/limits.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/syslimits.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/limits.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/signal.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/pthread_signal.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/time.h \
@@ -115,6 +105,13 @@ CMakeFiles/HiveGame.dir/GameMaster.cpp.obj: \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/alloc_traits.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_construct.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ext/string_conversions.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cstdlib \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/stdlib.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/sec_api/stdlib_s.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/stdlib.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/malloc.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/mm_malloc.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_abs.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cstdio \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cerrno \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/charconv.h \
@@ -135,9 +132,17 @@ CMakeFiles/HiveGame.dir/GameMaster.cpp.obj: \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/ctype_inline.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/locale_facets.tcc \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/basic_ios.tcc \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ostream \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/ostream.tcc \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/istream \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/istream.tcc \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/codecvt.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/basic_file.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/x86_64-w64-mingw32/bits/c++io.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/fstream.tcc \
+ C:\Users\jean-\Desktop\HiveGame_LO21\HiveGame\Joueur.h \
+ C:\Users\jean-\Desktop\HiveGame_LO21\HiveGame\Insecte.h \
+ C:\Users\jean-\Desktop\HiveGame_LO21\HiveGame\Hexagon.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/iostream \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/vector \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_uninitialized.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_vector.h \
@@ -162,12 +167,13 @@ CMakeFiles/HiveGame.dir/GameMaster.cpp.obj: \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_tempbuf.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/sstream \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/sstream.tcc \
- C:\Users\jean-\Desktop\HiveGame_LO21\HiveGame\Plateau.h \
- D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/limits \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/functional \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/std_function.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/ctime \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/random \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cmath \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/math.h \
+ D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/limits \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/cstdint \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/stdint.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/x86_64-w64-mingw32/include/stdint.h \
@@ -181,6 +187,7 @@ CMakeFiles/HiveGame.dir/GameMaster.cpp.obj: \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/random.tcc \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/numeric \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_numeric.h \
+ C:\Users\jean-\Desktop\HiveGame_LO21\HiveGame\Plateau.h \
  C:\Users\jean-\Desktop\HiveGame_LO21\HiveGame\Action.h \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/memory \
  D:/jean-/Appli/CLion\ 2024.1/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_raw_storage_iter.h \
