@@ -1,109 +1,99 @@
+#pragma ONCE
 #ifndef ACTION_H
 #define ACTION_H
-
-#include "Hexagon.h"
 #include "Insecte.h"
 #include "Plateau.h"
 #include "Joueur.h"
+#include <functional>
+#include <unordered_map>
+#include <memory>
+#include <iostream>
 
-// Classe de base abstraite pour les actions
+// Déclaration anticipée de la classe Action
+class Action;
+class Plateau;
+
+// ActionManager gère les actions possibles
+class ActionManager {
+private:
+    std::unordered_map<std::string, std::function<std::unique_ptr<Action>(Insecte*, Hexagon, Joueur*)>> actionFactories;
+
+public:
+    void ajouterExtensionAction(const std::string& nomAction, std::function<std::unique_ptr<Action>(Insecte*, Hexagon, Joueur*)> creator) {
+        actionFactories[nomAction] = creator;
+    }
+
+    std::unique_ptr<Action> createAction(const std::string& nomAction, Insecte* insecte, Hexagon position, Joueur* owner) {
+        auto it = actionFactories.find(nomAction);
+        if (it != actionFactories.end()) {
+            return it->second(insecte, position, owner);
+        }
+        return nullptr;  // Action inconnue
+    }
+};
+
+// Classe de base pour les actions
 class Action {
 public:
     virtual ~Action() = default;
 
-    // Méthode virtuelle pure pour annuler l'action
+    // Méthodes virtuelles pures
+    virtual void executerAction(Plateau& plateau) = 0;
     virtual void undo(Plateau& plateau) = 0;
     virtual std::string toJson() const = 0;
 };
 
+// Actions spécifiques héritées de Action
 class PlacementAction : public Action {
 private:
-    Insecte* insecte;        // L'insecte placé
-    Hexagon position;        // Position où il a été placé
-    Joueur* joueur;          // Joueur propriétaire de l'insecte
-    Insecte* insectBelow;    // Insecte en dessous avant le placement, nullptr si aucun
+    Insecte* insecte;
+    Hexagon position;
+    Joueur* joueur;
+    Insecte* insectBelow;
 
 public:
-    PlacementAction(Insecte* insecte, const Hexagon& position, Joueur* joueur, Insecte* insectBelow = nullptr)
-        : insecte(insecte), position(position), joueur(joueur), insectBelow(insectBelow) {}
+    PlacementAction(Insecte* insecte, const Hexagon& position, Joueur* joueur)
+        : insecte(insecte), position(position), joueur(joueur), insectBelow(nullptr) {}
 
-    void undo(Plateau& plateau) override {
-        if (!insecte) {
-            std::cerr << "Erreur : Aucun insecte à annuler pour le placement !" << std::endl;
-            return;
-        }
+    void executerAction(Plateau& plateau) override ;
+    void undo(Plateau& plateau) override;
 
-        // Supprimer l'insecte du plateau
-        plateau.supprimerInsectePlateauCoords(position);
-
-        // Ajouter l'insecte au deck du joueur
-        if (joueur) {
-            joueur->ajouterInsecte(insecte);
-        }
-
-        // Restaurer l'état des superpositions si nécessaire
-        if (insectBelow) {
-            insectBelow->setDessus(nullptr);
-        }
-    }
-    std::string toJson() const override {
-        std::string json = "{";
-        json += "\"type\": \"PlacementAction\",";
-        json += "\"insecte\": " + (insecte ? insecte->toJson() : "null") + ",";
-        json += "\"position\": " + position.toJson() + ",";
-        json += "\"joueur\": " + (joueur ? joueur->toJson() : "null") + ",";
-        json += "\"insectBelow\": " + (insectBelow ? insectBelow->toJson() : "null");
-        json += "}";
-        return json;
-    }
-
+    std::string toJson() const override ;
 };
 
 class DeplacementAction : public Action {
 private:
-    Insecte* insecte;         // L'insecte déplacé
-    Hexagon oldPosition;      // Position avant le déplacement
-    Hexagon newPosition;      // Position après le déplacement
-    Insecte* insectBelow;     // Insecte en dessous à l'ancienne position
-    Insecte* insectAbove;     // Insecte au-dessus à la nouvelle position
+    Insecte* insecte;
+    Hexagon oldPosition;
+    Hexagon newPosition;
 
 public:
-    DeplacementAction(Insecte* insect, const Hexagon& oldPosition, const Hexagon& newPosition,
-                      Insecte* insectBelow = nullptr, Insecte* insectAbove = nullptr)
-        : insecte(insect), oldPosition(oldPosition), newPosition(newPosition),
-          insectBelow(insectBelow), insectAbove(insectAbove) {}
+    DeplacementAction(Insecte* insecte, const Hexagon& oldPos, const Hexagon& newPos)
+        : insecte(insecte), oldPosition(oldPos), newPosition(newPos) {}
 
-    void undo(Plateau& plateau) override {
-        if (!insecte) {
-            std::cerr << "Erreur : Aucun insecte à annuler pour le déplacement !" << std::endl;
-            return;
-        }
+    void executerAction(Plateau& plateau) override;
 
-        // Restaurer l'insecte à son ancienne position
-        plateau.deplacerInsecte(insecte, oldPosition);
-        insecte->setCoords(oldPosition);
+    void undo(Plateau& plateau) override;
 
-        // Restaurer l'état des superpositions si applicable
-        if (insectBelow) {
-            insectBelow->setDessus(insecte);
-        }
-        if (insectAbove) {
-            insectAbove->setDessous(nullptr);
-        }
-    }
-    std::string toJson() const override{
-        std::string json = "{";
-        json += "\"type\": \"DeplacementAction\",";
-        json += "\"insecte\": " + (insecte ? insecte->toJson() : "null") + ",";
-        json += "\"oldPosition\": " + oldPosition.toJson() + ",";
-        json += "\"newPosition\": " + newPosition.toJson() + ",";
-        json += "\"insectBelow\": " + (insectBelow ? insectBelow->toJson() : "null") + ",";
-        json += "\"insectAbove\": " + (insectAbove ? insectAbove->toJson() : "null");
-        json += "}";
-        return json;
-    }
-
+    std::string toJson() const override;
 };
 
+class MangerPionAction : public Action {
+private:
+    Insecte* insecte;           // L'insecte qui effectue l'action
+    Hexagon oldPosition;        // La position initiale de l'insecte
+    Hexagon newPosition;        // La nouvelle position de l'insecte
+    Insecte* insectToRemove;    // L'insecte qui sera mangé et supprimé
+
+public:
+    MangerPionAction(Insecte* insecte, const Hexagon& oldPos, const Hexagon& newPos)
+        : insecte(insecte), oldPosition(oldPos), newPosition(newPos), insectToRemove(nullptr) {}
+
+    void executerAction(Plateau& plateau) override;
+
+    void undo(Plateau& plateau) override ;
+
+    std::string toJson() const override ;
+};
 
 #endif // ACTION_H

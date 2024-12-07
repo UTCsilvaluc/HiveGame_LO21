@@ -1,6 +1,30 @@
 #include "Insecte.h"
-#include "Joueur.h" // Ajoutez cette ligne
+Action* Insecte::actionPlacer(Hexagon targetCoord) {
+    return new PlacementAction(this, targetCoord, this->owner); // Remplacez `actionPlacer` par `PlacementAction`
+}
 
+Action* Insecte::actionDeplacer(Hexagon targetCoord) {
+    return new DeplacementAction(this, this->getCoords() , targetCoord );
+}
+
+std::vector<Hexagon> Insecte::getVoisinsEnnemis(const std::vector<Hexagon>& voisins, const std::map<Hexagon, Insecte*>& plateau) const {
+    std::vector<Hexagon> voisinsEnnemis;
+    for (const auto& voisin : voisins) {
+        auto it = plateau.find(voisin);
+        if (it != plateau.end() && it->second != nullptr && it->second->getOwner() != this->getOwner()) {
+            voisinsEnnemis.push_back(voisin);
+        }
+    }
+    return voisinsEnnemis;
+}
+Insecte* trouverReine(Joueur* joueur, const std::map<Hexagon, Insecte*>& plateau) {
+    for (const auto& [position, insecte] : plateau) {
+        if (insecte != nullptr && insecte->getOwner() == joueur && insecte->isQueen()) {
+            return insecte;
+        }
+    }
+    return nullptr;
+}
 std::vector<Hexagon> getVoisins(const Hexagon& coords) {
     std::vector<Hexagon> voisins;
     int q = coords.getQ();
@@ -27,26 +51,6 @@ std::vector<Hexagon> getVoisins(const Hexagon& coords) {
     return voisins;
 }
 
-// Méthode dans Insecte.h pour obtenir la liste des coordonnées des voisins ennemis
-std::vector<Hexagon> Insecte::getVoisinsEnnemis(const std::vector<Hexagon>& voisins, const std::map<Hexagon, Insecte*>& plateau) const {
-    std::vector<Hexagon> voisinsEnnemis;
-    for (const auto& voisin : voisins) {
-        auto it = plateau.find(voisin);
-        if (it != plateau.end() && it->second != nullptr && it->second->getOwner() != this->getOwner()) {
-            voisinsEnnemis.push_back(voisin);
-        }
-    }
-    return voisinsEnnemis;
-}
-
-Insecte* trouverReine(Joueur* joueur, const std::map<Hexagon, Insecte*>& plateau) {
-    for (const auto& [position, insecte] : plateau) {
-        if (insecte != nullptr && insecte->getOwner() == joueur && insecte->isQueen()) {
-            return insecte;
-        }
-    }
-    return nullptr;
-}
 
 std::vector<Hexagon> casesAdjacentesVides(Hexagon coords, const std::map<Hexagon, Insecte*>& p) {
     std::vector<Hexagon> vides;
@@ -412,7 +416,13 @@ std::vector<Hexagon> Insecte::placementsPossiblesDeBase(const std::map<Hexagon, 
 }
 
 
-
+std::vector<Hexagon> Termite::deplacementsPossibles(std::map<Hexagon, Insecte*> p){
+    return deplacementsPossiblesScarabee(getCoords(), p);
+}
+Action* Termite::actionDeplacer(Hexagon targetCoord) {
+    // La Termite exécute une action spécifique : MangerPionAction
+    return new MangerPionAction(this, this->getCoords(), targetCoord);
+}
 
 
 

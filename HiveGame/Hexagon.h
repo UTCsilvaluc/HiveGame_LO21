@@ -1,6 +1,5 @@
 #ifndef HEXAGON_H
 #define HEXAGON_H
-#include <cstdlib>
 #include <iostream>
 #include <vector>
 

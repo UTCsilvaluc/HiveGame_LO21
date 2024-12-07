@@ -100,9 +100,9 @@ GameMaster::~GameMaster() {
     delete joueur2;
 
     // Lib�rer la m�moire de la pile d'actions
-    while (!actionsPile.empty()) {
-        delete actionsPile.top();
-        actionsPile.pop();
+    while (!actionsDeque.empty()) {
+        delete actionsDeque.back();
+        actionsDeque.pop_back();
     }
 }
 
@@ -148,13 +148,15 @@ void GameMaster::deplacerPion(Joueur* current) {
     }
 
 
-    actionsPile.push(new DeplacementAction(currentInsecte, currentInsecte->getCoords(), nouvellePosition));
 
-    if (actionsPile.size() > maxRetourArriere) {
-        delete actionsPile.top();
-        actionsPile.pop();
+    Action* action = currentInsecte->actionDeplacer(nouvellePosition);
+    action->executerAction(plateau); // `plateau` est l'instance de Plateau utilisée dans votre jeu;
+    if (actionsDeque.size() >= maxRetourArriere) {
+        Action* actionToDelete = actionsDeque.front();
+        delete actionToDelete;
+        actionsDeque.pop_front();
     }
-    plateau.deplacerInsecte(currentInsecte, nouvellePosition);
+    actionsDeque.push_back(action);
 }
 
 
@@ -190,7 +192,7 @@ void GameMaster::jouer() {
         }
         while (true) {
             if (choice == 3) {
-                if (actionsPile.size() >= 2) {
+                if (actionsDeque.size() >= 2) {
                     undoLastTwoActions();
                     break;
                 } else {
@@ -268,21 +270,16 @@ void GameMaster::placerPion(Joueur* current, bool needPlayQueen) {
         }
 
     }
-
-    plateau.ajouterInsecte(insecteAPlacer, position);
+    Action* action = insecteAPlacer->actionPlacer(position);
+    action->executerAction(plateau); // `plateau` est l'instance de Plateau utilisée dans votre jeu
     current->retirerInsecte(index);
-
-
-    Insecte* insecteEnDessous = plateau.getInsecteAtCoords(position.getQ(), position.getR());
-    PlacementAction* action = new PlacementAction(insecteAPlacer, position, current, insecteEnDessous);
-
-    if (actionsPile.size() >= maxRetourArriere) {
-        Action* actionToDelete = actionsPile.top();
+    Insecte* insecteEnDessous = plateau.getInsecteAt(position);
+    if (actionsDeque.size() >= maxRetourArriere) {
+        Action* actionToDelete = actionsDeque.front();
         delete actionToDelete;
-        actionsPile.pop();
+        actionsDeque.pop_front();
     }
-
-    actionsPile.push(action);
+    actionsDeque.push_back(action);
 }
 
 
@@ -338,21 +335,35 @@ Insecte* GameMaster::selectionnerInsecte(Joueur* current) {
 
 
 void GameMaster::undoLastAction() {
-    if (actionsPile.size() < 2) {
+    if (actionsDeque.size() < 2) {
         std::cout << "Aucune action � annuler, la pile est vide.\n";
         return;  // Aucune action � annuler
     }
 
     // R�cup�rer la derni�re action de la pile
-    Action* lastAction = actionsPile.top();  // Utilisation de top() au lieu de back()
-    actionsPile.pop();  // Retirer l'action du sommet de la pile
-
-    // Appeler la m�thode `undo` de l'action
-    lastAction->undo(plateau);  // Vous devez passer le plateau pour que undo fonctionne
-
-    delete lastAction;  // Lib�rer la m�moire de l'action
+    Action* lastAction = actionsDeque.back();
+    lastAction->undo();
+    actionsDeque.pop_back();
+    delete lastAction;
     std::cout << "Derni�re action annul�e.\n";
     tour--;
+}
+
+void GameMaster::undoLastTwoActions() {
+    if (actionsPile.size() < 2) {
+        std::cout << "Pas assez d'actions dans la pile pour annuler. Minimum requis : 2.\n";
+        return;  // Pas assez d'actions à annuler
+    }
+
+    for (int i = 0; i < 2; ++i) {
+        // Récupérer la dernière action de la pile
+        Action* lastAction = actionsDeque.back();
+        lastAction->undo();
+        actionsDeque.pop_back();
+        delete lastAction;
+        std::cout << "Action annulée (" << (i + 1) << "/2).\n";
+        tour--;  // Réduire le numéro du tour
+    }
 }
 
 bool GameMaster::verifierProprietairePion(Joueur* current, Insecte* insecte) {
@@ -456,6 +467,34 @@ void GameMaster::undoLastTwoActions() {
         std::cout << "Action annulée (" << (i + 1) << "/2).\n";
         tour--;  // Réduire le numéro du tour
     }
+}
+
+Insecte* Joueur::contientInsecte(const std::string& nomInsecte) const {
+    for (Insecte* insecte : deck) {
+        if (insecte->getNom() == nomInsecte) {
+            return insecte;
+        }
+    }
+    return nullptr;
+}
+
+void Joueur::ajouterInsecte(Insecte* insecte) {
+    if (insecte == nullptr) {
+        std::cerr << "Erreur : Impossible d'ajouter un insecte nul au deck." << std::endl;
+        return;
+    }
+    deck.push_back(insecte);
+}
+
+std::vector<Insecte*> Joueur::getInsectesDuJoueur(const std::map<Hexagon, Insecte*>& plateauMap) const {
+    std::vector<Insecte*> insectesDuJoueur;
+    for (const auto& pair : plateauMap) {
+        Insecte* insecte = pair.second;
+        if (insecte->getOwner() == this) {
+            insectesDuJoueur.push_back(insecte);
+        }
+    }
+    return insectesDuJoueur;
 }
 
 #include <fstream>

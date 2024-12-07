@@ -1,5 +1,6 @@
 #ifndef GAMEMASTER_H
 #define GAMEMASTER_H
+
 #include <fstream>  // Ajout de l'en-tête pour la gestion des fichiers
 #include "Joueur.h"
 #include "Plateau.h"
@@ -7,7 +8,7 @@
 #include <iostream>
 #include <memory>
 #include <limits>
-#include <stack>
+#include <deque>
 
 bool positionEstValide(const Hexagon& position, const std::vector<Hexagon>& deplacementsPossibles);
 class GameMaster {
@@ -20,7 +21,7 @@ private:
     unsigned int tour;
     void deplacerPion(Joueur* current);
     void placerPion(Joueur* current, bool b);
-    std::stack<Action*> actionsPile;
+    std::deque<Action*> actionsDeque;
     unsigned int maxRetourArriere;
     InsecteFactoryImpl insecteFactory;
     std::string toJson() const;
@@ -91,64 +92,6 @@ public:
     void undoLastAction();
     // Destructeur pour libérer la mémoire
     ~GameMaster();
-
-    void testLoadAndDisplayHexagons(const std::string& saveFile) {
-        // Charger le fichier JSON de sauvegarde en tant que texte
-        std::ifstream file(saveFile);
-        if (!file.is_open()) {
-            std::cerr << "Erreur: Impossible d'ouvrir le fichier de sauvegarde." << std::endl;
-            return;
-        }
-        // Lire le contenu du fichier JSON
-        std::stringstream buffer;
-        buffer << file.rdbuf();
-        std::string jsonStr = buffer.str();
-
-        // Extraire et afficher les hexagones
-        size_t start = 0;
-        size_t end = 0;
-        size_t hexIndex = 0;
-
-        // Trouver et extraire chaque hexagone dans le JSON brut
-        while ((start = jsonStr.find("\"plateauMap\": {", end)) != std::string::npos) {
-            end = jsonStr.find("}", start);
-            std::string plateauMap = jsonStr.substr(start, end - start);
-
-            // Traiter chaque hexagone dans "plateauMap"
-            size_t hexStart = 0;
-            size_t hexEnd = 0;
-            while ((hexStart = plateauMap.find("{", hexEnd)) != std::string::npos) {
-                hexEnd = plateauMap.find("}", hexStart);
-                std::string hexagon = plateauMap.substr(hexStart, hexEnd - hexStart);
-
-                // Extraire les coordonnées (q, r) et le nom
-                size_t qStart = hexagon.find("\"q\":") + 4;
-                size_t rStart = hexagon.find("\"r\":") + 4;
-                size_t nomStart = hexagon.find("\"nom\":") + 7;
-                size_t nomEnd = hexagon.find("\"", nomStart);
-
-                // Récupérer les coordonnées et le nom
-                int q = std::stoi(hexagon.substr(qStart, hexagon.find(",", qStart) - qStart));
-                int r = std::stoi(hexagon.substr(rStart, hexagon.find(",", rStart) - rStart));
-                std::string nom = hexagon.substr(nomStart, nomEnd - nomStart);
-
-                // Afficher les informations sur l'hexagone
-                std::cout << "Hexagone " << hexIndex++ << ": " << std::endl;
-                std::cout << "  Nom: " << nom << std::endl;
-                std::cout << "  Coordonnées: (" << q << ", " << r << ")" << std::endl;
-
-                // Afficher les informations supplémentaires (par exemple le propriétaire)
-                size_t ownerStart = hexagon.find("\"owner\":") + 9;
-                if (ownerStart != std::string::npos) {
-                    size_t ownerEnd = hexagon.find("\"", ownerStart);
-                    std::string owner = hexagon.substr(ownerStart, ownerEnd - ownerStart);
-                    std::cout << "  Propriétaire: " << owner << std::endl;
-                }
-
-                std::cout << std::endl;
-            }
-        }
-    }
 
 };
 
