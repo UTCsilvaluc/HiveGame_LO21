@@ -2,55 +2,14 @@
 <CodeBlocks_layout_file>
 	<FileVersion major="1" minor="0" />
 	<ActiveTarget name="Debug" />
-	<File name="GameMaster.cpp" open="1" top="0" tabpos="11" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="9458" topLine="209" />
-		</Cursor>
-	</File>
-	<File name="Joueur.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Joueur.h" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="4762" topLine="97" />
 		</Cursor>
 	</File>
-	<File name="GameMaster.h" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="6787" topLine="30" />
-		</Cursor>
-	</File>
-	<File name="Insecte.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="13143" topLine="65" />
-		</Cursor>
-		<Folding>
-			<Collapse line="3" />
-			<Collapse line="29" />
-			<Collapse line="41" />
-			<Collapse line="53" />
-			<Collapse line="63" />
-			<Collapse line="76" />
-			<Collapse line="93" />
-			<Collapse line="124" />
-			<Collapse line="128" />
-			<Collapse line="153" />
-			<Collapse line="183" />
-			<Collapse line="209" />
-			<Collapse line="222" />
-			<Collapse line="250" />
-			<Collapse line="271" />
-			<Collapse line="300" />
-			<Collapse line="308" />
-			<Collapse line="325" />
-			<Collapse line="349" />
-		</Folding>
-	</File>
 	<File name="Plateau.cpp" open="0" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="2099" topLine="49" />
-		</Cursor>
-	</File>
-	<File name="Joueur.cpp" open="1" top="0" tabpos="8" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
-		<Cursor>
-			<Cursor1 position="2152" topLine="31" />
 		</Cursor>
 	</File>
 	<File name="main.cpp" open="0" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -58,19 +17,57 @@
 			<Cursor1 position="491" topLine="0" />
 		</Cursor>
 	</File>
+	<File name="Hexagon.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="363" topLine="0" />
+		</Cursor>
+	</File>
 	<File name="Insecte.h" open="1" top="0" tabpos="1" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
 		<Cursor>
 			<Cursor1 position="4037" topLine="30" />
 		</Cursor>
 	</File>
-	<File name="Hexagon.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+	<File name="GameMaster.h" open="1" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="1" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="2325" topLine="67" />
+			<Cursor1 position="3913" topLine="30" />
+		</Cursor>
+	</File>
+	<File name="Plateau.h" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="3386" topLine="53" />
+		</Cursor>
+	</File>
+	<File name="Insecte.cpp" open="1" top="0" tabpos="2" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="13143" topLine="173" />
+		</Cursor>
+		<Folding>
+			<Collapse line="1" />
+			<Collapse line="27" />
+			<Collapse line="41" />
+			<Collapse line="54" />
+			<Collapse line="66" />
+			<Collapse line="93" />
+			<Collapse line="118" />
+			<Collapse line="123" />
+			<Collapse line="152" />
+			<Collapse line="179" />
+			<Collapse line="206" />
+			<Collapse line="207" />
+			<Collapse line="250" />
+			<Collapse line="266" />
+			<Collapse line="321" />
+			<Collapse line="349" />
+		</Folding>
+	</File>
+	<File name="Joueur.cpp" open="1" top="0" tabpos="7" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
+		<Cursor>
+			<Cursor1 position="2152" topLine="31" />
 		</Cursor>
 	</File>
 	<File name="Action.h" open="1" top="0" tabpos="6" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3938" topLine="0" />
+			<Cursor1 position="3001" topLine="0" />
 		</Cursor>
 	</File>
 	<File name="Action.cpp" open="1" top="0" tabpos="5" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
@@ -78,14 +75,14 @@
 			<Cursor1 position="0" topLine="0" />
 		</Cursor>
 	</File>
-	<File name="Hexagon.cpp" open="0" top="0" tabpos="9" split="0" active="1" splitpos="0" zoom_1="0" zoom_2="0">
+	<File name="Hexagon.h" open="1" top="0" tabpos="3" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="363" topLine="0" />
+			<Cursor1 position="2325" topLine="59" />
 		</Cursor>
 	</File>
-	<File name="Plateau.h" open="1" top="1" tabpos="4" split="0" active="1" splitpos="0" zoom_1="3" zoom_2="0">
+	<File name="GameMaster.cpp" open="1" top="0" tabpos="10" split="0" active="1" splitpos="0" zoom_1="2" zoom_2="0">
 		<Cursor>
-			<Cursor1 position="3386" topLine="53" />
+			<Cursor1 position="9458" topLine="209" />
 		</Cursor>
 	</File>
 </CodeBlocks_layout_file>
